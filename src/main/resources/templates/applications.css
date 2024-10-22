@@ -1,0 +1,118 @@
+/* Загальні стилі */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Шапка сайту */
+header {
+  background-color: #004080;
+  color: #fff;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 10%;
+}
+
+.logo a {
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+}
+
+.nav-links li {
+  margin-left: 20px;
+}
+
+.nav-links a {
+  color: #fff;
+  font-weight: bold;
+}
+
+.auth-buttons a {
+  margin-left: 15px;
+  padding: 8px 15px;
+  border-radius: 5px;
+}
+
+.login-btn {
+  background-color: #fff;
+  color: #004080;
+}
+
+.register-btn {
+  background-color: #ffcc00;
+  color: #004080;
+}
+
+/* Головний контент */
+.hero {
+  background-image: url('../images/hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  text-align: center;
+  padding: 100px 10%;
+  color: #fff;
+}
+
+.hero h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.hero p {
+  font-size: 24px;
+  margin-bottom: 30px;
+}
+
+.cta-btn {
+  background-color: #ffcc00;
+  color: #004080;
+  padding: 15px 30px;
+  border-radius: 5px;
+  font-size: 18px;
+}
+
+/* Розділ з особливостями */
+.features {
+  display: flex;
+  justify-content: space-around;
+  padding: 50px 10%;
+  background-color: #f2f2f2;
+}
+
+.feature {
+  text-align: center;
+  width: 30%;
+}
+
+.feature h2 {
+  font-size: 28px;
+  margin-bottom: 15px;
+}
+
+.feature p {
+  font-size: 16px;
+  color: #666;
+}
+
+footer {
+  background-color: #004080;
+  color: #fff;
+  text-align: center;
+  padding: 15px 0;
+}
