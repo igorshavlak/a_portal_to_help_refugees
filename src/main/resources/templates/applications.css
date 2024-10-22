@@ -110,9 +110,97 @@ nav {
   color: #666;
 }
 
+/* Футер */
 footer {
   background-color: #004080;
   color: #fff;
   text-align: center;
   padding: 15px 0;
+}
+
+/* Модальне вікно */
+.modal {
+    display: none; /* Сховати за замовчуванням */
+    position: fixed; /* Фіксоване положення */
+    z-index: 1; /* Розташування поверх іншого контенту */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Прозорий чорний фон */
+    display: flex; /* Використовуємо flexbox для вирівнювання */
+    justify-content: center; /* Вирівнювання по горизонталі */
+    align-items: center; /* Вирівнювання по вертикалі */
+    overflow: hidden; /* Запобігає прокрутці під час відкритого модального вікна */
+}
+
+/* Вміст модального вікна */
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 30%;
+    max-width: 500px; /* Максимальна ширина */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative; /* Для кнопки закриття */
+}
+
+/* Кнопка закриття */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    cursor: pointer;
+}
+
+/* Стилі для форми входу */
+#login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+#login-form label {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+#login-form input {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#login-form button {
+  padding: 10px;
+  background-color: #004080;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#login-form button:hover {
+  background-color: #003060;
+}
+
+#login-form a {
+  color: #004080;
+  font-size: 14px;
+  text-align: center;
+  display: block;
+  margin-top: 10px;
+}
+
+#login-form a:hover {
+  text-decoration: underline;
 }
