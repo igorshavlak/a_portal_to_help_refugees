@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Особистий кабінет біженця</title>
+    <link rel="stylesheet" href="/templates/refugees.css">
+</head>
+<body>
+<!-- Шапка сайту -->
+<header>
+    <nav>
+        <div class="logo">
+            <a href="#">Портал допомоги</a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="application.html">Головна</a></li>
+            <li><a href="#">Про нас</a></li>
+            <li><a href="#">Контакти</a></li>
+        </ul>
+        <div class="auth-buttons">
+            <a href="#" class="logout-btn">Вийти</a>
+        </div>
+    </nav>
+</header>
+
+<!-- Героїчна секція -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>Ласкаво просимо, [Ім'я користувача]</h1>
+        <p>Ми раді вітати вас на нашому порталі. Тут ви можете знайти необхідну допомогу та підтримку.</p>
+        <a href="#" class="cta-btn" id="request-help-btn">Подати запит на допомогу</a>
+    </div>
+</section>
+
+<!-- Головний контент -->
+<main>
+    <section class="dashboard">
+        <h2>Ваші можливості</h2>
+        <div class="dashboard-actions">
+            <a href="#" class="action-btn">Переглянути мої запити</a>
+            <a href="#" class="action-btn">Корисні ресурси</a>
+            <a href="#" class="action-btn">Налаштування профілю</a>
+        </div>
+    </section>
+</main>
+
+<!-- Футер -->
+<footer>
+    <p>&copy; 2023 Портал допомоги біженцям. Всі права захищені.</p>
+</footer>
+
+<!-- Модальне вікно подання запиту -->
+<div id="request-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn request-close-btn">&times;</span>
+        <h2>Подати запит на допомогу</h2>
+        <form id="request-form">
+            <label for="request-type">Тип допомоги:</label>
+            <select id="request-type" name="request-type" required>
+                <option value="" disabled selected>Виберіть тип допомоги</option>
+                <option value="housing">Житло</option>
+                <option value="medical">Медична допомога</option>
+                <option value="legal">Юридична допомога</option>
+                <!-- Додайте інші типи допомоги за потреби -->
+            </select>
+
+            <label for="request-description">Опис ситуації:</label>
+            <textarea id="request-description" name="request-description" rows="4" required></textarea>
+
+            <button type="submit">Подати запит</button>
+        </form>
+    </div>
+</div>
+
+<!-- Підключення JavaScript -->
+<script src="/scripts/refugees.js"></script>
+</body>
+</html>
