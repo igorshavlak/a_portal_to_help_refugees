@@ -90,6 +90,7 @@ nav {
 /* Розділ з особливостями */
 .features {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-around;
   padding: 50px 10%;
   background-color: #f2f2f2;
@@ -98,6 +99,8 @@ nav {
 .feature {
   text-align: center;
   width: 30%;
+  min-width: 250px;
+  margin-bottom: 20px;
 }
 
 .feature h2 {
@@ -120,45 +123,55 @@ footer {
 
 /* Модальне вікно */
 .modal {
-    display: none; /* Сховати за замовчуванням */
-    position: fixed; /* Фіксоване положення */
-    z-index: 1; /* Розташування поверх іншого контенту */
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Прозорий чорний фон */
-    display: flex; /* Використовуємо flexbox для вирівнювання */
-    justify-content: center; /* Вирівнювання по горизонталі */
-    align-items: center; /* Вирівнювання по вертикалі */
-    overflow: hidden; /* Запобігає прокрутці під час відкритого модального вікна */
+  display: none; /* Сховане за замовчуванням */
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Прозорий чорний фон */
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.modal.show {
+  display: flex; /* Відображаємо модальне вікно та використовуємо flex для центрування */
 }
 
 /* Вміст модального вікна */
 .modal-content {
-    background-color: #fff;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 30%;
-    max-width: 500px; /* Максимальна ширина */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    position: relative; /* Для кнопки закриття */
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 30%;
+  max-width: 500px; /* Максимальна ширина */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  position: relative; /* Для кнопки закриття */
+  border-radius: 5px;
+}
+
+@media screen and (max-width: 768px) {
+  .modal-content {
+    width: 80%;
+  }
 }
 
 /* Кнопка закриття */
 .close-btn {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    color: #aaa;
-    font-size: 28px;
-    font-weight: bold;
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
 }
 
 .close-btn:hover,
 .close-btn:focus {
-    color: black;
-    cursor: pointer;
+  color: black;
+  cursor: pointer;
 }
 
 /* Стилі для форми входу */
@@ -203,4 +216,124 @@ footer {
 
 #login-form a:hover {
   text-decoration: underline;
+}
+
+/* Стилі для форми реєстрації */
+#register-form {
+  display: flex;
+  flex-direction: column;
+}
+
+#register-form label {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+#register-form input,
+#register-form select,
+#register-form textarea {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#register-form button {
+  padding: 10px;
+  background-color: #ffcc00;
+  color: #004080;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#register-form button:hover {
+  background-color: #e6b800;
+}
+
+#register-form a {
+  color: #004080;
+  font-size: 14px;
+  text-align: center;
+  display: block;
+  margin-top: 10px;
+}
+
+#register-form a:hover {
+  text-decoration: underline;
+}
+
+/* Стилі для поля select */
+#register-form select {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #333;
+}
+
+/* Стилі для textarea */
+#register-form textarea {
+  resize: vertical;
+}
+
+/* Специфічні стилі для модального вікна реєстрації */
+#register-modal .modal-content {
+  width: 40%; /* Встановіть необхідну ширину */
+}
+
+@media screen and (max-width: 768px) {
+  #register-modal .modal-content {
+    width: 80%;
+  }
+}
+
+/* Стилі для додаткових полів волонтера */
+#volunteer-fields {
+  margin-top: 10px;
+}
+
+#volunteer-fields label {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+#volunteer-fields input,
+#volunteer-fields textarea {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Адаптивність навігації (при необхідності) */
+@media screen and (max-width: 768px) {
+  .nav-links {
+    display: none; /* Приховуємо навігацію на малих екранах */
+  }
+
+  .auth-buttons {
+    display: none; /* Приховуємо кнопки авторизації на малих екранах */
+  }
+
+  nav {
+    justify-content: space-between;
+  }
+
+  /* Можна додати меню-бургер для мобільної навігації */
+}
+
+/* Додаткові стилі та медіа-запити */
+@media screen and (max-width: 992px) {
+  .feature {
+    width: 45%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .feature {
+    width: 100%;
+  }
 }
