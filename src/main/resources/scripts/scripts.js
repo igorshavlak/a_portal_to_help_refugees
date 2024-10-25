@@ -32,9 +32,7 @@ loginForm.addEventListener('submit', function(event) {
 
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
-
-  // Тут можна додати AJAX-запит для відправки даних на сервер
-
+  login();
   console.log('Email:', email);
   console.log('Password:', password);
 

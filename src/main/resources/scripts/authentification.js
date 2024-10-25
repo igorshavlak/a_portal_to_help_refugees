@@ -1,20 +1,24 @@
 function login() {
-    const username = document.getElementById("email").value
+    const email = document.getElementById("email").value
     const password = document.getElementById("password").value
 
-    fetch("api/login", {
+    fetch("/api/login", {
         method: "POST",
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+        body: `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
 
-    }).then(r  => r.text())
-        .then(data =>{
-            if (data === "successful"){
-                alert("successful login!");
-            }else {
-                alert(data);
-            }
-        })
+    }).then(response => {
+        if (response.redirected) {
+            window.location.href = response.url;
+        } else if (response.status === 403 || response.status === 401) {
+            window.location.href = '/application.html?error=true';
+        } else {
+            console.error('Unexpected response:', response);
+        }
+    })
+        .catch(error => {
+            console.error('Error during login:', error);
+        });
 }
