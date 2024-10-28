@@ -1,32 +1,23 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Отримуємо елементи
-
-    // Кнопки на головній сторінці
+    // Отримуємо елементи модального вікна запиту
     const requestHelpBtn = document.getElementById('request-help-btn');
-    const viewMyRequestsBtn = document.getElementById('view-my-requests-btn');
-    const usefulResourcesBtn = document.getElementById('useful-resources-btn');
-    const profileSettingsBtn = document.getElementById('profile-settings-btn');
-    const notificationsBtn = document.getElementById('notifications-btn');
-
-    // Секції
-    const requestsSection = document.getElementById('requests-section');
-    const requestsList = document.getElementById('requests-list');
-
-    const myRequestsSection = document.getElementById('my-requests-section');
-    const myRequestsList = document.getElementById('my-requests-list');
-
-    // Модальні вікна
     const requestModal = document.getElementById('request-modal');
     const requestCloseBtn = document.querySelector('.request-close-btn');
     const requestForm = document.getElementById('request-form');
+    const requestTypeSelect = document.getElementById('request-type');
 
+    // Отримуємо елементи для інших модальних вікон
+    const viewMyRequestsBtn = document.getElementById('view-my-requests-btn');
     const myRequestsModal = document.getElementById('my-requests-modal');
     const myRequestsCloseBtn = document.querySelector('.my-requests-close-btn');
+    const myRequestsList = document.getElementById('my-requests-list');
 
+    const profileSettingsBtn = document.getElementById('profile-settings-btn');
     const profileModal = document.getElementById('profile-modal');
     const profileCloseBtn = document.querySelector('.profile-close-btn');
     const profileForm = document.getElementById('profile-form');
 
+    const notificationsBtn = document.getElementById('notifications-btn');
     const notificationsModal = document.getElementById('notifications-modal');
     const notificationsCloseBtn = document.querySelector('.notifications-close-btn');
     const notificationsList = document.getElementById('notifications-list');
@@ -90,6 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Функція для відображення списку запитів
     function displayRequests() {
+        const requestsList = document.getElementById('requests-list');
         requestsList.innerHTML = '';
 
         if (requestsData.length === 0) {
@@ -127,8 +119,8 @@ document.addEventListener('DOMContentLoaded', function() {
         requestDetails.innerHTML = `
             <p><strong>Тип допомоги:</strong> ${request.type}</p>
             <p><strong>Опис ситуації:</strong> ${request.description}</p>
+            <p><strong>Статус:</strong> ${request.status}</p>
         `;
-        // Можна додати більше деталей за потреби
         openModal(requestModal);
     }
 
@@ -180,178 +172,34 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Функція для динамічного додавання полів форми запиту
-    function addDynamicFields(selectedType) {
-        const additionalFieldsContainer = document.getElementById('additional-fields');
-        additionalFieldsContainer.innerHTML = ''; // Очистити попередні додаткові поля
+    // Функція для показу додаткових полів залежно від типу допомоги
+    function handleRequestTypeChange() {
+        const selectedType = requestTypeSelect.value;
+        hideAllAdditionalFields(); // Спочатку сховати всі додаткові поля
 
         if (selectedType === 'housing') {
-            // Поле для кількості членів сім'ї
-            const familySizeLabel = document.createElement('label');
-            familySizeLabel.setAttribute('for', 'family-size');
-            familySizeLabel.textContent = 'Кількість членів сім\'ї:';
-            additionalFieldsContainer.appendChild(familySizeLabel);
-
-            const familySizeInput = document.createElement('input');
-            familySizeInput.setAttribute('type', 'number');
-            familySizeInput.setAttribute('id', 'family-size');
-            familySizeInput.setAttribute('name', 'family-size');
-            familySizeInput.setAttribute('min', '1');
-            familySizeInput.setAttribute('required', 'required');
-            additionalFieldsContainer.appendChild(familySizeInput);
-
-            // Поле для особливих потреб
-            const specialNeedsLabel = document.createElement('label');
-            specialNeedsLabel.setAttribute('for', 'special-needs');
-            specialNeedsLabel.textContent = 'Особливі потреби (якщо є):';
-            additionalFieldsContainer.appendChild(specialNeedsLabel);
-
-            const specialNeedsTextarea = document.createElement('textarea');
-            specialNeedsTextarea.setAttribute('id', 'special-needs');
-            specialNeedsTextarea.setAttribute('name', 'special-needs');
-            specialNeedsTextarea.setAttribute('rows', '3');
-            additionalFieldsContainer.appendChild(specialNeedsTextarea);
+            document.getElementById('housing-fields').classList.add('show');
         } else if (selectedType === 'medical') {
-            // Поле для типу медичної допомоги
-            const medicalTypeLabel = document.createElement('label');
-            medicalTypeLabel.setAttribute('for', 'medical-type');
-            medicalTypeLabel.textContent = 'Тип медичної допомоги:';
-            additionalFieldsContainer.appendChild(medicalTypeLabel);
-
-            const medicalTypeSelect = document.createElement('select');
-            medicalTypeSelect.setAttribute('id', 'medical-type');
-            medicalTypeSelect.setAttribute('name', 'medical-type');
-            medicalTypeSelect.setAttribute('required', 'required');
-
-            const defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.disabled = true;
-            defaultOption.selected = true;
-            defaultOption.textContent = 'Виберіть тип медичної допомоги';
-            medicalTypeSelect.appendChild(defaultOption);
-
-            const option1 = document.createElement('option');
-            option1.value = 'consultation';
-            option1.textContent = 'Консультація';
-            medicalTypeSelect.appendChild(option1);
-
-            const option2 = document.createElement('option');
-            option2.value = 'treatment';
-            option2.textContent = 'Лікування';
-            medicalTypeSelect.appendChild(option2);
-
-            // Додайте більше опцій за потреби
-
-            additionalFieldsContainer.appendChild(medicalTypeSelect);
+            document.getElementById('medical-fields').classList.add('show');
         } else if (selectedType === 'legal') {
-            // Поле для типу юридичної допомоги
-            const legalTypeLabel = document.createElement('label');
-            legalTypeLabel.setAttribute('for', 'legal-type');
-            legalTypeLabel.textContent = 'Тип юридичної допомоги:';
-            additionalFieldsContainer.appendChild(legalTypeLabel);
-
-            const legalTypeSelect = document.createElement('select');
-            legalTypeSelect.setAttribute('id', 'legal-type');
-            legalTypeSelect.setAttribute('name', 'legal-type');
-            legalTypeSelect.setAttribute('required', 'required');
-
-            const defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.disabled = true;
-            defaultOption.selected = true;
-            defaultOption.textContent = 'Виберіть тип юридичної допомоги';
-            legalTypeSelect.appendChild(defaultOption);
-
-            const option1 = document.createElement('option');
-            option1.value = 'documentation';
-            option1.textContent = 'Документація';
-            legalTypeSelect.appendChild(option1);
-
-            const option2 = document.createElement('option');
-            option2.value = 'representation';
-            option2.textContent = 'Представництво';
-            legalTypeSelect.appendChild(option2);
-
-            // Додайте більше опцій за потреби
-
-            additionalFieldsContainer.appendChild(legalTypeSelect);
+            document.getElementById('legal-fields').classList.add('show');
+        } else if (selectedType === 'employment') {
+            document.getElementById('employment-fields').classList.add('show');
+        } else if (selectedType === 'education') {
+            document.getElementById('education-fields').classList.add('show');
+        } else if (selectedType === 'food') {
+            document.getElementById('food-fields').classList.add('show');
+        } else if (selectedType === 'financial') {
+            document.getElementById('financial-fields').classList.add('show');
         }
-        // Додайте інші типи допомоги за потреби
     }
 
-    // Обробник зміни типу допомоги
-    const requestTypeSelect = document.getElementById('request-type');
-    requestTypeSelect.addEventListener('change', function() {
-        const selectedType = this.value;
-        addDynamicFields(selectedType);
-    });
-
-    // Функція для відкриття модального вікна з деталями запиту (для запитів на допомогу)
-    function openRequestModalFromRequests(request) {
-        // Тут можна реалізувати відкриття модального вікна з деталями конкретного запиту
-        // Наприклад, показати більше інформації або статусу
-    }
-
-    // Функція для обробки подання форми запиту
-    requestForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const requestType = document.getElementById('request-type').value;
-        const requestDescription = document.getElementById('request-description').value;
-
-        // Збір додаткових полів залежно від типу допомоги
-        let additionalData = {};
-
-        if (requestType === 'housing') {
-            const familySize = document.getElementById('family-size').value;
-            const specialNeeds = document.getElementById('special-needs').value;
-            additionalData = {
-                familySize: familySize,
-                specialNeeds: specialNeeds
-            };
-        } else if (requestType === 'medical') {
-            const medicalType = document.getElementById('medical-type').value;
-            additionalData = {
-                medicalType: medicalType
-            };
-        } else if (requestType === 'legal') {
-            const legalType = document.getElementById('legal-type').value;
-            additionalData = {
-                legalType: legalType
-            };
-        }
-
-        // Створення нового запиту
-        const newRequest = {
-            id: requestsData.length + 1,
-            type: requestType === 'housing' ? 'Житло' :
-                requestType === 'medical' ? 'Медична допомога' :
-                    requestType === 'legal' ? 'Юридична допомога' : 'Інше',
-            description: requestDescription,
-            status: 'Новий',
-            additionalData: additionalData
-        };
-
-        // Додавання нового запиту до масиву запитів
-        requestsData.push(newRequest);
-
-        // Оновлення списку запитів
-        displayRequests();
-
-        // Очистка форми
-        requestForm.reset();
-        document.getElementById('additional-fields').innerHTML = '';
-
-        // Показати повідомлення про успішне подання
-        alert('Ваш запит успішно подано!');
-
-        // Закрити модальне вікно
-        closeModal(requestModal);
-    });
-
-    // Функція для відкриття модального вікна "Мої активні запити"
-    function openMyRequestsModal() {
-        displayMyRequests();
+    // Функція для сховання всіх додаткових полів
+    function hideAllAdditionalFields() {
+        const additionalFields = document.querySelectorAll('.additional-fields');
+        additionalFields.forEach(function(field) {
+            field.classList.remove('show');
+        });
     }
 
     // Обробники подій
@@ -365,13 +213,32 @@ document.addEventListener('DOMContentLoaded', function() {
     // Закриття модального вікна запиту на допомогу
     requestCloseBtn.addEventListener('click', function() {
         closeModal(requestModal);
+        hideAllAdditionalFields();
+        requestForm.reset();
+    });
+
+    // Закриття модальних вікон при кліку поза ними
+    window.addEventListener('click', function(event) {
+        if (event.target === requestModal) {
+            closeModal(requestModal);
+            hideAllAdditionalFields();
+            requestForm.reset();
+        }
+        if (event.target === myRequestsModal) {
+            closeModal(myRequestsModal);
+        }
+        if (event.target === profileModal) {
+            closeModal(profileModal);
+        }
+        if (event.target === notificationsModal) {
+            closeModal(notificationsModal);
+        }
     });
 
     // Відкриття модального вікна "Мої активні запити"
     viewMyRequestsBtn.addEventListener('click', function(event) {
         event.preventDefault();
-        openModal(myRequestsModal);
-        // Можна додати функціонал для завантаження реальних даних
+        displayMyRequests();
     });
 
     // Закриття модального вікна "Мої активні запити"
@@ -402,23 +269,91 @@ document.addEventListener('DOMContentLoaded', function() {
         closeModal(notificationsModal);
     });
 
-    // Закриття модальних вікон при кліку поза ними
-    window.addEventListener('click', function(event) {
-        if (event.target === requestModal) {
-            closeModal(requestModal);
+    // Додавання обробника зміни типу допомоги
+    requestTypeSelect.addEventListener('change', handleRequestTypeChange);
+
+    // Обробник подання форми запиту
+    requestForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const requestType = document.getElementById('request-type').value;
+        const requestDescription = document.getElementById('request-description').value;
+
+        // Збір додаткових полів залежно від типу допомоги
+        let additionalData = {};
+
+        if (requestType === 'housing') {
+            const familyMembers = document.getElementById('family-members').value;
+            const specialNeeds = document.getElementById('special-needs').value;
+            additionalData = {
+                familyMembers: familyMembers,
+                specialNeeds: specialNeeds
+            };
+        } else if (requestType === 'medical') {
+            const medicalCondition = document.getElementById('medical-condition').value;
+            additionalData = {
+                medicalCondition: medicalCondition
+            };
+        } else if (requestType === 'legal') {
+            const legalIssue = document.getElementById('legal-issue').value;
+            additionalData = {
+                legalIssue: legalIssue
+            };
+        } else if (requestType === 'employment') {
+            const currentEmployment = document.getElementById('current-employment').value;
+            const desiredJob = document.getElementById('desired-job').value;
+            additionalData = {
+                currentEmployment: currentEmployment,
+                desiredJob: desiredJob
+            };
+        } else if (requestType === 'education') {
+            const currentEducation = document.getElementById('current-education').value;
+            const desiredProgram = document.getElementById('desired-program').value;
+            additionalData = {
+                currentEducation: currentEducation,
+                desiredProgram: desiredProgram
+            };
+        } else if (requestType === 'food') {
+            const foodItems = document.getElementById('food-items').value;
+            additionalData = {
+                foodItems: foodItems
+            };
+        } else if (requestType === 'financial') {
+            const financialAmount = document.getElementById('financial-amount').value;
+            const financialPurpose = document.getElementById('financial-purpose').value;
+            additionalData = {
+                financialAmount: financialAmount,
+                financialPurpose: financialPurpose
+            };
         }
-        if (event.target === myRequestsModal) {
-            closeModal(myRequestsModal);
-        }
-        if (event.target === profileModal) {
-            closeModal(profileModal);
-        }
-        if (event.target === notificationsModal) {
-            closeModal(notificationsModal);
-        }
+
+        // Створення нового запиту
+        const newRequest = {
+            id: requestsData.length + 1,
+            type: getHelpTypeName(requestType),
+            description: requestDescription,
+            status: 'Новий',
+            additionalData: additionalData
+        };
+
+        // Додавання нового запиту до масиву запитів
+        requestsData.push(newRequest);
+
+        // Оновлення списку запитів
+        displayRequests();
+
+        // Очистка форми та сховання додаткових полів
+        requestForm.reset();
+        hideAllAdditionalFields();
+
+        // Показати повідомлення про успішне подання
+        alert('Ваш запит успішно подано! Ми зв\'яжемося з вами найближчим часом.');
+
+        // Закрити модальне вікно
+        closeModal(requestModal);
     });
 
-    // Функція для обробки подання форми профілю
+    // Обробник подання форми профілю
     profileForm.addEventListener('submit', function(event) {
         event.preventDefault();
 
@@ -432,4 +367,26 @@ document.addEventListener('DOMContentLoaded', function() {
         alert('Зміни успішно збережено!');
         closeModal(profileModal);
     });
+
+    // Функція для отримання назви типу допомоги
+    function getHelpTypeName(type) {
+        switch(type) {
+            case 'housing':
+                return 'Житло';
+            case 'medical':
+                return 'Медична допомога';
+            case 'legal':
+                return 'Юридична допомога';
+            case 'employment':
+                return 'Допомога у працевлаштуванні';
+            case 'education':
+                return 'Освітні та професійні програми';
+            case 'food':
+                return 'Продукти харчування та предмети першої необхідності';
+            case 'financial':
+                return 'Фінансова допомога';
+            default:
+                return 'Інше';
+        }
+    }
 });
