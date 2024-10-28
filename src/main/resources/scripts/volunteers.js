@@ -8,13 +8,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const notificationsBtn = document.getElementById('notifications-btn');
 
     // Секції
-    const requestsSection = document.getElementById('requests-section');
-    const requestsList = document.getElementById('requests-list');
-
-    const myRequestsSection = document.getElementById('my-requests-section');
-    const myRequestsList = document.getElementById('my-requests-list');
+    const myCategoriesSection = document.getElementById('my-categories-section');
+    const categoriesForm = document.getElementById('categories-form');
 
     // Модальні вікна
+    const helpRequestsModal = document.getElementById('help-requests-modal');
+    const helpRequestsCloseBtn = document.querySelector('.help-requests-close-btn');
+    const helpRequestsList = document.getElementById('help-requests-list');
+
+    const myActiveRequestsModal = document.getElementById('my-active-requests-modal');
+    const myActiveRequestsCloseBtn = document.querySelector('.my-active-requests-close-btn');
+    const myActiveRequestsList = document.getElementById('my-active-requests-list');
+
     const requestModal = document.getElementById('request-modal');
     const requestCloseBtn = document.querySelector('.request-close-btn');
     const requestDetails = document.getElementById('request-details');
@@ -42,6 +47,36 @@ document.addEventListener('DOMContentLoaded', function() {
             description: 'Потрібен лікар для консультації щодо хронічної хвороби.',
             status: 'Новий'
         },
+        {
+            id: 3,
+            type: 'Юридична допомога',
+            description: 'Потрібна допомога з оформленням документів.',
+            status: 'Новий'
+        },
+        {
+            id: 4,
+            type: 'Допомога у працевлаштуванні',
+            description: 'Потрібна консультація з написання резюме.',
+            status: 'Новий'
+        },
+        {
+            id: 5,
+            type: 'Освітні та професійні програми',
+            description: 'Потрібна допомога в організації освітніх курсів.',
+            status: 'Новий'
+        },
+        {
+            id: 6,
+            type: 'Продукти харчування та предмети першої необхідності',
+            description: 'Потрібна допомога у зборі продуктів для біженців.',
+            status: 'Новий'
+        },
+        {
+            id: 7,
+            type: 'Фінансова допомога',
+            description: 'Потрібна фінансова підтримка для сім\'ї.',
+            status: 'Новий'
+        }
         // Додайте більше запитів за потреби
     ];
 
@@ -75,11 +110,35 @@ document.addEventListener('DOMContentLoaded', function() {
         // Додайте більше сповіщень за потреби
     ];
 
-    // Функція для відображення списку запитів
-    function displayRequests() {
-        requestsList.innerHTML = '';
+    // Функція для відкриття модального вікна
+    function openModal(modal) {
+        modal.classList.add('show');
+    }
 
-        requestsData.forEach(request => {
+    // Функція для закриття модального вікна
+    function closeModal(modal) {
+        modal.classList.remove('show');
+    }
+
+    // Функція для відображення списку запитів у модальному вікні "Запити на допомогу"
+    function displayHelpRequests() {
+        helpRequestsList.innerHTML = '';
+
+        const selectedCategories = getSelectedCategories();
+        if (selectedCategories.length === 0) {
+            helpRequestsList.innerHTML = '<p>Будь ласка, оберіть категорії допомоги у секції "Мої категорії допомоги".</p>';
+            return;
+        }
+
+        // Фільтрація запитів за вибраними категоріями
+        const filteredRequests = requestsData.filter(request => selectedCategories.includes(getHelpTypeKey(request.type)));
+
+        if (filteredRequests.length === 0) {
+            helpRequestsList.innerHTML = '<p>Наразі немає доступних запитів у ваших обраних категоріях.</p>';
+            return;
+        }
+
+        filteredRequests.forEach(request => {
             const requestCard = document.createElement('div');
             requestCard.className = 'request-card';
 
@@ -99,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function() {
             requestCard.appendChild(requestDesc);
             requestCard.appendChild(viewButton);
 
-            requestsList.appendChild(requestCard);
+            helpRequestsList.appendChild(requestCard);
         });
     }
 
@@ -108,20 +167,20 @@ document.addEventListener('DOMContentLoaded', function() {
         requestDetails.innerHTML = `
             <p><strong>Тип допомоги:</strong> ${request.type}</p>
             <p><strong>Опис ситуації:</strong> ${request.description}</p>
+            <p><strong>Статус:</strong> ${request.status}</p>
         `;
         acceptRequestBtn.dataset.requestId = request.id;
-        requestModal.classList.add('show');
+        openModal(requestModal);
     }
 
-    // Функція для закриття модального вікна
-    function closeRequestModal() {
-        requestModal.classList.remove('show');
-    }
+    // Функція для відображення "Моїх активних запитів" у модальному вікні
+    function displayMyActiveRequests() {
+        myActiveRequestsList.innerHTML = '';
 
-    // Функція для відображення "Моїх активних запитів"
-    function displayMyRequests() {
-        myRequestsSection.style.display = 'block';
-        myRequestsList.innerHTML = '';
+        if (myRequestsData.length === 0) {
+            myActiveRequestsList.innerHTML = '<p>Наразі у вас немає активних запитів.</p>';
+            return;
+        }
 
         myRequestsData.forEach(request => {
             const requestCard = document.createElement('div');
@@ -140,34 +199,79 @@ document.addEventListener('DOMContentLoaded', function() {
             requestCard.appendChild(requestDesc);
             requestCard.appendChild(requestStatus);
 
-            myRequestsList.appendChild(requestCard);
+            myActiveRequestsList.appendChild(requestCard);
         });
 
-        // Прокручуємо до секції "Мої активні запити"
-        myRequestsSection.scrollIntoView({ behavior: 'smooth' });
+        openModal(myActiveRequestsModal);
     }
 
-    // Функція для відкриття модального вікна "Налаштування профілю"
-    function openProfileModal(event) {
-        event.preventDefault();
-        profileModal.classList.add('show');
+    // Функція для отримання ключа типу допомоги з назви
+    function getHelpTypeKey(typeName) {
+        switch(typeName) {
+            case 'Житло':
+                return 'housing';
+            case 'Медична допомога':
+                return 'medical';
+            case 'Юридична допомога':
+                return 'legal';
+            case 'Допомога у працевлаштуванні':
+                return 'employment';
+            case 'Освітні та професійні програми':
+                return 'education';
+            case 'Продукти харчування та предмети першої необхідності':
+                return 'food';
+            case 'Фінансова допомога':
+                return 'financial';
+            default:
+                return 'other';
+        }
     }
 
-    // Функція для закриття модального вікна "Налаштування профілю"
-    function closeProfileModal() {
-        profileModal.classList.remove('show');
+    // Функція для отримання назви типу допомоги з ключа
+    function getHelpTypeName(typeKey) {
+        switch(typeKey) {
+            case 'housing':
+                return 'Житло';
+            case 'medical':
+                return 'Медична допомога';
+            case 'legal':
+                return 'Юридична допомога';
+            case 'employment':
+                return 'Допомога у працевлаштуванні';
+            case 'education':
+                return 'Освітні та професійні програми';
+            case 'food':
+                return 'Продукти харчування та предмети першої необхідності';
+            case 'financial':
+                return 'Фінансова допомога';
+            default:
+                return 'Інше';
+        }
     }
 
-    // Функція для відкриття модального вікна "Сповіщення"
-    function openNotificationsModal(event) {
-        event.preventDefault();
-        notificationsModal.classList.add('show');
-        displayNotifications();
+    // Функція для отримання вибраних категорій з форми
+    function getSelectedCategories() {
+        const checkedBoxes = categoriesForm.querySelectorAll('input[name="categories"]:checked');
+        const categories = Array.from(checkedBoxes).map(cb => cb.value);
+        return categories;
     }
 
-    // Функція для закриття модального вікна "Сповіщення"
-    function closeNotificationsModal() {
-        notificationsModal.classList.remove('show');
+    // Функція для збереження вибраних категорій у LocalStorage
+    function saveCategories(categories) {
+        localStorage.setItem('volunteerCategories', JSON.stringify(categories));
+    }
+
+    // Функція для завантаження вибраних категорій з LocalStorage
+    function loadCategories() {
+        const categories = localStorage.getItem('volunteerCategories');
+        return categories ? JSON.parse(categories) : [];
+    }
+
+    // Функція для встановлення вибраних чекбоксів на основі збережених категорій
+    function setCategoriesForm(categories) {
+        categoriesForm.querySelectorAll('input[name="categories"]').forEach(cb => {
+            cb.checked = categories.includes(cb.value);
+        });
     }
 
     // Функція для відображення сповіщень
@@ -185,28 +289,36 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Обробник події для кнопки "Переглянути запити на допомогу"
+    // Обробники подій
+
+    // Відкриття модального вікна "Запити на допомогу"
     viewRequestsBtn.addEventListener('click', (event) => {
         event.preventDefault();
-        requestsSection.style.display = 'block';
-        displayRequests();
-        // Прокручуємо до секції запитів
-        requestsSection.scrollIntoView({ behavior: 'smooth' });
+        openModal(helpRequestsModal);
+        displayHelpRequests();
     });
 
-    // Обробники подій для модального вікна запиту
-    requestCloseBtn.addEventListener('click', closeRequestModal);
+    // Закриття модального вікна "Запити на допомогу"
+    helpRequestsCloseBtn.addEventListener('click', () => {
+        closeModal(helpRequestsModal);
+    });
 
-    // Обробники подій для модальних вікон
+    // Закриття модальних вікон при кліку поза ними
     window.addEventListener('click', function(event) {
         if (event.target === requestModal) {
-            closeRequestModal();
+            closeModal(requestModal);
         }
         if (event.target === profileModal) {
-            closeProfileModal();
+            closeModal(profileModal);
         }
         if (event.target === notificationsModal) {
-            closeNotificationsModal();
+            closeModal(notificationsModal);
+        }
+        if (event.target === helpRequestsModal) {
+            closeModal(helpRequestsModal);
+        }
+        if (event.target === myActiveRequestsModal) {
+            closeModal(myActiveRequestsModal);
         }
     });
 
@@ -215,20 +327,55 @@ document.addEventListener('DOMContentLoaded', function() {
         const requestId = acceptRequestBtn.dataset.requestId;
         // Тут можна додати код для оновлення статусу запиту на сервері
         alert(`Ви прийняли запит №${requestId}. Дякуємо за вашу допомогу!`);
-        closeRequestModal();
+        closeModal(requestModal);
+
+        // Додавання запиту до "Моїх активних запитів"
+        const acceptedRequest = requestsData.find(req => req.id == requestId);
+        if (acceptedRequest) {
+            acceptedRequest.status = 'В процесі';
+            myRequestsData.push({
+                id: acceptedRequest.id,
+                type: acceptedRequest.type,
+                description: acceptedRequest.description,
+                status: acceptedRequest.status
+            });
+            displayMyActiveRequests();
+        }
     });
 
-    // Обробники подій для кнопок "Мої активні запити", "Налаштування профілю", "Сповіщення"
+    // Відкриття модального вікна "Мої активні запити"
     myActiveRequestsBtn.addEventListener('click', (event) => {
         event.preventDefault();
-        displayMyRequests();
+        displayMyActiveRequests();
     });
 
-    profileSettingsBtn.addEventListener('click', openProfileModal);
-    profileCloseBtn.addEventListener('click', closeProfileModal);
+    // Закриття модального вікна "Мої активні запити"
+    myActiveRequestsCloseBtn.addEventListener('click', () => {
+        closeModal(myActiveRequestsModal);
+    });
 
-    notificationsBtn.addEventListener('click', openNotificationsModal);
-    notificationsCloseBtn.addEventListener('click', closeNotificationsModal);
+    // Відкриття модального вікна "Налаштування профілю"
+    profileSettingsBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        openModal(profileModal);
+    });
+
+    // Закриття модального вікна "Налаштування профілю"
+    profileCloseBtn.addEventListener('click', () => {
+        closeModal(profileModal);
+    });
+
+    // Відкриття модального вікна "Сповіщення"
+    notificationsBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        openModal(notificationsModal);
+        displayNotifications();
+    });
+
+    // Закриття модального вікна "Сповіщення"
+    notificationsCloseBtn.addEventListener('click', () => {
+        closeModal(notificationsModal);
+    });
 
     // Обробник події для відправки форми профілю
     profileForm.addEventListener('submit', function(event) {
@@ -242,6 +389,19 @@ document.addEventListener('DOMContentLoaded', function() {
         // Тут можна додати код для оновлення даних профілю на сервері
 
         alert('Зміни успішно збережено!');
-        closeProfileModal();
+        closeModal(profileModal);
     });
+
+    // Обробник події для збереження категорій
+    categoriesForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const selectedCategories = getSelectedCategories();
+        saveCategories(selectedCategories);
+        alert('Ваші категорії допомоги збережено!');
+        displayHelpRequests();
+    });
+
+    // Завантаження вибраних категорій при завантаженні сторінки
+    const savedCategories = loadCategories();
+    setCategoriesForm(savedCategories);
 });
