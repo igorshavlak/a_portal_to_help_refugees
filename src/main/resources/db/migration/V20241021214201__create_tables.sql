@@ -8,9 +8,9 @@ create table users
 );
 create table authorities
 (
-    email VARCHAR(50),
+    email     VARCHAR(50),
     authority VARCHAR(50) NOT NULL,
-    FOREIGN KEY (email) REFERENCES users(email)
+    FOREIGN KEY (email) REFERENCES users (email)
 );
 
 create table refugees
@@ -26,9 +26,11 @@ create table refugees
 create table applications
 (
     id              SERIAL PRIMARY KEY,
-    refugee_id      INT NOT NULL,
-    submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status          VARCHAR(20) NOT NULL CHECK (status IN ('pending', 'processing', 'completed', 'rejected')),
+    user_id         INT         NOT NULL,
+    type            VARCHAR(100),
     description     TEXT,
-    FOREIGN KEY (refugee_id) REFERENCES Refugees (id) ON DELETE CASCADE
+    additional_data VARCHAR(200),
+    status          VARCHAR(20) NOT NULL CHECK (status IN ('pending', 'processing', 'completed', 'rejected')),
+    created_at      TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );

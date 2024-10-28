@@ -119,6 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Modal Functions
     // --------------------------------------------------
 
+
     /**
      * Function to open a modal
      * @param {HTMLElement} modal - The modal element to open
@@ -139,18 +140,45 @@ document.addEventListener('DOMContentLoaded', function() {
     // Display Functions
     // --------------------------------------------------
 
+
+
+
+
+    async function displayMyRequests() {
+        try {
+            const response = await fetch('/applications/getUserApplications', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Помилка: ${response.statusText}`);
+            }
+
+            const helpRequests = await response.json();
+            renderMyRequests(helpRequests);
+            openModal(myRequestsModal);
+        } catch (error) {
+            console.error('Помилка при отриманні запитів:', error);
+            showToast('Сталася помилка при отриманні запитів. Спробуйте пізніше.');
+        }
+    }
+
     /**
-     * Function to display active requests in the modal
+     * Function to render the list of help requests in the modal
+     * @param {Array} helpRequests - Array of help request objects
      */
-    function displayMyRequests() {
+    function renderMyRequests(helpRequests) {
         myRequestsList.innerHTML = '';
 
-        if (myRequestsData.length === 0) {
+        if (helpRequests.length === 0) {
             myRequestsList.innerHTML = '<p>Наразі у вас немає активних запитів.</p>';
             return;
         }
 
-        myRequestsData.forEach(request => {
+        helpRequests.forEach(request => {
             const requestCard = document.createElement('div');
             requestCard.className = 'my-request-card';
 
@@ -163,15 +191,44 @@ document.addEventListener('DOMContentLoaded', function() {
             const requestStatus = document.createElement('p');
             requestStatus.innerHTML = `<span class="status">Статус:</span> ${request.status}`;
 
+            const requestDate = document.createElement('p');
+            const date = new Date(request.createdAt);
+            requestDate.innerHTML = `<span class="date">Дата створення:</span> ${date.toLocaleString()}`;
+
+            // Optionally, display additional data if needed
+            // const additionalData = document.createElement('p');
+            // additionalData.innerHTML = `<strong>Додаткові дані:</strong> ${request.additionalData}`;
+            // requestCard.appendChild(additionalData);
+
             requestCard.appendChild(requestTitle);
             requestCard.appendChild(requestDesc);
             requestCard.appendChild(requestStatus);
+            requestCard.appendChild(requestDate);
 
             myRequestsList.appendChild(requestCard);
         });
-
-        openModal(myRequestsModal);
     }
+
+    /**
+     * Function to display notifications in the modal
+     */
+    function displayNotifications() {
+        notificationsList.innerHTML = '';
+
+        if (notificationsData.length === 0) {
+            notificationsList.innerHTML = '<p>Наразі у вас немає нових сповіщень.</p>';
+            return;
+        }
+
+        notificationsData.forEach(notification => {
+            const notificationItem = document.createElement('p');
+            notificationItem.textContent = notification.message;
+            notificationsList.appendChild(notificationItem);
+        });
+
+        openModal(notificationsModal);
+    }
+
 
     /**
      * Function to display notifications in the modal
@@ -236,7 +293,7 @@ document.addEventListener('DOMContentLoaded', function() {
      * Function to handle submission of the request form
      * @param {Event} event - The form submission event
      */
-    function handleRequestFormSubmit(event) {
+    async function handleRequestFormSubmit(event) {
         event.preventDefault();
 
         const requestType = document.getElementById('request-type').value;
@@ -245,7 +302,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Collect additional data based on request type
         let additionalData = {};
 
-        switch(requestType) {
+        switch (requestType) {
             case 'housing':
                 const familyMembers = document.getElementById('family-members').value;
                 const specialNeeds = document.getElementById('special-needs').value;
@@ -299,36 +356,39 @@ document.addEventListener('DOMContentLoaded', function() {
             default:
                 additionalData = {};
         }
-
-        // Create new request object
-        const newRequest = {
-            id: requestsData.length + 1,
-            type: getHelpTypeName(requestType),
+        const requestData = {
+            type: requestType,
             description: requestDescription,
-            status: 'Новий',
             additionalData: additionalData
         };
 
-        // Add new request to the requestsData array
-        requestsData.push(newRequest);
+        try {
+            // Отправка данных на сервер
+            const response = await fetch('/applications/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            });
 
-        // Optionally, add the new request to myRequestsData if you want the user to see it as active
-        // myRequestsData.push({
-        //     id: newRequest.id,
-        //     type: newRequest.type,
-        //     description: newRequest.description,
-        //     status: newRequest.status
-        // });
+            const data = await response.json();
 
-        // Reset the form and hide additional fields
-        requestForm.reset();
-        hideAllAdditionalFields();
+            if (data.success) {
+                showToast(data.message);
+            } else {
+                showToast(data.message);
+            }
 
-        // Show success toast notification
-        showToast('Ваш запит успішно подано! Ми зв\'яжемося з вами найближчим часом.');
+            requestForm.reset();
+            hideAllAdditionalFields();
 
-        // Close the request modal
-        closeModalFunction(requestModal);
+            closeModalFunction(requestModal);
+
+        } catch (error) {
+            console.error('Помилка при відправці запиту:', error);
+            alert('Сталася помилка при відправці запиту. Спробуйте пізніше.');
+        }
     }
 
     /**

@@ -64,7 +64,7 @@
         <h2>Подати запит на допомогу</h2>
         <form id="request-form">
             <label for="request-type">Тип допомоги:</label>
-            <select id="request-type" name="request-type" required>
+            <select id="request-type" name="request-type" >
                 <option value="" disabled selected>Виберіть тип допомоги</option>
                 <option value="housing">Житло</option>
                 <option value="medical">Медична допомога</option>
@@ -76,12 +76,12 @@
             </select>
 
             <label for="request-description">Опис ситуації:</label>
-            <textarea id="request-description" name="request-description" rows="4" required></textarea>
+            <textarea id="request-description" name="request-description" rows="4" ></textarea>
 
             <!-- Додаткові поля для Житла -->
             <div id="housing-fields" class="additional-fields">
                 <label for="family-members">Кількість членів сім'ї:</label>
-                <input type="number" id="family-members" name="family-members" min="1" required>
+                <input type="number" id="family-members" name="family-members" min="1" >
 
                 <label for="special-needs">Особливі потреби (якщо є):</label>
                 <textarea id="special-needs" name="special-needs" rows="2"></textarea>
@@ -90,19 +90,19 @@
             <!-- Додаткові поля для Медичної допомоги -->
             <div id="medical-fields" class="additional-fields">
                 <label for="medical-condition">Опис хронічної хвороби:</label>
-                <textarea id="medical-condition" name="medical-condition" rows="3" required></textarea>
+                <textarea id="medical-condition" name="medical-condition" rows="3" ></textarea>
             </div>
 
             <!-- Додаткові поля для Юридичної допомоги -->
             <div id="legal-fields" class="additional-fields">
                 <label for="legal-issue">Опис юридичної проблеми:</label>
-                <textarea id="legal-issue" name="legal-issue" rows="3" required></textarea>
+                <textarea id="legal-issue" name="legal-issue" rows="3" ></textarea>
             </div>
 
             <!-- Додаткові поля для Допомоги у працевлаштуванні -->
             <div id="employment-fields" class="additional-fields">
                 <label for="current-employment">Поточний статус зайнятості:</label>
-                <select id="current-employment" name="current-employment" required>
+                <select id="current-employment" name="current-employment" >
                     <option value="" disabled selected>Виберіть статус</option>
                     <option value="unemployed">Безробітний</option>
                     <option value="employed">Зайнятий</option>
@@ -110,13 +110,13 @@
                 </select>
 
                 <label for="desired-job">Бажана посада:</label>
-                <input type="text" id="desired-job" name="desired-job" required>
+                <input type="text" id="desired-job" name="desired-job" >
             </div>
 
             <!-- Додаткові поля для Освітніх та професійних програм -->
             <div id="education-fields" class="additional-fields">
                 <label for="current-education">Поточний рівень освіти:</label>
-                <select id="current-education" name="current-education" required>
+                <select id="current-education" name="current-education" >
                     <option value="" disabled selected>Виберіть рівень</option>
                     <option value="secondary">Середня освіта</option>
                     <option value="bachelor">Бакалавр</option>
@@ -125,22 +125,22 @@
                 </select>
 
                 <label for="desired-program">Бажана освітня або професійна програма:</label>
-                <input type="text" id="desired-program" name="desired-program" required>
+                <input type="text" id="desired-program" name="desired-program" >
             </div>
 
             <!-- Додаткові поля для Продуктів харчування та предметів першої необхідності -->
             <div id="food-fields" class="additional-fields">
                 <label for="food-items">Перелік необхідних продуктів та предметів:</label>
-                <textarea id="food-items" name="food-items" rows="3" required></textarea>
+                <textarea id="food-items" name="food-items" rows="3" ></textarea>
             </div>
 
             <!-- Додаткові поля для Фінансової допомоги -->
             <div id="financial-fields" class="additional-fields">
                 <label for="financial-amount">Необхідна сума:</label>
-                <input type="number" id="financial-amount" name="financial-amount" min="1" required>
+                <input type="number" id="financial-amount" name="financial-amount" min="1" >
 
                 <label for="financial-purpose">Мета фінансової допомоги:</label>
-                <textarea id="financial-purpose" name="financial-purpose" rows="2" required></textarea>
+                <textarea id="financial-purpose" name="financial-purpose" rows="2" ></textarea>
             </div>
 
             <button type="submit" class="save-btn">Подати запит</button>

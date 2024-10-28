@@ -26,6 +26,7 @@ dependencies {
     implementation("org.springframework.security:spring-security-core:6.3.3")
     implementation("org.postgresql:postgresql:42.7.4")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("javax.validation:validation-api:2.0.0.Final")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     compileOnly("jakarta.servlet:jakarta.servlet-api:6.1.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

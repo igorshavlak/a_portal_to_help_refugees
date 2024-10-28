@@ -17,7 +17,7 @@ public class UserController {
     @GetMapping("/home")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Resource> getUserPage(){
-        Resource resource = new ClassPathResource("static/volunteer.html");
+        Resource resource = new ClassPathResource("static/refugee.html");
         if(!resource.exists()){
             return ResponseEntity.notFound().build();
         } else {

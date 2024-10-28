@@ -201,8 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 showToast('Будь ласка, заповніть всі поля.');
                 return;
             }
-
-            // TODO: Implement actual authentication logic (e.g., API call)
+            login()
 
             console.log('Login Details:', { email, password });
 
