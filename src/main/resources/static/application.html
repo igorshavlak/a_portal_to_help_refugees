@@ -5,16 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Портал допомоги біженцям</title>
     <link rel="stylesheet" href="/templates/applications.css">
+    <!-- Підключення Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <!-- Шапка сайту -->
 <header>
-    <nav>
+    <nav class="navbar">
         <div class="logo">
             <a href="#">Портал допомоги</a>
         </div>
         <ul class="nav-links">
-            <li><a href="#">Головна</a></li>
+            <li><a href="#" class="active">Головна</a></li>
             <li><a href="#">Про нас</a></li>
             <li><a href="#">Допомога</a></li>
             <li><a href="#">Контакти</a></li>
@@ -23,36 +25,43 @@
             <a href="#" class="login-btn">Увійти</a>
             <a href="#" class="register-btn">Реєстрація</a>
         </div>
+        <!-- Гамбургер меню для мобільних пристроїв -->
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
     </nav>
 </header>
 
-<!-- Головний контент -->
-<main>
-    <section class="hero">
+<!-- Героїчна секція -->
+<section class="hero">
+    <div class="hero-content">
         <h1>Ласкаво просимо на портал допомоги біженцям</h1>
         <p>Допомагаємо знайти підтримку та необхідні ресурси тим, хто цього потребує.</p>
         <a href="#" class="cta-btn">Дізнатися більше</a>
-    </section>
+    </div>
+</section>
 
-    <section class="features">
-        <div class="feature">
-            <h2>Подати запит на допомогу</h2>
-            <p>Швидко та легко подайте запит на необхідну допомогу.</p>
-        </div>
-        <div class="feature">
-            <h2>Стати волонтером</h2>
-            <p>Приєднуйтесь до нашої команди волонтерів та допомагайте тим, хто цього потребує.</p>
-        </div>
-        <div class="feature">
-            <h2>Знайти ресурси</h2>
-            <p>Перегляньте доступні ресурси та послуги у вашому регіоні.</p>
-        </div>
-    </section>
-</main>
+<!-- Розділ з особливостями -->
+<section class="features">
+    <div class="feature">
+        <h2>Подати запит на допомогу</h2>
+        <p>Швидко та легко подайте запит на необхідну допомогу.</p>
+    </div>
+    <div class="feature">
+        <h2>Стати волонтером</h2>
+        <p>Приєднуйтесь до нашої команди волонтерів та допомагайте тим, хто цього потребує.</p>
+    </div>
+    <div class="feature">
+        <h2>Знайти ресурси</h2>
+        <p>Перегляньте доступні ресурси та послуги у вашому регіоні.</p>
+    </div>
+</section>
 
 <!-- Футер -->
 <footer>
-    <p>&copy; 2023 Портал допомоги біженцям. Всі права захищені.</p>
+    <p>&copy; 2024 Портал допомоги біженцям. Всі права захищені.</p>
 </footer>
 
 <!-- Модальне вікно входу -->
@@ -100,12 +109,9 @@
             </select>
 
             <!-- Додаткові поля для волонтерів -->
-            <div id="volunteer-fields" style="display: none;">
+            <div id="volunteer-fields" class="additional-fields">
                 <label for="volunteer-skills">Навички та досвід:</label>
                 <textarea id="volunteer-skills" name="volunteer-skills" rows="4"></textarea>
-
-                <label for="volunteer-availability">Доступність:</label>
-                <input type="text" id="volunteer-availability" name="volunteer-availability">
             </div>
 
             <button type="submit">Зареєструватися</button>

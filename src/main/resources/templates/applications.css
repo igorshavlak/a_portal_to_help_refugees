@@ -1,339 +1,574 @@
-/* Загальні стилі */
+/* --------------------------------------------------
+   General Styles
+-------------------------------------------------- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  color: #333;
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f5f5f5;
 }
 
 a {
-  text-decoration: none;
-  color: inherit;
+    text-decoration: none;
+    color: inherit;
 }
 
-/* Шапка сайту */
+button {
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+/* --------------------------------------------------
+   Header and Navigation
+-------------------------------------------------- */
 header {
-  background-color: #004080;
-  color: #fff;
+    background-color: #004080;
+    color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 10%;
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 10%;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .logo a {
-  font-size: 24px;
-  font-weight: bold;
-  color: #fff;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #fff;
 }
 
 .nav-links {
-  list-style: none;
-  display: flex;
+    list-style: none;
+    display: flex;
+    gap: 25px;
 }
 
-.nav-links li {
-  margin-left: 20px;
+.nav-links li a {
+    color: #fff;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    position: relative;
 }
 
-.nav-links a {
-  color: #fff;
-  font-weight: bold;
+.nav-links li a:hover,
+.nav-links li a.active {
+    color: #ffcc00;
+}
+
+.nav-links li a.active::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: #ffcc00;
+    bottom: -5px;
+    left: 0;
 }
 
 .auth-buttons a {
-  margin-left: 15px;
-  padding: 8px 15px;
-  border-radius: 5px;
+    margin-left: 15px;
+    padding: 8px 20px;
+    border-radius: 25px;
+    font-weight: 500;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .login-btn {
-  background-color: #fff;
-  color: #004080;
+    background-color: #fff;
+    color: #004080;
+}
+
+.login-btn:hover {
+    background-color: #e6e6e6;
 }
 
 .register-btn {
-  background-color: #ffcc00;
-  color: #004080;
+    background-color: #ffcc00;
+    color: #004080;
 }
 
-/* Головний контент */
+.register-btn:hover {
+    background-color: #e6b800;
+}
+
+/* Hamburger Menu (Mobile) */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.hamburger span {
+    width: 25px;
+    height: 3px;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+/* --------------------------------------------------
+   Hero Section
+-------------------------------------------------- */
 .hero {
-  background-image: url('../images/hero-bg.jpg');
-  background-size: cover;
-  background-position: center;
-  text-align: center;
-  padding: 100px 10%;
-  color: #fff;
+    background-image: url('../images/hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    padding: 120px 10%;
+    color: #fff;
+    text-align: center;
+    position: relative;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Dark Overlay */
+    z-index: 0;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .hero h1 {
-  font-size: 48px;
-  margin-bottom: 20px;
+    font-size: 3rem;
+    margin-bottom: 20px;
+    line-height: 1.2;
 }
 
 .hero p {
-  font-size: 24px;
-  margin-bottom: 30px;
+    font-size: 1.25rem;
+    margin-bottom: 30px;
+    line-height: 1.5;
 }
 
 .cta-btn {
-  background-color: #ffcc00;
-  color: #004080;
-  padding: 15px 30px;
-  border-radius: 5px;
-  font-size: 18px;
+    background-color: #ffcc00;
+    color: #004080;
+    padding: 15px 30px;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: 700;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    display: inline-block;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Розділ з особливостями */
+.cta-btn:hover {
+    background-color: #e6b800;
+    transform: translateY(-3px);
+}
+
+/* --------------------------------------------------
+   Features Section
+-------------------------------------------------- */
 .features {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  padding: 50px 10%;
-  background-color: #f2f2f2;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 50px 10%;
+    background-color: #fff;
+    gap: 20px;
 }
 
 .feature {
-  text-align: center;
-  width: 30%;
-  min-width: 250px;
-  margin-bottom: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 30px 20px;
+    flex: 1 1 30%;
+    max-width: 30%;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .feature h2 {
-  font-size: 28px;
-  margin-bottom: 15px;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #004080;
 }
 
 .feature p {
-  font-size: 16px;
-  color: #666;
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
 }
 
-/* Футер */
+/* --------------------------------------------------
+   Footer
+-------------------------------------------------- */
 footer {
-  background-color: #004080;
-  color: #fff;
-  text-align: center;
-  padding: 15px 0;
+    background-color: #004080;
+    color: #fff;
+    text-align: center;
+    padding: 20px 10%;
+    font-size: 0.95rem;
+    margin-top: auto;
 }
 
-/* Модальне вікно */
+/* --------------------------------------------------
+   Modal Windows
+-------------------------------------------------- */
 .modal {
-  display: none; /* Сховане за замовчуванням */
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Прозорий чорний фон */
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Prevent scrolling */
+    transition: opacity 0.3s ease;
 }
 
 .modal.show {
-  display: flex; /* Відображаємо модальне вікно та використовуємо flex для центрування */
+    display: flex; /* Show the modal and use flex to center */
+    opacity: 1;
 }
 
-/* Вміст модального вікна */
 .modal-content {
-  background-color: #fff;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 30%;
-  max-width: 500px; /* Максимальна ширина */
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  position: relative; /* Для кнопки закриття */
-  border-radius: 5px;
+    background-color: #fff;
+    padding: 30px 40px;
+    width: 90%;
+    max-width: 500px; /* Maximum width */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Softer shadow */
+    position: relative; /* For the close button */
+    border-radius: 10px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideDown 0.3s ease-out;
 }
 
-@media screen and (max-width: 768px) {
-  .modal-content {
-    width: 80%;
-  }
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* Кнопка закриття */
+.modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 25px;
+    font-size: 2rem;
+    color: #004080;
+    text-align: center;
+}
+
+/* Close Button */
 .close-btn {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  color: #aaa;
-  font-size: 28px;
-  font-weight: bold;
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    color: #aaa;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
 }
 
 .close-btn:hover,
 .close-btn:focus {
-  color: black;
-  cursor: pointer;
+    color: #000;
 }
 
-/* Стилі для форми входу */
-#login-form {
-  display: flex;
-  flex-direction: column;
+/* --------------------------------------------------
+   Forms
+-------------------------------------------------- */
+
+/* General Form Styles */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
-#login-form label {
-  margin-top: 10px;
-  margin-bottom: 5px;
+label {
+    font-weight: 500;
+    color: #004080;
 }
 
-#login-form input {
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-#login-form button {
-  padding: 10px;
-  background-color: #004080;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-#login-form button:hover {
-  background-color: #003060;
-}
-
-#login-form a {
-  color: #004080;
-  font-size: 14px;
-  text-align: center;
-  display: block;
-  margin-top: 10px;
-}
-
-#login-form a:hover {
-  text-decoration: underline;
-}
-
-/* Стилі для форми реєстрації */
-#register-form {
-  display: flex;
-  flex-direction: column;
-}
-
-#register-form label {
-  margin-top: 10px;
-  margin-bottom: 5px;
-}
-
-#register-form input,
-#register-form select,
-#register-form textarea {
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-#register-form button {
-  padding: 10px;
-  background-color: #ffcc00;
-  color: #004080;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-#register-form button:hover {
-  background-color: #e6b800;
-}
-
-#register-form a {
-  color: #004080;
-  font-size: 14px;
-  text-align: center;
-  display: block;
-  margin-top: 10px;
-}
-
-#register-form a:hover {
-  text-decoration: underline;
-}
-
-/* Стилі для поля select */
-#register-form select {
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #fff;
-  color: #333;
-}
-
-/* Стилі для textarea */
-#register-form textarea {
-  resize: vertical;
-}
-
-/* Специфічні стилі для модального вікна реєстрації */
-#register-modal .modal-content {
-  width: 40%; /* Встановіть необхідну ширину */
-}
-
-@media screen and (max-width: 768px) {
-  #register-modal .modal-content {
-    width: 80%;
-  }
-}
-
-/* Стилі для додаткових полів волонтера */
-#volunteer-fields {
-  margin-top: 10px;
-}
-
-#volunteer-fields label {
-  margin-top: 10px;
-  margin-bottom: 5px;
-}
-
-#volunteer-fields input,
-#volunteer-fields textarea {
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-/* Адаптивність навігації (при необхідності) */
-@media screen and (max-width: 768px) {
-  .nav-links {
-    display: none; /* Приховуємо навігацію на малих екранах */
-  }
-
-  .auth-buttons {
-    display: none; /* Приховуємо кнопки авторизації на малих екранах */
-  }
-
-  nav {
-    justify-content: space-between;
-  }
-
-  /* Можна додати меню-бургер для мобільної навігації */
-}
-
-/* Додаткові стилі та медіа-запити */
-@media screen and (max-width: 992px) {
-  .feature {
-    width: 45%;
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .feature {
+input,
+select,
+textarea {
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
     width: 100%;
-  }
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #0066cc;
+    box-shadow: 0 0 5px rgba(0, 102, 204, 0.5);
+    outline: none;
+}
+
+textarea {
+    resize: none; /* Prevent resizing */
+    min-height: 100px;
+}
+
+/* Buttons */
+button {
+    padding: 12px 20px;
+    background-color: #004080;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: 700;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    align-self: center;
+    width: 50%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    background-color: #003060;
+    transform: translateY(-3px);
+}
+
+/* Specific Button Styles */
+.login-btn,
+.register-btn,
+.cta-btn {
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.login-btn {
+    background-color: #fff;
+    color: #004080;
+}
+
+.login-btn:hover {
+    background-color: #e6e6e6;
+}
+
+.register-btn {
+    background-color: #ffcc00;
+    color: #004080;
+}
+
+.register-btn:hover {
+    background-color: #e6b800;
+}
+
+.cta-btn {
+    background-color: #ffcc00;
+    color: #004080;
+    padding: 15px 30px;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: 700;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    display: inline-block;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cta-btn:hover {
+    background-color: #e6b800;
+    transform: translateY(-3px);
+}
+
+/* Additional Fields */
+.additional-fields {
+    display: none; /* Hidden by default */
+    flex-direction: column;
+    gap: 15px;
+    transition: all 0.3s ease;
+}
+
+.additional-fields.show {
+    display: flex; /* Show the fields */
+}
+
+/* Positioning of Registration and Login Links */
+.modal-content p {
+    margin-top: 20px; /* Add space above the paragraph */
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.modal-content p a {
+    color: #004080;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.modal-content p a:hover {
+    color: #0066cc;
+    text-decoration: underline;
+}
+
+/* --------------------------------------------------
+   Toast Notifications
+-------------------------------------------------- */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 15px 25px;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    z-index: 2000;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(-10px);
+}
+
+/* --------------------------------------------------
+   Responsive Styles
+-------------------------------------------------- */
+@media screen and (max-width: 1024px) {
+    .features {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .feature {
+        max-width: 80%;
+    }
+
+    .modal-content {
+        width: 80%;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero p {
+        font-size: 1.2rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        width: 100%;
+        display: none;
+        background-color: #004080;
+        padding: 15px 0;
+    }
+
+    .nav-links li {
+        margin: 10px 0;
+        text-align: center;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .features {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .feature {
+        max-width: 90%;
+    }
+
+    .login-btn,
+    .register-btn,
+    .cta-btn,
+    button {
+        width: 100%;
+    }
+
+    .modal-content p {
+        margin-top: 15px; /* Adjust margin for smaller screens */
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    .cta-btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+
+    .modal-content {
+        padding: 20px;
+    }
+
+    .modal-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .features {
+        padding: 30px 5%;
+    }
+
+    .feature {
+        max-width: 100%;
+    }
+
+    .modal-content p {
+        margin-top: 15px; /* Adjust margin for smaller screens */
+    }
 }
