@@ -33,6 +33,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const notificationsCloseBtn = document.querySelector('.notifications-close-btn');
     const notificationsList = document.getElementById('notifications-list');
 
+    // Toast повідомлення
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toast-message');
+
+    // Гамбургер меню
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+
     // Дані запитів (тимчасово, поки немає серверної частини)
     const requestsData = [
         {
@@ -116,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Функція для закриття модального вікна
-    function closeModal(modal) {
+    function closeModalFunction(modal) {
         modal.classList.remove('show');
     }
 
@@ -282,11 +290,27 @@ document.addEventListener('DOMContentLoaded', function() {
             notificationsList.innerHTML = '<p>Наразі у вас немає нових сповіщень.</p>';
         } else {
             notificationsData.forEach(notification => {
-                const notificationItem = document.createElement('p');
+                const notificationItem = document.createElement('div');
+                notificationItem.className = 'notification-item';
                 notificationItem.textContent = notification.message;
                 notificationsList.appendChild(notificationItem);
             });
         }
+    }
+
+    // Функція для показу Toast повідомлення
+    function showToast(message) {
+        toastMessage.textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
+
+    // Функція для відкриття/закриття навігаційного меню
+    function toggleNav() {
+        navLinks.classList.toggle('active');
+        hamburger.classList.toggle('active');
     }
 
     // Обробники подій
@@ -300,25 +324,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Закриття модального вікна "Запити на допомогу"
     helpRequestsCloseBtn.addEventListener('click', () => {
-        closeModal(helpRequestsModal);
+        closeModalFunction(helpRequestsModal);
     });
 
     // Закриття модальних вікон при кліку поза ними
     window.addEventListener('click', function(event) {
         if (event.target === requestModal) {
-            closeModal(requestModal);
+            closeModalFunction(requestModal);
         }
         if (event.target === profileModal) {
-            closeModal(profileModal);
+            closeModalFunction(profileModal);
         }
         if (event.target === notificationsModal) {
-            closeModal(notificationsModal);
+            closeModalFunction(notificationsModal);
         }
         if (event.target === helpRequestsModal) {
-            closeModal(helpRequestsModal);
+            closeModalFunction(helpRequestsModal);
         }
         if (event.target === myActiveRequestsModal) {
-            closeModal(myActiveRequestsModal);
+            closeModalFunction(myActiveRequestsModal);
         }
     });
 
@@ -326,8 +350,8 @@ document.addEventListener('DOMContentLoaded', function() {
     acceptRequestBtn.addEventListener('click', () => {
         const requestId = acceptRequestBtn.dataset.requestId;
         // Тут можна додати код для оновлення статусу запиту на сервері
-        alert(`Ви прийняли запит №${requestId}. Дякуємо за вашу допомогу!`);
-        closeModal(requestModal);
+        showToast(`Ви прийняли запит №${requestId}. Дякуємо за вашу допомогу!`);
+        closeModalFunction(requestModal);
 
         // Додавання запиту до "Моїх активних запитів"
         const acceptedRequest = requestsData.find(req => req.id == requestId);
@@ -351,7 +375,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Закриття модального вікна "Мої активні запити"
     myActiveRequestsCloseBtn.addEventListener('click', () => {
-        closeModal(myActiveRequestsModal);
+        closeModalFunction(myActiveRequestsModal);
     });
 
     // Відкриття модального вікна "Налаштування профілю"
@@ -362,7 +386,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Закриття модального вікна "Налаштування профілю"
     profileCloseBtn.addEventListener('click', () => {
-        closeModal(profileModal);
+        closeModalFunction(profileModal);
     });
 
     // Відкриття модального вікна "Сповіщення"
@@ -374,34 +398,55 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Закриття модального вікна "Сповіщення"
     notificationsCloseBtn.addEventListener('click', () => {
-        closeModal(notificationsModal);
+        closeModalFunction(notificationsModal);
     });
 
     // Обробник події для відправки форми профілю
     profileForm.addEventListener('submit', function(event) {
         event.preventDefault();
         // Отримуємо значення полів
-        const name = document.getElementById('volunteer-name').value;
-        const email = document.getElementById('volunteer-email').value;
-        const skills = document.getElementById('volunteer-skills').value;
-        const availability = document.getElementById('volunteer-availability').value;
+        const name = document.getElementById('volunteer-name').value.trim();
+        const email = document.getElementById('volunteer-email').value.trim();
+        const skills = document.getElementById('volunteer-skills').value.trim();
+        const availability = document.getElementById('volunteer-availability').value.trim();
+
+        // Валідація введених даних
+        if (name === '' || email === '' || skills === '' || availability === '') {
+            showToast('Будь ласка, заповніть всі поля.');
+            return;
+        }
 
         // Тут можна додати код для оновлення даних профілю на сервері
 
-        alert('Зміни успішно збережено!');
-        closeModal(profileModal);
+        showToast('Зміни успішно збережено!');
+        closeModalFunction(profileModal);
     });
 
     // Обробник події для збереження категорій
     categoriesForm.addEventListener('submit', function(event) {
         event.preventDefault();
         const selectedCategories = getSelectedCategories();
+        if (selectedCategories.length === 0) {
+            showToast('Будь ласка, оберіть хоча б одну категорію.');
+            return;
+        }
         saveCategories(selectedCategories);
-        alert('Ваші категорії допомоги збережено!');
+        showToast('Ваші категорії допомоги збережено!');
         displayHelpRequests();
     });
+
+    // Обробник події для гамбургер меню
+    hamburger.addEventListener('click', toggleNav);
 
     // Завантаження вибраних категорій при завантаженні сторінки
     const savedCategories = loadCategories();
     setCategoriesForm(savedCategories);
+
+    // Функція для закриття навігаційного меню при зміні розміру вікна
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
+            navLinks.classList.remove('active');
+            hamburger.classList.remove('active');
+        }
+    });
 });

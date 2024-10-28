@@ -5,21 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Особистий кабінет волонтера</title>
     <link rel="stylesheet" href="/templates/volunteers.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <!-- Шапка сайту -->
 <header>
-    <nav>
+    <nav class="navbar">
         <div class="logo">
             <a href="#">Портал допомоги</a>
         </div>
         <ul class="nav-links">
-            <li><a href="application.html">Головна</a></li>
+            <li><a href="application.html" class="active">Головна</a></li>
             <li><a href="#">Про нас</a></li>
             <li><a href="#">Контакти</a></li>
         </ul>
         <div class="auth-buttons">
             <a href="#" class="logout-btn">Вийти</a>
+        </div>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
     </nav>
 </header>
@@ -27,7 +33,7 @@
 <!-- Героїчна секція -->
 <section class="hero">
     <div class="hero-content">
-        <h1>Ласкаво просимо, [Ім'я волонтера]</h1>
+        <h1>Ласкаво просимо, <span class="user-name">[Ім'я волонтера]</span></h1>
         <p>Дякуємо за вашу допомогу та підтримку. Разом ми робимо світ кращим!</p>
         <a href="#" class="cta-btn" id="view-requests-btn">Переглянути запити на допомогу</a>
     </div>
@@ -78,7 +84,7 @@
                     <span>Фінансова допомога</span>
                 </label>
             </div>
-            <button type="submit">Зберегти категорії</button>
+            <button type="submit" class="save-btn">Зберегти категорії</button>
         </form>
     </section>
 
@@ -112,7 +118,7 @@
             <div id="request-details">
                 <!-- Деталі запиту будуть завантажуватися динамічно -->
             </div>
-            <button id="accept-request-btn">Прийняти запит</button>
+            <button id="accept-request-btn" class="accept-btn">Прийняти запит</button>
         </div>
     </div>
 
@@ -142,7 +148,7 @@
                     <input type="text" id="volunteer-availability" name="volunteer-availability" value="[Доступність волонтера]" required>
                 </div>
 
-                <button type="submit">Зберегти зміни</button>
+                <button type="submit" class="save-btn">Зберегти зміни</button>
             </form>
         </div>
     </div>
@@ -159,6 +165,10 @@
         </div>
     </div>
 
+    <!-- Toast повідомлення -->
+    <div id="toast" class="toast">
+        <p id="toast-message"></p>
+    </div>
 </main>
 
 <!-- Футер -->

@@ -1,4 +1,6 @@
-/* Загальні стилі */
+/* --------------------------------------------------
+   General Styles
+-------------------------------------------------- */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -6,7 +8,7 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Roboto', sans-serif;
     color: #333;
     display: flex;
     flex-direction: column;
@@ -19,14 +21,24 @@ a {
     color: inherit;
 }
 
-/* Шапка сайту */
+button {
+    border: none;
+    cursor: pointer;
+}
+
+/* --------------------------------------------------
+   Header and Navigation
+-------------------------------------------------- */
 header {
     background-color: #004080;
     color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
-nav {
+.navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -37,7 +49,7 @@ nav {
 
 .logo a {
     font-size: 1.5rem;
-    font-weight: bold;
+    font-weight: 700;
     color: #fff;
 }
 
@@ -47,17 +59,18 @@ nav {
     gap: 20px;
 }
 
-.nav-links a {
+.nav-links li a {
     color: #fff;
     font-weight: 500;
     transition: color 0.3s ease;
 }
 
-.nav-links a:hover {
+.nav-links li a:hover,
+.nav-links li a.active {
     color: #ffcc00;
 }
 
-.auth-buttons a {
+.auth-buttons a.logout-btn {
     padding: 8px 15px;
     border-radius: 5px;
     background-color: #fff;
@@ -66,16 +79,33 @@ nav {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.auth-buttons a:hover {
+.auth-buttons a.logout-btn:hover {
     background-color: #e6e6e6;
 }
 
-/* Героїчна секція */
+/* Hamburger Menu */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.hamburger span {
+    width: 25px;
+    height: 3px;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+/* --------------------------------------------------
+   Hero Section
+-------------------------------------------------- */
 .hero {
     background-image: url('../images/volunteer-hero.jpg');
     background-size: cover;
     background-position: center;
-    padding: 100px 10%;
+    padding: 120px 10%;
     color: #fff;
     text-align: center;
     position: relative;
@@ -88,7 +118,7 @@ nav {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Темний наклад */
+    background-color: rgba(0, 0, 0, 0.6); /* Dark Overlay */
     z-index: 0;
 }
 
@@ -100,7 +130,7 @@ nav {
 }
 
 .hero h1 {
-    font-size: 2.5rem;
+    font-size: 3rem;
     margin-bottom: 20px;
     line-height: 1.2;
 }
@@ -114,12 +144,13 @@ nav {
 .cta-btn {
     background-color: #ffcc00;
     color: #004080;
-    padding: 12px 25px;
-    border-radius: 5px;
+    padding: 15px 30px;
+    border-radius: 30px;
     font-size: 1rem;
-    font-weight: bold;
+    font-weight: 700;
     transition: background-color 0.3s ease, transform 0.3s ease;
     display: inline-block;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .cta-btn:hover {
@@ -127,7 +158,9 @@ nav {
     transform: translateY(-3px);
 }
 
-/* Головний контент */
+/* --------------------------------------------------
+   Main Content
+-------------------------------------------------- */
 main {
     flex: 1;
     padding: 50px 10%;
@@ -135,13 +168,16 @@ main {
     margin: 0 auto;
 }
 
+/* --------------------------------------------------
+   Dashboard Section
+-------------------------------------------------- */
 .dashboard {
     text-align: center;
     margin-bottom: 50px;
 }
 
 .dashboard h2 {
-    font-size: 2rem;
+    font-size: 2.5rem;
     margin-bottom: 30px;
     color: #004080;
 }
@@ -156,12 +192,14 @@ main {
 .dashboard-actions .action-btn {
     background-color: #0066cc;
     color: #fff;
-    padding: 12px 25px;
-    border-radius: 5px;
+    padding: 15px 25px;
+    border-radius: 8px;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 600;
     transition: background-color 0.3s ease, transform 0.3s ease;
-    cursor: pointer;
+    min-width: 200px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .dashboard-actions .action-btn:hover {
@@ -169,31 +207,33 @@ main {
     transform: translateY(-3px);
 }
 
-/* Секція "Мої категорії допомоги" */
+/* --------------------------------------------------
+   My Categories Section
+-------------------------------------------------- */
 .my-categories {
     background-color: #fff;
-    padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 40px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .my-categories h2 {
-    font-size: 1.75rem;
+    font-size: 2rem;
     margin-bottom: 25px;
     text-align: center;
     color: #004080;
 }
 
 #categories-form {
-    max-width: 600px;
+    max-width: 700px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
 }
 
 .categories-list {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 15px;
     margin-bottom: 20px;
 }
@@ -201,11 +241,16 @@ main {
 .categories-list label {
     display: flex;
     align-items: center;
-    width: 48%;
     font-size: 1rem;
     cursor: pointer;
     position: relative;
-    padding-left: 25px;
+    padding-left: 30px;
+    user-select: none;
+    transition: color 0.3s ease;
+}
+
+.categories-list label:hover {
+    color: #0066cc;
 }
 
 .categories-list input[type="checkbox"] {
@@ -213,10 +258,11 @@ main {
     left: 0;
     top: 50%;
     transform: translateY(-50%);
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     cursor: pointer;
     opacity: 0;
+    z-index: -1;
 }
 
 .categories-list span::before {
@@ -225,10 +271,10 @@ main {
     left: 0;
     top: 50%;
     transform: translateY(-50%);
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     border: 2px solid #ccc;
-    border-radius: 4px;
+    border-radius: 5px;
     background-color: #fff;
     transition: border-color 0.3s ease, background-color 0.3s ease;
 }
@@ -241,11 +287,11 @@ main {
 .categories-list input[type="checkbox"]:checked + span::after {
     content: '';
     position: absolute;
-    left: 5px;
+    left: 6px;
     top: 50%;
     transform: translateY(-50%) rotate(45deg);
-    width: 5px;
-    height: 10px;
+    width: 6px;
+    height: 12px;
     border: solid #fff;
     border-width: 0 2px 2px 0;
 }
@@ -255,33 +301,37 @@ main {
     border-color: #0066cc;
 }
 
-#categories-form button {
-    padding: 12px;
+.save-btn {
+    padding: 15px;
     background-color: #28a745;
     color: #fff;
-    border: none;
-    border-radius: 5px;
+    border-radius: 30px;
     font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
+    font-weight: 700;
     transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    align-self: center;
+    width: 50%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-#categories-form button:hover {
+.save-btn:hover {
     background-color: #218838;
     transform: translateY(-3px);
 }
 
-/* Модальні вікна */
+/* --------------------------------------------------
+   Modals
+-------------------------------------------------- */
 .modal {
-    display: none; /* Сховане за замовчуванням */
+    display: none; /* Hidden by default */
     position: fixed;
     z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Прозорий чорний фон */
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
     justify-content: center;
     align-items: center;
     overflow-y: auto;
@@ -289,18 +339,18 @@ main {
 }
 
 .modal.show {
-    display: flex; /* Відображаємо модальне вікно та використовуємо flex для центрування */
+    display: flex; /* Show the modal and use flex to center */
     opacity: 1;
 }
 
 .modal-content {
     background-color: #fff;
-    padding: 30px;
+    padding: 40px;
     width: 90%;
-    max-width: 600px; /* Максимальна ширина */
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* М'якша тінь */
-    position: relative; /* Для кнопки закриття */
-    border-radius: 8px;
+    max-width: 700px; /* Maximum width */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Softer shadow */
+    position: relative; /* For the close button */
+    border-radius: 10px;
     max-height: 90vh;
     overflow-y: auto;
     animation: slideDown 0.3s ease-out;
@@ -309,7 +359,7 @@ main {
 @keyframes slideDown {
     from {
         opacity: 0;
-        transform: translateY(-20px);
+        transform: translateY(-30px);
     }
     to {
         opacity: 1;
@@ -319,17 +369,17 @@ main {
 
 .modal-content h2 {
     margin-top: 0;
-    margin-bottom: 20px;
-    font-size: 1.5rem;
+    margin-bottom: 25px;
+    font-size: 2rem;
     color: #004080;
     text-align: center;
 }
 
-/* Кнопка закриття */
+/* Close Button */
 .close-btn {
     position: absolute;
-    top: 15px;
-    right: 20px;
+    top: 20px;
+    right: 25px;
     color: #aaa;
     font-size: 1.5rem;
     font-weight: bold;
@@ -342,87 +392,176 @@ main {
     color: #000;
 }
 
-/* Списки запитів */
+/* Requests List */
 .requests-list,
 .my-requests-list,
 #notifications-list {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
 }
 
 .request-card,
 .my-request-card {
-    background-color: #f2f2f2;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .request-card:hover,
 .my-request-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .request-card h3,
 .my-request-card h3 {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     color: #004080;
+    font-size: 1.25rem;
 }
 
 .request-card p,
 .my-request-card p {
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: #555;
-    line-height: 1.4;
+    line-height: 1.6;
 }
 
 .request-card button,
-#accept-request-btn {
+.accept-btn {
     padding: 10px 20px;
     background-color: #004080;
     color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 0.95rem;
-    font-weight: bold;
-    cursor: pointer;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
     transition: background-color 0.3s ease, transform 0.3s ease;
-    align-self: flex-start;
+    cursor: pointer;
+    margin-top: 20px;
 }
 
 .request-card button:hover,
-#accept-request-btn:hover {
+.accept-btn:hover {
     background-color: #003060;
     transform: translateY(-2px);
 }
 
 .my-request-card .status {
-    font-weight: bold;
+    font-weight: 600;
+    color: #0066cc;
+}
+
+/* Notifications */
+#notifications-list p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* --------------------------------------------------
+   Profile Settings Section
+-------------------------------------------------- */
+#profile-modal .modal-content form#profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#profile-modal .modal-content .form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+#profile-modal .modal-content .form-group label {
+    margin-bottom: 5px;
+    font-weight: 500;
     color: #004080;
 }
 
-/* Сповіщення */
-#notifications-list p {
-    font-size: 0.95rem;
-    color: #555;
-    line-height: 1.4;
+#profile-modal .modal-content .form-group input[type="text"],
+#profile-modal .modal-content .form-group input[type="email"],
+#profile-modal .modal-content .form-group textarea {
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    resize: none; /* Prevent resizing */
+    width: 100%;
 }
 
-/* Футер */
+#profile-modal .modal-content .form-group input[type="text"]:focus,
+#profile-modal .modal-content .form-group input[type="email"]:focus,
+#profile-modal .modal-content .form-group textarea:focus {
+    border-color: #0066cc;
+    box-shadow: 0 0 5px rgba(0, 102, 204, 0.5);
+}
+
+#profile-modal .modal-content form#profile-form .save-btn {
+    padding: 15px;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: 700;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    align-self: center;
+    width: 50%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#profile-modal .modal-content form#profile-form .save-btn:hover {
+    background-color: #218838;
+    transform: translateY(-3px);
+}
+
+/* --------------------------------------------------
+   Toast Notifications
+-------------------------------------------------- */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 15px 25px;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    z-index: 2000;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(-10px);
+}
+
+/* --------------------------------------------------
+   Footer
+-------------------------------------------------- */
 footer {
     background-color: #004080;
     color: #fff;
     text-align: center;
-    padding: 15px 10%;
-    font-size: 0.9rem;
+    padding: 20px 10%;
+    font-size: 0.95rem;
 }
 
-/* Адаптивність */
+/* --------------------------------------------------
+   Responsive Styles
+-------------------------------------------------- */
+@media screen and (max-width: 1024px) {
+    .categories-list {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
+
 @media screen and (max-width: 768px) {
-    nav {
+    .navbar {
         flex-direction: column;
         align-items: flex-start;
     }
@@ -430,10 +569,22 @@ footer {
     .nav-links {
         flex-direction: column;
         width: 100%;
+        display: none;
+        background-color: #004080;
+        padding: 15px 0;
     }
 
     .nav-links li {
         margin: 10px 0;
+        text-align: center;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .hamburger {
+        display: flex;
     }
 
     .dashboard-actions {
@@ -442,10 +593,16 @@ footer {
         gap: 15px;
     }
 
-    .categories-list label {
-        width: 100%;
+    .categories-list {
+        grid-template-columns: 1fr;
     }
 
+    .save-btn {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 480px) {
     .hero h1 {
         font-size: 2rem;
     }
@@ -459,17 +616,15 @@ footer {
         font-size: 0.9rem;
     }
 
-    .dashboard-actions .action-btn {
-        width: 80%;
-        text-align: center;
+    .dashboard h2 {
+        font-size: 2rem;
     }
 
     .modal-content {
-        width: 95%;
+        padding: 20px;
     }
 
-    .request-card,
-    .my-request-card {
-        width: 100%;
+    .modal-content h2 {
+        font-size: 1.5rem;
     }
 }
