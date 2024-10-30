@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Repository
@@ -30,7 +32,9 @@ public class ApplicationsRepo {
                  rs.getString("type"),
                  rs.getString("description"),
                  rs.getString("additional_data"),
-                 rs.getString("status")
+                 rs.getString("status"),
+                 rs.getDate("created_at").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+
          ),id);
 
     }
