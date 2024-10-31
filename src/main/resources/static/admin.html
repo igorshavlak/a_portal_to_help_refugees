@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель адміністратора</title>
+    <link rel="stylesheet" href="/templates/admins.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- Шапка сайту -->
+<header>
+    <nav class="navbar">
+        <div class="logo">
+            <a href="#">Портал допомоги</a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="application.html" class="active">Головна</a></li>
+            <li><a href="#">Про нас</a></li>
+            <li><a href="#">Контакти</a></li>
+        </ul>
+        <div class="auth-buttons">
+            <a href="#" class="logout-btn">Вийти</a>
+        </div>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+</header>
+
+<!-- Героїчна секція -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>Ласкаво просимо, <span class="user-name">[Ім'я адміністратора]</span></h1>
+        <p>Тут ви можете керувати заявками біженців та підтверджувати їх для волонтерів.</p>
+    </div>
+</section>
+
+<!-- Головний контент -->
+<main>
+    <section class="dashboard">
+        <h2>Панель управління</h2>
+        <div class="dashboard-actions">
+            <a href="#" class="action-btn" id="view-refugees-btn">Список біженців</a>
+            <a href="#" class="action-btn" id="view-requests-btn">Заявки на підтвердження</a>
+        </div>
+    </section>
+
+    <!-- Модальне вікно "Список біженців" -->
+    <div id="refugees-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn refugees-close-btn">&times;</span>
+            <h2>Список біженців</h2>
+            <!-- Поле пошуку -->
+            <div class="search-container">
+                <input type="text" id="refugee-search-input" placeholder="Пошук за електронною поштою...">
+                <button id="refugee-search-btn">Пошук</button>
+            </div>
+            <div class="refugees-list" id="refugees-list">
+                <!-- Список біженців буде завантажуватися динамічно за допомогою JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальне вікно "Заявки на підтвердження" -->
+    <div id="requests-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn requests-close-btn">&times;</span>
+            <h2>Заявки на підтвердження</h2>
+            <!-- Вибір категорій -->
+            <div class="categories-filter">
+                <label for="category-select">Фільтрувати за категорією:</label>
+                <select id="category-select">
+                    <option value="all">Всі категорії</option>
+                    <option value="housing">Житло</option>
+                    <option value="medical">Медична допомога</option>
+                    <option value="legal">Юридична допомога</option>
+                    <option value="employment">Допомога у працевлаштуванні</option>
+                    <option value="education">Освітні та професійні програми</option>
+                    <option value="food">Продукти харчування та предмети першої необхідності</option>
+                    <option value="financial">Фінансова допомога</option>
+                </select>
+            </div>
+            <div class="requests-list" id="requests-list">
+                <!-- Список заявок буде завантажуватися динамічно за допомогою JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальне вікно з деталями заявки -->
+    <div id="request-details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn request-details-close-btn">&times;</span>
+            <h2>Деталі заявки</h2>
+            <div id="request-details">
+                <!-- Деталі заявки будуть завантажуватися динамічно -->
+            </div>
+            <button id="approve-request-btn" class="approve-btn">Підтвердити заявку</button>
+        </div>
+    </div>
+
+    <!-- Toast повідомлення -->
+    <div id="toast" class="toast">
+        <p id="toast-message"></p>
+    </div>
+</main>
+
+<!-- Футер -->
+<footer>
+    <p>&copy; 2024 Портал допомоги біженцям. Всі права захищені.</p>
+</footer>
+
+<!-- Підключення JavaScript -->
+<script src="/scripts/admins.js"></script>
+</body>
+</html>
