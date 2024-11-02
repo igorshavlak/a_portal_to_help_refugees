@@ -34,4 +34,7 @@ public class ApplicationService {
     public List<Application> getUserApplications(Principal principal){
         return applicationsRepo.getUserApplications(refugeeRepo.getIdByUsername(principal.getName()));
     }
+    public List<Application> getApplicationsByCategories(List<String> categories){
+        return applicationsRepo.getAllApplicationsByCategories(categories);
+    }
 }

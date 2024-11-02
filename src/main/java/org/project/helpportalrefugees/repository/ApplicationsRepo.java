@@ -8,12 +8,16 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
 public class ApplicationsRepo {
     private final String saveRequest = "INSERT INTO applications (user_id,type,description,additional_data,status) VALUES (?,?,?,?,?)";
     private final String getAllRequest = "SELECT * FROM applications WHERE user_id=?";
+    private final String acceptRequest = "UPDATE applications SET status=?, volunteer_id=? WHERE user_id=?";
+
+
 
 
     JdbcTemplate jdbcTemplate;
@@ -37,5 +41,28 @@ public class ApplicationsRepo {
 
          ),id);
 
+    }
+    public List<Application> getAllApplicationsByCategories(List<String> categories) {
+        String sql = "SELECT * FROM applications WHERE type IN (" +
+                String.join(",", Collections.nCopies(categories.size(), "?")) + ") AND status = ?";
+        Object[] params = new Object[categories.size() + 1];
+        System.arraycopy(categories.toArray(), 0, params, 0, categories.size());
+        params[params.length - 1] = "pending";
+        return jdbcTemplate.query(
+                sql,
+                params,
+                (rs, rowNum) -> new Application(
+                        rs.getInt("id"),
+                        rs.getInt("user_id"),
+                        rs.getString("type"),
+                        rs.getString("description"),
+                        rs.getString("additional_data"),
+                        rs.getString("status"),
+                        rs.getDate("created_at").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+                )
+        );
+    }
+    public void acceptApplication(int applicationId, int volunteerId) {
+        jdbcTemplate.update(acceptRequest,applicationId,volunteerId);
     }
 }

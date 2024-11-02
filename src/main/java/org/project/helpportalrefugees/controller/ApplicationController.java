@@ -57,5 +57,22 @@ public class ApplicationController {
             return ResponseEntity.status(500).build();
         }
     }
+    @GetMapping("/applications")
+    public ResponseEntity<List<Application>> getApplicationsByCategories(@RequestBody List<String> categoryList) {
+        try {
+            List<Application> applications = applicationService.getApplicationsByCategories(categoryList);
+            return ResponseEntity.status(200).body(applications);
+
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(500).build();
+        }
+    }
+    @PostMapping("/volunteerAccept")
+    public void accept(@RequestParam int id,Principal principal){
+
+
+
+    }
 
 }

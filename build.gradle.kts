@@ -25,6 +25,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     implementation("org.springframework.security:spring-security-core:6.3.3")
     implementation("org.postgresql:postgresql:42.7.4")
+    implementation("org.springframework:spring-messaging:6.1.12")
+    implementation("org.springframework:spring-websocket:6.1.13")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("javax.validation:validation-api:2.0.0.Final")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
