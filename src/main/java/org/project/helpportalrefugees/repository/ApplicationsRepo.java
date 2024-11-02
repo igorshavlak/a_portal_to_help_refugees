@@ -37,7 +37,7 @@ public class ApplicationsRepo {
                  rs.getString("description"),
                  rs.getString("additional_data"),
                  rs.getString("status"),
-                 rs.getDate("created_at").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+                 rs.getDate("created_at").toLocalDate().atStartOfDay()
 
          ),id);
 

@@ -148,36 +148,96 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to display active requests
     function displayMyActiveRequests() {
-        myActiveRequestsList.innerHTML = '';
+        try {
+            const helpRequests =  getUserApplications();
+            renderHelpRequests(helpRequests);
+            openModal(helpRequestsModal);
+        } catch (error) {
+            console.error('Помилка при отриманні запитів:', error);
+            showToast('Сталася помилка при отриманні запитів. Спробуйте пізніше.');
+        }
+    }
+    function renderHelpRequests(helpRequests) {
+        helpRequestsList.innerHTML = '';
 
-        if (myRequestsData.length === 0) {
-            myActiveRequestsList.innerHTML = '<p>Наразі у вас немає активних запитів.</p>';
+        if (helpRequests.length === 0) {
+            helpRequestsList.innerHTML = '<p>Наразі немає доступних запитів у ваших обраних категоріях.</p>';
             return;
         }
 
-        myRequestsData.forEach(request => {
+        helpRequests.forEach(request => {
             const requestCard = document.createElement('div');
-            requestCard.className = 'my-request-card';
+            requestCard.className = 'request-card';
 
             const requestTitle = document.createElement('h3');
-            requestTitle.textContent = request.type;
+            requestTitle.textContent = getHelpTypeName(request.type);
 
             const requestDesc = document.createElement('p');
             requestDesc.textContent = request.description;
 
-            const requestStatus = document.createElement('p');
-            requestStatus.innerHTML = `<span class="status">Статус:</span> ${request.status}`;
+            const viewButton = document.createElement('button');
+            viewButton.textContent = 'Переглянути';
+            viewButton.classList.add('view-btn');
+            viewButton.addEventListener('click', () => {
+                openRequestModal(request);
+            });
 
             requestCard.appendChild(requestTitle);
             requestCard.appendChild(requestDesc);
-            requestCard.appendChild(requestStatus);
+            requestCard.appendChild(viewButton);
 
-            myActiveRequestsList.appendChild(requestCard);
+            helpRequestsList.appendChild(requestCard);
         });
-
-        openModal(myActiveRequestsModal);
     }
+    async function handleRequestFormSubmit(event) {
+        event.preventDefault();
 
+        const requestType = document.getElementById('request-type').value;
+        const requestDescription = document.getElementById('request-description').value;
+
+        // Collect additional data based on request type
+        let additionalData = {};
+
+        switch (requestType) {
+            case 'housing':
+                const familyMembers = document.getElementById('family-members').value;
+                const specialNeeds = document.getElementById('special-needs').value;
+                additionalData = {
+                    familyMembers: familyMembers,
+                    specialNeeds: specialNeeds
+                };
+                break;
+            case 'medical':
+                const medicalCondition = document.getElementById('medical-condition').value;
+                additionalData = {
+                    medicalCondition: medicalCondition
+                };
+                break;
+            // ... остальные кейсы
+            default:
+                additionalData = {};
+        }
+        const requestData = {
+            type: requestType,
+            description: requestDescription,
+            additionalData: additionalData
+        };
+
+        try {
+            const data = await saveApplication(requestData); // Глобальная функция
+
+            showToast(data.message || 'Заявка успішно відправлена.');
+
+            requestForm.reset();
+            hideAllAdditionalFields();
+
+            closeModalFunction(requestModal);
+
+        } catch (error) {
+            console.error('Помилка при відправці запиту:', error);
+            showToast(error.message || 'Сталася помилка при відправці запиту. Спробуйте пізніше.');
+        }
+    }
     // Function to get the key for help type
     function getHelpTypeKey(typeName) {
         const mapping = {

@@ -53,6 +53,7 @@ public class ApplicationController {
             List<Application> applications = applicationService.getUserApplications(principal);
             return ResponseEntity.status(200).body(applications);
         }catch (Exception e) {
+            e.printStackTrace();
             System.out.println("error " + e.getMessage());
             return ResponseEntity.status(500).build();
         }

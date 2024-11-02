@@ -45,5 +45,26 @@ async function fetchHelpRequests(categories) {
         throw error;
     }
 }
+async function getUserApplications() {
+    try {
+        const response = await fetch('/applications/getUserApplications', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Помилка: ${response.statusText}`);
+        }
+
+        const helpRequests = await response.json();
+        return helpRequests;
+    } catch (error) {
+        console.error('Помилка при отримані заявок:', error);
+        throw error;
+    }
+}
+window.getUserApplications = getUserApplications;
 window.fetchHelpRequests = fetchHelpRequests;
 window.acceptHelpRequest = acceptHelpRequest;
