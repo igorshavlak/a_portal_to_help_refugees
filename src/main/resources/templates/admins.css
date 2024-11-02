@@ -1,0 +1,527 @@
+/* --------------------------------------------------
+   General Styles
+-------------------------------------------------- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+/* --------------------------------------------------
+   Header and Navigation
+-------------------------------------------------- */
+header {
+    background-color: #004080;
+    color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 4px solid #ffcc00; /* Додано нижню смугу для консистентності */
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 10%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo a {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links li a {
+    color: #fff;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-links li a:hover,
+.nav-links li a.active {
+    color: #ffcc00;
+}
+
+.auth-buttons a.logout-btn {
+    padding: 8px 15px;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #004080;
+    font-weight: 500;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.auth-buttons a.logout-btn:hover {
+    background-color: #e6e6e6;
+}
+
+/* Hamburger Menu */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.hamburger span {
+    width: 25px;
+    height: 3px;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+/* --------------------------------------------------
+   Hero Section
+-------------------------------------------------- */
+.hero {
+    background-image: url('../images/admin-hero.jpg'); /* Змініть шлях до фону за потреби */
+    background-size: cover;
+    background-position: center;
+    padding: 120px 10%;
+    color: #fff;
+    text-align: center;
+    position: relative;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Dark Overlay */
+    z-index: 0;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+/* --------------------------------------------------
+   Main Content
+-------------------------------------------------- */
+main {
+    flex: 1;
+    padding: 50px 10%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* --------------------------------------------------
+   Dashboard Section
+-------------------------------------------------- */
+.dashboard {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.dashboard h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: #004080;
+}
+
+.dashboard-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.dashboard-actions .action-btn {
+    background-color: #0066cc;
+    color: #fff;
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    min-width: 200px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-actions .action-btn:hover {
+    background-color: #005bb5;
+    transform: translateY(-3px);
+}
+
+/* --------------------------------------------------
+   Modals
+-------------------------------------------------- */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+    transition: opacity 0.3s ease;
+}
+
+.modal.show {
+    display: flex; /* Show the modal and use flex to center */
+    opacity: 1;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 40px;
+    width: 90%;
+    max-width: 700px; /* Maximum width */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Softer shadow */
+    position: relative; /* For the close button */
+    border-radius: 10px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 25px;
+    font-size: 2rem;
+    color: #004080;
+    text-align: center;
+}
+
+/* Close Button */
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    color: #aaa;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: #000;
+}
+
+/* Lists */
+.refugees-list,
+.requests-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.refugee-card,
+.request-card {
+    background-color: #f9f9f9;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.refugee-card:hover,
+.request-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.refugee-card h3,
+.request-card h3 {
+    margin-bottom: 15px;
+    color: #004080;
+    font-size: 1.25rem;
+}
+
+.refugee-card p,
+.request-card p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+.request-card button,
+.approve-btn {
+    padding: 10px 20px;
+    background-color: #28a745; /* Green for approval */
+    color: #fff;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.request-card button:hover,
+.approve-btn:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+/* Request Details Modal */
+#request-details {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+#request-details p {
+    margin-bottom: 10px;
+}
+
+/* --------------------------------------------------
+   Search and Filter Styles
+-------------------------------------------------- */
+/* Стилі для пошуку біженців */
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.search-container input[type="text"] {
+    padding: 10px;
+    width: 60%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.search-container button {
+    padding: 10px 20px;
+    background-color: #0066cc;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-container button:hover {
+    background-color: #005bb5;
+}
+
+/* Стилі для фільтра категорій */
+.categories-filter {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.categories-filter label {
+    font-weight: 500;
+    color: #004080;
+}
+
+.categories-filter select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+/* --------------------------------------------------
+   Toast Notifications
+-------------------------------------------------- */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 15px 25px;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    z-index: 2000;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(-10px);
+}
+
+/* --------------------------------------------------
+   Footer
+-------------------------------------------------- */
+footer {
+    background-color: #004080;
+    color: #fff;
+    text-align: center;
+    padding: 20px 10%;
+    font-size: 0.95rem;
+    border-top: 4px solid #ffcc00; /* Додано верхню смугу для консистентності */
+}
+
+/* --------------------------------------------------
+   Responsive Styles
+-------------------------------------------------- */
+@media screen and (max-width: 1024px) {
+    .dashboard h2 {
+        font-size: 2rem;
+    }
+
+    .modal-content {
+        width: 80%;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero p {
+        font-size: 1.2rem;
+    }
+
+    .search-container input[type="text"] {
+        width: 70%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        width: 100%;
+        display: none;
+        background-color: #004080;
+        padding: 15px 0;
+    }
+
+    .nav-links li {
+        margin: 10px 0;
+        text-align: center;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .dashboard-actions {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .dashboard-actions .action-btn {
+        width: 80%;
+        text-align: center;
+    }
+
+    .approve-btn,
+    .search-container input[type="text"],
+    .search-container button,
+    .categories-filter select {
+        width: 100%;
+    }
+
+    .search-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .categories-filter {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    .dashboard h2 {
+        font-size: 1.8rem;
+    }
+
+    .modal-content {
+        padding: 20px;
+    }
+
+    .modal-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .search-container input[type="text"] {
+        width: 100%;
+    }
+}
