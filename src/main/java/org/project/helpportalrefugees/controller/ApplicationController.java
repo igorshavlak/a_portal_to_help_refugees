@@ -57,22 +57,32 @@ public class ApplicationController {
             return ResponseEntity.status(500).build();
         }
     }
-    @GetMapping("/applications")
+    @PostMapping("/getApplicationsByCategories")
     public ResponseEntity<List<Application>> getApplicationsByCategories(@RequestBody List<String> categoryList) {
         try {
             List<Application> applications = applicationService.getApplicationsByCategories(categoryList);
             return ResponseEntity.status(200).body(applications);
 
         }catch (Exception e) {
+            e.printStackTrace();
             System.out.println(e.getMessage());
             return ResponseEntity.status(500).build();
         }
     }
-    @PostMapping("/volunteerAccept")
-    public void accept(@RequestParam int id,Principal principal){
+        @PutMapping("/{requestId}/accept")
+        public ResponseEntity<?> accept(@PathVariable int requestId,Principal principal){
+            try {
+                applicationService.accept(requestId,principal);
+                return ResponseEntity.status(201).body(
+                        new ApiResponse(true, "Заявка прийнята")
+                );
 
-
-
-    }
+            }catch(Exception e){
+                e.printStackTrace();
+                return ResponseEntity.status(500).body(
+                        new ApiResponse(false, "Сталася помилка")
+                );
+            }
+        }
 
 }

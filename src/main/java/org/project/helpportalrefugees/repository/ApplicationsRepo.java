@@ -15,7 +15,7 @@ import java.util.List;
 public class ApplicationsRepo {
     private final String saveRequest = "INSERT INTO applications (user_id,type,description,additional_data,status) VALUES (?,?,?,?,?)";
     private final String getAllRequest = "SELECT * FROM applications WHERE user_id=?";
-    private final String acceptRequest = "UPDATE applications SET status=?, volunteer_id=? WHERE user_id=?";
+    private final String acceptRequest = "UPDATE applications SET status=?, volunteer_id=? WHERE id=?";
 
 
 
@@ -58,11 +58,11 @@ public class ApplicationsRepo {
                         rs.getString("description"),
                         rs.getString("additional_data"),
                         rs.getString("status"),
-                        rs.getDate("created_at").toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+                        rs.getDate("created_at").toLocalDate().atStartOfDay()
                 )
         );
     }
     public void acceptApplication(int applicationId, int volunteerId) {
-        jdbcTemplate.update(acceptRequest,applicationId,volunteerId);
+        jdbcTemplate.update(acceptRequest,"processing",volunteerId,applicationId);
     }
 }

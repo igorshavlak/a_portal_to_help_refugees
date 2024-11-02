@@ -139,11 +139,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // --------------------------------------------------
     // Display Functions
     // --------------------------------------------------
-
-
-
-
-
     async function displayMyRequests() {
         try {
             const response = await fetch('/applications/getUserApplications', {
