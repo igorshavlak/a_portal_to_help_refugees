@@ -26,6 +26,14 @@ button {
     cursor: pointer;
 }
 
+input, textarea {
+    font-family: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+}
+
 /* --------------------------------------------------
    Header and Navigation
 -------------------------------------------------- */
@@ -301,25 +309,6 @@ main {
     border-color: #0066cc;
 }
 
-.save-btn {
-    padding: 15px;
-    background-color: #28a745;
-    color: #fff;
-    border-radius: 30px;
-    font-size: 1rem;
-    font-weight: 700;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    cursor: pointer;
-    align-self: center;
-    width: 50%;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.save-btn:hover {
-    background-color: #218838;
-    transform: translateY(-3px);
-}
-
 /* --------------------------------------------------
    Modals
 -------------------------------------------------- */
@@ -452,6 +441,44 @@ main {
 .my-request-card .status {
     font-weight: 600;
     color: #0066cc;
+}
+
+/* Стилі для модального вікна "Деталі запиту" */
+.request-details-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+}
+
+.request-details-container h2 {
+    text-align: center;
+    color: #004080;
+    margin-bottom: 20px;
+}
+
+.request-details-container #request-details {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.request-details-container .accept-btn {
+    display: block;
+    margin: 0 auto;
+    padding: 10px 30px;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+}
+
+.request-details-container .accept-btn:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
 }
 
 /* Notifications */
@@ -596,10 +623,6 @@ footer {
     .categories-list {
         grid-template-columns: 1fr;
     }
-
-    .save-btn {
-        width: 100%;
-    }
 }
 
 @media screen and (max-width: 480px) {
@@ -628,3 +651,7 @@ footer {
         font-size: 1.5rem;
     }
 }
+
+/* --------------------------------------------------
+   Additional Styles
+-------------------------------------------------- */

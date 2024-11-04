@@ -84,7 +84,7 @@
                     <span>Фінансова допомога</span>
                 </label>
             </div>
-            <button type="submit" class="save-btn">Зберегти категорії</button>
+            <!-- Кнопка "Зберегти категорії" видалена -->
         </form>
     </section>
 
@@ -114,11 +114,13 @@
     <div id="request-modal" class="modal">
         <div class="modal-content">
             <span class="close-btn request-close-btn">&times;</span>
-            <h2>Деталі запиту</h2>
-            <div id="request-details">
-                <!-- Деталі запиту будуть завантажуватися динамічно -->
+            <div class="request-details-container">
+                <h2>Деталі запиту</h2>
+                <div id="request-details">
+                    <!-- Деталі запиту будуть завантажуватися динамічно -->
+                </div>
+                <button id="accept-request-btn" class="accept-btn">Прийняти запит</button>
             </div>
-            <button id="accept-request-btn" class="accept-btn">Прийняти запит</button>
         </div>
     </div>
 
@@ -177,7 +179,7 @@
 </footer>
 
 <!-- Підключення JavaScript -->
-<!-- volunteerFetch.js подключен перед volunteers.js -->
+<!-- volunteerFetch.js підключений перед volunteers.js -->
 <script src="/scripts/volunteerFetch.js"></script>
 <script src="/scripts/volunteers.js"></script>
 </body>
