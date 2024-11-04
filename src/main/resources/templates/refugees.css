@@ -234,7 +234,7 @@ main {
     background-color: #fff;
     padding: 40px;
     width: 90%;
-    max-width: 700px; /* Maximum width */
+    max-width: 700px; /* Increased max-width for better appearance */
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Softer shadow */
     position: relative; /* For the close button */
     border-radius: 10px;
@@ -387,6 +387,7 @@ main {
     width: 100%;
 }
 
+/* Submit Button */
 #request-form button {
     padding: 15px;
     background-color: #ffcc00;
@@ -441,6 +442,7 @@ main {
     resize: none; /* Prevent resizing */
 }
 
+/* Profile Form */
 #profile-form {
     display: flex;
     flex-direction: column;
@@ -513,6 +515,16 @@ main {
 .toast.show {
     opacity: 1;
     transform: translateY(-10px);
+}
+
+@keyframes fadein {
+    from { bottom: 0; opacity: 0; }
+    to { bottom: 30px; opacity: 1; }
+}
+
+@keyframes fadeout {
+    from { bottom: 30px; opacity: 1; }
+    to { bottom: 0; opacity: 0; }
 }
 
 /* --------------------------------------------------
@@ -617,4 +629,65 @@ footer {
     .modal-content h2 {
         font-size: 1.5rem;
     }
+}
+
+/* --------------------------------------------------
+   Additional Styles for Request Details Modal
+-------------------------------------------------- */
+
+/* Styling the content inside request-details-content */
+#request-details-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#request-details-content p {
+    font-size: 1rem;
+    color: #555;
+}
+
+#request-details-content ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#request-details-content ul li {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+#request-details-content ul li strong {
+    width: 220px;
+    color: #004080;
+}
+
+.volunteer-info {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f0f8ff;
+    border-left: 4px solid #007BFF;
+    border-radius: 5px;
+}
+
+.volunteer-info h4 {
+    margin-bottom: 10px;
+    color: #007BFF;
+}
+
+.volunteer-info ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.volunteer-info ul li {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.volunteer-info ul li strong {
+    width: 150px;
+    color: #004080;
 }

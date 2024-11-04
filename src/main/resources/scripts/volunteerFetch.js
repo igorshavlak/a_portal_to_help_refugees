@@ -45,10 +45,12 @@ async function fetchHelpRequests(categories) {
         throw error;
     }
 }
+
 async function getUserApplications() {
     try {
         const response = await fetch('/applications/getUserApplications', {
             method: 'GET',
+
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -58,13 +60,13 @@ async function getUserApplications() {
             throw new Error(`Помилка: ${response.statusText}`);
         }
 
-        const helpRequests = await response.json();
-        return helpRequests;
+        return await response.json();
     } catch (error) {
         console.error('Помилка при отримані заявок:', error);
         throw error;
     }
 }
+
 window.getUserApplications = getUserApplications;
 window.fetchHelpRequests = fetchHelpRequests;
 window.acceptHelpRequest = acceptHelpRequest;

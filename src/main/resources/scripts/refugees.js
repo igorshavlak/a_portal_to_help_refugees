@@ -14,12 +14,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const myRequestsModal = document.getElementById('my-requests-modal');
     const profileModal = document.getElementById('profile-modal');
     const notificationsModal = document.getElementById('notifications-modal');
+    const requestDetailsModal = document.getElementById('request-details-modal');
 
     // Close buttons for modals
     const requestCloseBtn = document.querySelector('.request-close-btn');
     const myRequestsCloseBtn = document.querySelector('.my-requests-close-btn');
     const profileCloseBtn = document.querySelector('.profile-close-btn');
     const notificationsCloseBtn = document.querySelector('.notifications-close-btn');
+    const requestDetailsCloseBtn = document.querySelector('.request-details-close-btn');
 
     // Forms
     const requestForm = document.getElementById('request-form');
@@ -32,6 +34,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const myRequestsList = document.getElementById('my-requests-list');
     const notificationsList = document.getElementById('notifications-list');
 
+    // List inside request details modal
+    const requestDetailsContent = document.getElementById('request-details-content');
+
     // Hamburger menu elements
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
@@ -40,17 +45,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Toast Notification Setup
     // --------------------------------------------------
 
-    // Create toast element
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    document.body.appendChild(toast);
-
     /**
      * Function to show toast notification
      * @param {string} message - The message to display in the toast
      */
     function showToast(message) {
-        toast.textContent = message;
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
+
+        toastMessage.textContent = message;
         toast.classList.add('show');
         setTimeout(() => {
             toast.classList.remove('show');
@@ -58,67 +61,68 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --------------------------------------------------
-    // Data Structures (Temporary Data)
+    // Translation Functions
     // --------------------------------------------------
 
-    // Sample data for help requests
-    const requestsData = [
-        {
-            id: 1,
-            type: 'Житло',
-            description: 'Потрібне тимчасове житло для сім\'ї з 4 осіб у Львові.',
-            status: 'Новий',
-            additionalData: {
-                familyMembers: 4,
-                specialNeeds: 'Немає'
-            }
-        },
-        {
-            id: 2,
-            type: 'Медична допомога',
-            description: 'Потрібен лікар для консультації щодо хронічної хвороби.',
-            status: 'Новий',
-            additionalData: {
-                medicalCondition: 'Цукровий діабет'
-            }
-        },
-        // Додайте більше запитів за потреби
-    ];
+    /**
+     * Function to translate status from internal key to Ukrainian
+     * @param {string} statusKey - The status key (e.g., 'pending', 'processing')
+     * @returns {string} - Translated status in Ukrainian
+     */
+    function getStatusName(statusKey) {
+        const statusMapping = {
+            'pending': 'Очікує',
+            'processing': 'В процесі',
+            'completed': 'Виконано',
+            'rejected': 'Відхилено'
+        };
+        return statusMapping[statusKey.toLowerCase()] || 'Невідомий статус';
+    }
 
-    // Sample data for active requests
-    const myRequestsData = [
-        {
-            id: 1,
-            type: 'Житло',
-            description: 'Допомагаю сім\'ї з 4 осіб у Львові.',
-            status: 'В процесі'
-        },
-        {
-            id: 2,
-            type: 'Медична допомога',
-            description: 'Консультую щодо хронічної хвороби.',
-            status: 'Виконано'
-        },
-        // Додайте більше активних запитів за потреби
-    ];
+    /**
+     * Function to translate help type from internal key to Ukrainian
+     * @param {string} typeKey - The type key (e.g., 'housing', 'medical')
+     * @returns {string} - Translated type in Ukrainian
+     */
+    function getHelpTypeName(typeKey) {
+        const typeMapping = {
+            'housing': 'Житло',
+            'medical': 'Медична допомога',
+            'legal': 'Юридична допомога',
+            'employment': 'Допомога у працевлаштуванні',
+            'education': 'Освітні та професійні програми',
+            'food': 'Продукти харчування та предмети першої необхідності',
+            'financial': 'Фінансова допомога'
+        };
+        return typeMapping[typeKey] || 'Інше';
+    }
 
-    // Sample data for notifications
-    const notificationsData = [
-        {
-            id: 1,
-            message: 'Новий запит на допомогу доступний для перегляду.'
-        },
-        {
-            id: 2,
-            message: 'Ваш профіль було успішно оновлено.'
-        },
-        // Додайте більше сповіщень за потреби
-    ];
+    /**
+     * Function to translate additionalData keys to Ukrainian labels
+     * @param {string} key - The key from additionalData
+     * @returns {string} - Translated label in Ukrainian
+     */
+    function getAdditionalDataLabel(key) {
+        const additionalDataMapping = {
+            'familyMembers': 'Кількість членів сім\'ї',
+            'specialNeeds': 'Спеціальні потреби',
+            'medicalCondition': 'Медичний стан',
+            'legalIssue': 'Юридична проблема',
+            'currentEmployment': 'Поточний статус зайнятості',
+            'desiredJob': 'Бажана посада',
+            'currentEducation': 'Поточний рівень освіти',
+            'desiredProgram': 'Бажана освітня або професійна програма',
+            'foodItems': 'Перелік необхідних продуктів та предметів',
+            'financialAmount': 'Необхідна сума',
+            'financialPurpose': 'Мета фінансової допомоги'
+            // Додайте більше ключів за потреби
+        };
+        return additionalDataMapping[key] || key;
+    }
 
     // --------------------------------------------------
     // Modal Functions
     // --------------------------------------------------
-
 
     /**
      * Function to open a modal
@@ -139,7 +143,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // --------------------------------------------------
     // Display Functions
     // --------------------------------------------------
+
+    /**
+     * Function to display the user's help requests
+     */
     async function displayMyRequests() {
+        myRequestsList.innerHTML = '';
+
         try {
             const response = await fetch('/applications/getUserApplications', {
                 method: 'GET',
@@ -178,71 +188,147 @@ document.addEventListener('DOMContentLoaded', function() {
             requestCard.className = 'my-request-card';
 
             const requestTitle = document.createElement('h3');
-            requestTitle.textContent = request.type;
+            requestTitle.textContent = getHelpTypeName(request.type);
 
             const requestDesc = document.createElement('p');
             requestDesc.textContent = request.description;
 
             const requestStatus = document.createElement('p');
-            requestStatus.innerHTML = `<span class="status">Статус:</span> ${request.status}`;
+            requestStatus.innerHTML = `<span class="status">Статус:</span> ${getStatusName(request.status)}`;
 
             const requestDate = document.createElement('p');
-            const date = new Date(request.createdAt);
+            const date = new Date(request.createdAt || Date.now()); // Використовуємо дату створення, якщо доступно
             requestDate.innerHTML = `<span class="date">Дата створення:</span> ${date.toLocaleString()}`;
 
-            // Optionally, display additional data if needed
-            // const additionalData = document.createElement('p');
-            // additionalData.innerHTML = `<strong>Додаткові дані:</strong> ${request.additionalData}`;
-            // requestCard.appendChild(additionalData);
+            // Додати кнопку "Переглянути"
+            const viewButton = document.createElement('button');
+            viewButton.textContent = 'Переглянути';
+            viewButton.classList.add('view-btn');
+            viewButton.addEventListener('click', () => {
+                openRequestDetailsModal(request);
+            });
 
             requestCard.appendChild(requestTitle);
             requestCard.appendChild(requestDesc);
             requestCard.appendChild(requestStatus);
             requestCard.appendChild(requestDate);
+            requestCard.appendChild(viewButton);
 
             myRequestsList.appendChild(requestCard);
         });
     }
 
     /**
-     * Function to display notifications in the modal
+     * Function to render notifications in the modal
      */
-    function displayNotifications() {
+    async function displayNotifications() {
         notificationsList.innerHTML = '';
 
-        if (notificationsData.length === 0) {
-            notificationsList.innerHTML = '<p>Наразі у вас немає нових сповіщень.</p>';
-            return;
+        try {
+            const response = await fetch('/notifications/getUserNotifications', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Помилка: ${response.statusText}`);
+            }
+
+            const notifications = await response.json();
+            renderNotifications(notifications);
+            openModal(notificationsModal);
+        } catch (error) {
+            console.error('Помилка при отриманні сповіщень:', error);
+            showToast('Сталася помилка при отриманні сповіщень. Спробуйте пізніше.');
         }
-
-        notificationsData.forEach(notification => {
-            const notificationItem = document.createElement('p');
-            notificationItem.textContent = notification.message;
-            notificationsList.appendChild(notificationItem);
-        });
-
-        openModal(notificationsModal);
     }
 
-
     /**
-     * Function to display notifications in the modal
+     * Function to render notifications
+     * @param {Array} notifications - Array of notification objects
      */
-    function displayNotifications() {
+    function renderNotifications(notifications) {
         notificationsList.innerHTML = '';
 
-        if (notificationsData.length === 0) {
+        if (notifications.length === 0) {
             notificationsList.innerHTML = '<p>Наразі у вас немає нових сповіщень.</p>';
             return;
         }
 
-        notificationsData.forEach(notification => {
+        notifications.forEach(notification => {
             const notificationItem = document.createElement('p');
             notificationItem.textContent = notification.message;
             notificationsList.appendChild(notificationItem);
         });
+    }
 
-        openModal(notificationsModal);
+    /**
+     * Function to open the request details modal with translated fields and volunteer info if applicable
+     * @param {Object} request - The help request object
+     */
+    function openRequestDetailsModal(request) {
+        // Переконайтеся, що additionalData є об'єктом
+        let additionalData = request.additionalData;
+        if (typeof additionalData === 'string') {
+            try {
+                additionalData = JSON.parse(additionalData);
+            } catch (e) {
+                console.error('Помилка парсингу additionalData:', e);
+                additionalData = {};
+            }
+        }
+
+        // Перекладаємо статус
+        const translatedStatus = getStatusName(request.status);
+
+        // Створюємо HTML для additionalData
+        let additionalDataHTML = '';
+        if (additionalData && Object.keys(additionalData).length > 0) {
+            additionalDataHTML += `<h3>Додаткові дані:</h3><ul>`;
+            for (const [key, value] of Object.entries(additionalData)) {
+                const label = getAdditionalDataLabel(key);
+                additionalDataHTML += `<li><strong>${label}:</strong> ${value}</li>`;
+            }
+            additionalDataHTML += `</ul>`;
+        }
+
+        // Створюємо HTML для даних волонтера, якщо статус "В процесі"
+        let volunteerHTML = '';
+        if (request.status.toLowerCase() === 'processing') {
+            if (request.volunteer) {
+                volunteerHTML += `
+                    <div class="volunteer-info">
+                        <h4>Дані волонтера, який прийняв заявку:</h4>
+                        <ul>
+                            <li><strong>Ім'я:</strong> ${request.volunteer.firstName}</li>
+                            <li><strong>Прізвище:</strong> ${request.volunteer.lastName}</li>
+                            <li><strong>Електронна пошта:</strong> ${request.volunteer.email}</li>
+                            <li><strong>Телефон:</strong> ${request.volunteer.phone}</li>
+                        </ul>
+                    </div>
+                `;
+            } else {
+                volunteerHTML += `
+                    <div class="volunteer-info">
+                        <h4>Дані волонтера, який прийняв заявку:</h4>
+                        <p>Волонтер ще не прийняв цю заявку.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Об'єднуємо всі частини
+        requestDetailsContent.innerHTML = `
+            <p><strong>Тип допомоги:</strong> ${getHelpTypeName(request.type)}</p>
+            <p><strong>Опис ситуації:</strong> ${request.description}</p>
+            <p><strong>Статус:</strong> ${translatedStatus}</p>
+            ${additionalDataHTML}
+            ${volunteerHTML}
+        `;
+
+        openModal(requestDetailsModal);
     }
 
     // --------------------------------------------------
@@ -351,6 +437,7 @@ document.addEventListener('DOMContentLoaded', function() {
             default:
                 additionalData = {};
         }
+
         const requestData = {
             type: requestType,
             description: requestDescription,
@@ -358,7 +445,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         try {
-            // Отправка данных на сервер
+            // Відправка даних на сервер
             const response = await fetch('/applications/save', {
                 method: 'POST',
                 headers: {
@@ -370,9 +457,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
 
             if (data.success) {
-                showToast(data.message);
+                showToast(data.message || 'Заявка успішно подана.');
+                // Опціонально, можна оновити список запитів
+                // await displayMyRequests();
             } else {
-                showToast(data.message);
+                showToast(data.message || 'Сталася помилка при подачі заявки.');
             }
 
             requestForm.reset();
@@ -382,7 +471,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         } catch (error) {
             console.error('Помилка при відправці запиту:', error);
-            alert('Сталася помилка при відправці запиту. Спробуйте пізніше.');
+            showToast('Сталася помилка при відправці запиту. Спробуйте пізніше.');
         }
     }
 
@@ -390,7 +479,7 @@ document.addEventListener('DOMContentLoaded', function() {
      * Function to handle submission of the profile form
      * @param {Event} event - The form submission event
      */
-    function handleProfileFormSubmit(event) {
+    async function handleProfileFormSubmit(event) {
         event.preventDefault();
 
         const userName = document.getElementById('user-name').value.trim();
@@ -404,13 +493,38 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Here you can add code to update profile data on the server via API
+        const profileData = {
+            name: userName,
+            email: userEmail,
+            address: userAddress,
+            phone: userPhone
+        };
 
-        // Show success toast notification
-        showToast('Зміни успішно збережено!');
+        try {
+            // Відправка даних профілю на сервер
+            const response = await fetch('/user/updateProfile', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(profileData)
+            });
 
-        // Close the profile modal
-        closeModalFunction(profileModal);
+            const data = await response.json();
+
+            if (data.success) {
+                showToast(data.message || 'Зміни успішно збережено!');
+                // Опціонально, оновити інформацію на сторінці
+            } else {
+                showToast(data.message || 'Сталася помилка при збереженні змін.');
+            }
+
+            closeModalFunction(profileModal);
+
+        } catch (error) {
+            console.error('Помилка при оновленні профілю:', error);
+            showToast('Сталася помилка при оновленні профілю. Спробуйте пізніше.');
+        }
     }
 
     // --------------------------------------------------
@@ -493,6 +607,11 @@ document.addEventListener('DOMContentLoaded', function() {
         closeModalFunction(notificationsModal);
     });
 
+    // Open request details modal close button
+    requestDetailsCloseBtn && requestDetailsCloseBtn.addEventListener('click', function() {
+        closeModalFunction(requestDetailsModal);
+    });
+
     // Handle request type change to show/hide additional fields
     requestTypeSelect.addEventListener('change', handleRequestTypeChange);
 
@@ -526,6 +645,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (event.target === notificationsModal) {
             closeModalFunction(notificationsModal);
         }
+        if (event.target === requestDetailsModal) {
+            closeModalFunction(requestDetailsModal);
+        }
     });
-
 });

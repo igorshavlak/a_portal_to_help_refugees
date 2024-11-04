@@ -14,7 +14,8 @@ import java.util.List;
 @Repository
 public class ApplicationsRepo {
     private final String saveRequest = "INSERT INTO applications (user_id,type,description,additional_data,status) VALUES (?,?,?,?,?)";
-    private final String getAllRequest = "SELECT * FROM applications WHERE user_id=?";
+    private final String getAllRefugeeApplicationsRequest = "SELECT * FROM applications WHERE user_id=?";
+    private final String getAllVolunteerApplicationsRequest = "SELECT * FROM applications WHERE volunteer_id=?";
     private final String acceptRequest = "UPDATE applications SET status=?, volunteer_id=? WHERE id=?";
 
 
@@ -29,8 +30,8 @@ public class ApplicationsRepo {
     public void save(Application application) {
          jdbcTemplate.update(saveRequest,application.getRefugeeId(),application.getType(),application.getDescription(),application.getAdditionalData(),application.getStatus());
     }
-    public List<Application> getUserApplications(int id) {
-        return jdbcTemplate.query(getAllRequest,(rs, rowNum) -> new Application(
+    public List<Application> getRefugeeApplications(int id) {
+        return jdbcTemplate.query(getAllRefugeeApplicationsRequest,(rs, rowNum) -> new Application(
                  rs.getInt("id"),
                  rs.getInt("user_id"),
                  rs.getString("type"),
@@ -40,6 +41,19 @@ public class ApplicationsRepo {
                  rs.getDate("created_at").toLocalDate().atStartOfDay()
 
          ),id);
+
+    }
+    public List<Application> getVolunteerApplications(int id) {
+        return jdbcTemplate.query(getAllVolunteerApplicationsRequest,(rs, rowNum) -> new Application(
+                rs.getInt("id"),
+                rs.getInt("user_id"),
+                rs.getString("type"),
+                rs.getString("description"),
+                rs.getString("additional_data"),
+                rs.getString("status"),
+                rs.getDate("created_at").toLocalDate().atStartOfDay()
+
+        ),id);
 
     }
     public List<Application> getAllApplicationsByCategories(List<String> categories) {
