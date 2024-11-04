@@ -482,22 +482,28 @@ document.addEventListener('DOMContentLoaded', function() {
     async function handleProfileFormSubmit(event) {
         event.preventDefault();
 
-        const userName = document.getElementById('user-name').value.trim();
-        const userEmail = document.getElementById('user-email').value.trim();
-        const userAddress = document.getElementById('user-address').value.trim();
+        const userFirstName = document.getElementById('user-first-name').value.trim();
+        const userLastName = document.getElementById('user-last-name').value.trim();
+        const userBirthDate = document.getElementById('user-birth-date').value.trim();
         const userPhone = document.getElementById('user-phone').value.trim();
+        const userGender = document.getElementById('user-gender').value;
+        const userCity = document.getElementById('user-city').value.trim();
+        const userCountry = document.getElementById('user-country').value.trim();
 
-        // Basic validation (additional validation can be added as needed)
-        if (!userName || !userEmail || !userAddress || !userPhone) {
+        // Перевірка заповнення всіх полів
+        if (!userFirstName || !userLastName || !userBirthDate || !userPhone || !userGender || !userCity || !userCountry) {
             showToast('Будь ласка, заповніть всі поля.');
             return;
         }
 
         const profileData = {
-            name: userName,
-            email: userEmail,
-            address: userAddress,
-            phone: userPhone
+            firstName: userFirstName,
+            lastName: userLastName,
+            birthDate: userBirthDate,
+            phone: userPhone,
+            gender: userGender,
+            city: userCity,
+            country: userCountry
         };
 
         try {
@@ -514,7 +520,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (data.success) {
                 showToast(data.message || 'Зміни успішно збережено!');
-                // Опціонально, оновити інформацію на сторінці
+                // Оновлення інформації на сторінці, якщо необхідно
+                document.querySelector('.user-name').textContent = userFirstName;
             } else {
                 showToast(data.message || 'Сталася помилка при збереженні змін.');
             }
@@ -526,6 +533,8 @@ document.addEventListener('DOMContentLoaded', function() {
             showToast('Сталася помилка при оновленні профілю. Спробуйте пізніше.');
         }
     }
+
+
 
     // --------------------------------------------------
     // Utility Functions

@@ -200,29 +200,51 @@
         <h2>Налаштування профілю</h2>
         <form id="profile-form">
             <div class="form-group">
-                <label for="user-name">Ім'я:</label>
-                <input type="text" id="user-name" name="user-name" value="[Ім'я користувача]" required>
+                <label for="user-first-name">Ім'я:</label>
+                <input type="text" id="user-first-name" name="user-first-name" value="[Ім'я користувача]" required>
             </div>
 
             <div class="form-group">
-                <label for="user-email">Електронна пошта:</label>
-                <input type="email" id="user-email" name="user-email" value="[Email користувача]" required>
+                <label for="user-last-name">Прізвище:</label>
+                <input type="text" id="user-last-name" name="user-last-name" value="[Прізвище користувача]" required>
             </div>
 
             <div class="form-group">
-                <label for="user-address">Адреса:</label>
-                <input type="text" id="user-address" name="user-address" value="[Адреса користувача]" required>
+                <label for="user-birth-date">Дата народження:</label>
+                <input type="date" id="user-birth-date" name="user-birth-date" value="[Дата народження]" required>
             </div>
 
             <div class="form-group">
-                <label for="user-phone">Номер телефону:</label>
+                <label for="user-phone">Контактний номер телефону:</label>
                 <input type="tel" id="user-phone" name="user-phone" value="[Номер телефону]" required>
+            </div>
+
+            <div class="form-group">
+                <label for="user-gender">Стать:</label>
+                <select id="user-gender" name="user-gender" required>
+                    <option value="" disabled selected>Оберіть вашу стать</option>
+                    <option value="male">Чоловіча</option>
+                    <option value="female">Жіноча</option>
+                    <option value="other">Інша</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="user-city">Місто проживання:</label>
+                <input type="text" id="user-city" name="user-city" value="[Місто проживання]" required>
+            </div>
+
+            <div class="form-group">
+                <label for="user-country">Країна проживання:</label>
+                <input type="text" id="user-country" name="user-country" value="[Країна проживання]" required>
             </div>
 
             <button type="submit" class="save-btn">Зберегти зміни</button>
         </form>
     </div>
 </div>
+
+
 
 <!-- Модальне вікно "Сповіщення" -->
 <div id="notifications-modal" class="modal">

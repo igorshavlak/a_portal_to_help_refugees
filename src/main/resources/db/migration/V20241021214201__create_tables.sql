@@ -1,8 +1,6 @@
 create table users
 (
     id         SERIAL PRIMARY KEY,
-    first_name VARCHAR(50)         NOT NULL,
-    last_name  VARCHAR(50)         NOT NULL,
     email      VARCHAR(100) UNIQUE NOT NULL,
     password   VARCHAR(100)        NOT NULL
 );
@@ -15,12 +13,12 @@ create table authorities
 
 create table refugees
 (
-    id            SERIAL PRIMARY KEY,
-    user_id       INT NOT NULL,
-    nationality   VARCHAR(50),
-    date_of_birth DATE,
-    gender        VARCHAR(10),
-    contact_info  VARCHAR(255),
+    user_id INT NOT NULL,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    birth_date DATE,
+    phone_number VARCHAR(50),
+    city VARCHAR(50),
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 create table applications

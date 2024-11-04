@@ -13,8 +13,7 @@ import java.io.IOException;
 
 @Controller
 @RequestMapping("/volunteer")
-public class VolunteerController {
-
+public class VolunteerPagerController {
 
     @GetMapping("/home")
     @PreAuthorize("hasRole('VOLUNTEER')")
