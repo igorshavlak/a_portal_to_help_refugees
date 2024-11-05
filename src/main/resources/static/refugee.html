@@ -193,50 +193,45 @@
     </div>
 </div>
 
-<!-- Модальне вікно "Налаштування профілю" -->
+<!-- Модальне вікно "Налаштування профілю біженця" -->
 <div id="profile-modal" class="modal">
     <div class="modal-content">
         <span class="close-btn profile-close-btn">&times;</span>
         <h2>Налаштування профілю</h2>
         <form id="profile-form">
             <div class="form-group">
-                <label for="user-first-name">Ім'я:</label>
-                <input type="text" id="user-first-name" name="user-first-name" value="[Ім'я користувача]" required>
+                <label for="refugee-name">Ім'я:</label>
+                <input type="text" id="refugee-name" name="refugee-name" value="[Ім'я біженця]" required>
             </div>
 
             <div class="form-group">
-                <label for="user-last-name">Прізвище:</label>
-                <input type="text" id="user-last-name" name="user-last-name" value="[Прізвище користувача]" required>
+                <label for="refugee-last-name">Прізвище:</label>
+                <input type="text" id="refugee-last-name" name="refugee-last-name" value="[Прізвище біженця]" required>
             </div>
 
             <div class="form-group">
-                <label for="user-birth-date">Дата народження:</label>
-                <input type="date" id="user-birth-date" name="user-birth-date" value="[Дата народження]" required>
+                <label for="refugee-phone">Телефон:</label>
+                <input type="tel" id="refugee-phone" name="refugee-phone" value="[Телефон біженця]" required>
             </div>
 
             <div class="form-group">
-                <label for="user-phone">Контактний номер телефону:</label>
-                <input type="tel" id="user-phone" name="user-phone" value="[Номер телефону]" required>
+                <label for="refugee-skills">Навички та досвід:</label>
+                <textarea id="refugee-skills" name="refugee-skills" rows="4" required>[Навички біженця]</textarea>
             </div>
 
             <div class="form-group">
-                <label for="user-gender">Стать:</label>
-                <select id="user-gender" name="user-gender" required>
-                    <option value="" disabled selected>Оберіть вашу стать</option>
-                    <option value="male">Чоловіча</option>
-                    <option value="female">Жіноча</option>
-                    <option value="other">Інша</option>
-                </select>
+                <label for="refugee-city">Місто:</label>
+                <input type="text" id="refugee-city" name="refugee-city" value="[Місто біженця]" required>
             </div>
 
             <div class="form-group">
-                <label for="user-city">Місто проживання:</label>
-                <input type="text" id="user-city" name="user-city" value="[Місто проживання]" required>
+                <label for="refugee-country">Країна:</label>
+                <input type="text" id="refugee-country" name="refugee-country" value="[Країна біженця]" required>
             </div>
 
             <div class="form-group">
-                <label for="user-country">Країна проживання:</label>
-                <input type="text" id="user-country" name="user-country" value="[Країна проживання]" required>
+                <label for="refugee-status">Статус біженця:</label>
+                <input type="text" id="refugee-status" name="refugee-status" value="не підтверджено" readonly>
             </div>
 
             <button type="submit" class="save-btn">Зберегти зміни</button>

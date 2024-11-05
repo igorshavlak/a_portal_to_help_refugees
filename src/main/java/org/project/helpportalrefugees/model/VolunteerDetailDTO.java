@@ -4,22 +4,27 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
-public class UserDetailDTO {
+public class VolunteerDetailDTO {
 
-
-    @NotBlank(message = "Ім`я є обов`язковим")
+    @NotBlank(message = "Ім'я є обов'язковим")
     private String firstName;
-    @NotBlank(message = "Фамілія є обов`язкова")
+
+    @NotBlank(message = "Прізвище є обов'язковим")
     private String lastName;
-    @NotBlank(message = "Дата народження є обов`язкова")
+
+    @NotNull(message = "Дата народження є обов'язковою")
     private LocalDate birthDate;
-    @NotBlank(message = "Номер телефону є обов`язковим")
+
+    @NotBlank(message = "Номер телефону є обов'язковим")
     private String phone;
-    @NotBlank(message = "Гендер є обов`язковим")
-    private String gender;
-    @NotBlank(message = "Місто є обов`язковим")
+
+    @NotBlank(message = "Це поле є обов'язковим")
+    private String skillsAndExperience;
+
+    @NotBlank(message = "Місто є обов'язковим")
     private String city;
-    @NotBlank(message = "Країна є обов`язкова")
+
+    @NotBlank(message = "Країна є обов'язковою")
     private String country;
 
     public void setFirstName(String firstName) {
@@ -36,10 +41,6 @@ public class UserDetailDTO {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
     }
 
     public void setCity(String city) {
@@ -66,9 +67,6 @@ public class UserDetailDTO {
         return phone;
     }
 
-    public String getGender() {
-        return gender;
-    }
 
     public String getCity() {
         return city;
@@ -76,5 +74,13 @@ public class UserDetailDTO {
 
     public String getCountry() {
         return country;
+    }
+
+    public void setSkillsAndExperience(String skillsAndExperience) {
+        this.skillsAndExperience = skillsAndExperience;
+    }
+
+    public String getSkillsAndExperience() {
+        return skillsAndExperience;
     }
 }

@@ -160,12 +160,32 @@ document.addEventListener('DOMContentLoaded', function() {
             additionalDataHTML += `</ul>`;
         }
 
-        requestDetails.innerHTML = `
-            <p><strong>Тип допомоги:</strong> ${getHelpTypeName(request.type)}</p>
-            <p><strong>Опис ситуації:</strong> ${request.description}</p>
-            <p><strong>Статус:</strong> ${translatedStatus}</p>
-            ${additionalDataHTML}
+        // Створюємо HTML для даних біженця
+        let refugeeHTML = '';
+        if (request.refugee) {
+            refugeeHTML += `
+            <div class="refugee-info">
+                <h4>Дані Біженця:</h4>
+                <ul>
+                    <li><strong>Ім'я:</strong> ${request.refugee.name} ${request.refugee.surname}</li>
+                    <li><strong>Дата народження:</strong> ${new Date(request.refugee.dateOfBirth).toLocaleDateString()}</li>
+                    <li><strong>Статус:</strong> ${request.refugee.status}</li>
+                    <li><strong>Телефон:</strong> ${request.refugee.phone}</li>
+                    <li><strong>Місто:</strong> ${request.refugee.city}</li>
+                    <li><strong>Країна:</strong> ${request.refugee.country}</li>
+                </ul>
+            </div>
         `;
+        }
+
+        // Об'єднуємо всі частини
+        requestDetails.innerHTML = `
+        <p><strong>Тип допомоги:</strong> ${getHelpTypeName(request.type)}</p>
+        <p><strong>Опис ситуації:</strong> ${request.description}</p>
+        <p><strong>Статус:</strong> ${translatedStatus}</p>
+        ${additionalDataHTML}
+        ${refugeeHTML}
+    `;
         acceptRequestBtn.dataset.requestId = request.id;
 
         // Показуємо або ховаємо кнопку прийняття запиту
@@ -177,6 +197,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         openModal(requestModal);
     }
+
 
     // Функція для відображення власних активних запитів
     async function displayMyActiveRequests() {
@@ -190,6 +211,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Функція для рендерингу списку запитів
     // Функція для рендерингу списку запитів
     function renderHelpRequests(helpRequests, listElement, canAccept = true) {
         listElement.innerHTML = '';
@@ -451,25 +473,50 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Обробка відправки форми профілю
-    profileForm.addEventListener('submit', function(event) {
-        event.preventDefault();
+    profileForm.addEventListener('submit', async function (event) {
+        event.preventDefault(); // Запобігаємо стандартній відправці форми
+
         // Отримуємо значення з форми
-        const name = document.getElementById('volunteer-name').value.trim();
-        const email = document.getElementById('volunteer-email').value.trim();
-        const skills = document.getElementById('volunteer-skills').value.trim();
-        const availability = document.getElementById('volunteer-availability').value.trim();
+        const firstName = document.getElementById('volunteer-first-name').value.trim();
+        const lastName = document.getElementById('volunteer-last-name').value.trim();
+        const birthDate = document.getElementById('volunteer-birth-date').value.trim();
+        const phone = document.getElementById('volunteer-phone').value.trim();
+        const skillsAndExperience = document.getElementById('volunteer-skills').value.trim();
+        const city = document.getElementById('volunteer-city').value.trim();
+        const country = document.getElementById('volunteer-country').value.trim();
 
         // Валідація введених даних
-        if (name === '' || email === '' || skills === '' || availability === '') {
+        if (!firstName || !lastName || !birthDate || !phone || !skillsAndExperience || !city || !country) {
             showToast('Будь ласка, заповніть всі поля.');
             return;
         }
 
-        // Тут можна додати код для оновлення профілю на сервері
+        // Створюємо об'єкт даних
+        const volunteerData = {
+            firstName,
+            lastName,
+            birthDate,
+            phone,
+            skillsAndExperience,
+            city,
+            country
+        };
 
-        showToast('Зміни успішно збережено!');
-        closeModalFunction(profileModal);
+        try {
+            const result = await sendVolunteerData(volunteerData);
+
+            if (result.success) {
+                showToast(result.message);
+                closeModalFunction(document.getElementById('profile-modal'));
+            } else {
+                showToast('Сталася помилка при збереженні змін.');
+            }
+        } catch (error) {
+            console.error('Помилка при відправці даних волонтера:', error);
+            showToast('Сталася помилка при відправці даних. Спробуйте пізніше.');
+        }
     });
+
 
     // Обробка відправки форми категорій
     categoriesForm.addEventListener('submit', function(event) {

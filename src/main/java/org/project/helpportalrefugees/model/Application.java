@@ -1,5 +1,7 @@
 package org.project.helpportalrefugees.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.time.LocalDateTime;
 
 public class Application {
@@ -10,6 +12,10 @@ public class Application {
     private String additionalData;
     private String status;
     private LocalDateTime createdAt;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Volunteer volunteer;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Refugee refugee;
 
     public Application(int id, int refugeeId, String type, String description, String additionalData, String status, LocalDateTime createdAt) {
         this.id = id;
@@ -90,5 +96,21 @@ public class Application {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public void setVolunteer(Volunteer volunteer) {
+        this.volunteer = volunteer;
+    }
+
+    public Volunteer getVolunteer() {
+        return volunteer;
+    }
+
+    public Refugee getRefugee() {
+        return refugee;
+    }
+
+    public void setRefugee(Refugee refugee) {
+        this.refugee = refugee;
     }
 }

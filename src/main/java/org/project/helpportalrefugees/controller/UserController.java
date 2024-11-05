@@ -1,23 +1,57 @@
 package org.project.helpportalrefugees.controller;
 
-import org.project.helpportalrefugees.model.UserDetailDTO;
+import org.project.helpportalrefugees.http.ApiResponse;
+import org.project.helpportalrefugees.model.Refugee;
+import org.project.helpportalrefugees.model.Volunteer;
+import org.project.helpportalrefugees.model.VolunteerDetailDTO;
+import org.project.helpportalrefugees.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
-/*
-    @PostMapping("/saveUserDetails")
-    public ResponseEntity<?> saveUserDetails(@Validated @RequestBody UserDetailDTO dto){
+    UserService userService;
 
-
-
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
-    */
+
+    @PostMapping("/updateVolunteerDetails")
+    public ResponseEntity<String> saveVolunteerDetails(@Validated @RequestBody VolunteerDetailDTO dto,
+                                                  Principal principal){
+        if (principal instanceof Authentication) {
+            Authentication authentication = (Authentication) principal;
+            GrantedAuthority authority = authentication.getAuthorities().stream().findFirst().orElse(null);
+            assert authority != null;
+            if (authority.toString().equals("ROLE_USER")) {
+                if(userService.safeOrUpdateUser(new Refugee(dto.getFirstName(),dto.getLastName(),dto.getBirthDate(),dto.getPhone(),dto.getCity(),dto.getCountry()),principal)){
+                    return ResponseEntity.ok("Дані успішно збереглися");
+                } else {
+                    return ResponseEntity.ok("Дані успішно оновилися");
+                }
+
+            } else if (authority.toString().equals("ROLE_VOLUNTEER")) {
+               if(userService.safeOrUpdateUser(new Volunteer(dto.getFirstName(), dto.getLastName(), dto.getBirthDate(), dto.getPhone(),  dto.getCity(), dto.getCountry(), dto.getSkillsAndExperience()),principal)){
+                   return ResponseEntity.ok("Дані успішно збереглися");
+               }else {
+                   return ResponseEntity.ok("Дані успішно оновилися");
+               }
+            }
+        }
+       return ResponseEntity.status(500).build();
+    }
+
 }

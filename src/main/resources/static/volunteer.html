@@ -124,36 +124,52 @@
         </div>
     </div>
 
-    <!-- Модальне вікно "Налаштування профілю" -->
     <div id="profile-modal" class="modal">
         <div class="modal-content">
             <span class="close-btn profile-close-btn">&times;</span>
             <h2>Налаштування профілю</h2>
             <form id="profile-form">
                 <div class="form-group">
-                    <label for="volunteer-name">Ім'я:</label>
-                    <input type="text" id="volunteer-name" name="volunteer-name" value="[Ім'я волонтера]" required>
+                    <label for="volunteer-first-name">Ім'я:</label>
+                    <input type="text" id="volunteer-first-name" name="volunteer-first-name" value="[Ім'я волонтера]" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="volunteer-email">Електронна пошта:</label>
-                    <input type="email" id="volunteer-email" name="volunteer-email" value="[Email волонтера]" required>
+                    <label for="volunteer-last-name">Прізвище:</label>
+                    <input type="text" id="volunteer-last-name" name="volunteer-last-name" value="[Прізвище волонтера]" required>
+                </div>
+
+                <!-- Додане поле дати народження -->
+                <div class="form-group">
+                    <label for="volunteer-birth-date">Дата народження:</label>
+                    <input type="date" id="volunteer-birth-date" name="volunteer-birth-date" value="[Дата народження волонтера]" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="volunteer-phone">Телефон:</label>
+                    <input type="tel" id="volunteer-phone" name="volunteer-phone" value="[Телефон волонтера]" required>
                 </div>
 
                 <div class="form-group">
                     <label for="volunteer-skills">Навички та досвід:</label>
-                    <textarea id="volunteer-skills" name="volunteer-skills" rows="4" required>[Навички волонтера]</textarea>
+                    <textarea id="volunteer-skills" name="volunteer-skills" rows="4" required>[Навички та досвід волонтера]</textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="volunteer-availability">Доступність:</label>
-                    <input type="text" id="volunteer-availability" name="volunteer-availability" value="[Доступність волонтера]" required>
+                    <label for="volunteer-city">Місто:</label>
+                    <input type="text" id="volunteer-city" name="volunteer-city" value="[Місто волонтера]" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="volunteer-country">Країна:</label>
+                    <input type="text" id="volunteer-country" name="volunteer-country" value="[Країна волонтера]" required>
                 </div>
 
                 <button type="submit" class="save-btn">Зберегти зміни</button>
             </form>
         </div>
     </div>
+
 
     <!-- Модальне вікно "Сповіщення" -->
     <div id="notifications-modal" class="modal">

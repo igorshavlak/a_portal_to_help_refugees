@@ -24,9 +24,32 @@ async function fetchHelpRequests(categories) {
 }
 
 
+ async function sendVolunteerData(volunteerData) {
+     try {
+         const response = await fetch('/user/updateVolunteerDetails', {
+             method: 'POST',
+             headers: {
+                 'Content-Type': 'application/json'
+             },
+             body: JSON.stringify(volunteerData)
+         });
+
+         const text = await response.text();
+
+         if (response.ok) {
+             return { success: true, message: text };
+         } else {
+             return { success: false, message: text || 'Сталася помилка при збереженні даних.' };
+         }
+     } catch (error) {
+         console.error('Помилка:', error);
+         return { success: false, message: 'Помилка при відправці даних.' };
+     }
+}
+
  async function acceptHelpRequest(requestId) {
     try {
-        const response = await fetch(`/applications/${requestId}/accept`, { // Adjust the endpoint as needed
+        const response = await fetch(`/applications/${requestId}/accept`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -67,6 +90,7 @@ async function getUserApplications() {
     }
 }
 
+window.sendVolunteerData = sendVolunteerData;
 window.getUserApplications = getUserApplications;
 window.fetchHelpRequests = fetchHelpRequests;
 window.acceptHelpRequest = acceptHelpRequest;
