@@ -656,3 +656,165 @@ footer {
    Additional Styles
 -------------------------------------------------- */
 
+/* Стилі для модального вікна "Деталі запиту" */
+#request-modal .modal-content {
+    padding: 30px;
+    border-radius: 10px;
+    background-color: #fff;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    max-width: 700px;
+    width: 90%;
+    animation: slideDown 0.3s ease-out;
+}
+
+.request-details-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.request-details-container h2 {
+    text-align: center;
+    color: #004080;
+    margin-bottom: 20px;
+    font-size: 2rem;
+}
+
+.detail-section h3 {
+    color: #0066cc;
+    margin-bottom: 10px;
+    font-size: 1.25rem;
+    border-bottom: 2px solid #e6e6e6;
+    padding-bottom: 5px;
+}
+
+.detail-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.detail-section ul li {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.detail-section ul li strong {
+    width: 200px;
+    color: #004080;
+    font-weight: 600;
+}
+
+/* Стилі для кнопки прийняття запиту */
+.accept-btn {
+    padding: 12px 25px;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    align-self: center;
+    display: block;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.accept-btn:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+/* Стилі для кнопки закриття */
+.request-close-btn {
+    font-size: 1.5rem;
+    color: #aaa;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.request-close-btn:hover {
+    color: #000;
+}
+
+/* Додаткові Стилі для Більш Естетичного Вигляду */
+.request-details-container .refugee-info {
+    background-color: #f0f8ff;
+    border-left: 4px solid #007BFF;
+    padding: 15px 20px;
+    border-radius: 5px;
+}
+
+.request-details-container .refugee-info h4 {
+    margin-bottom: 10px;
+    color: #007BFF;
+    font-size: 1.25rem;
+}
+
+.request-details-container .refugee-info ul li {
+    margin-bottom: 8px;
+}
+
+#request-details p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+.toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 15px 25px;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    z-index: 2000;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(-10px);
+}
+.detail-section ul li {
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.detail-section ul li:last-child {
+    border-bottom: none;
+}
+/* Анімація для модального вікна */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Анімація для тост-повідомлень */
+.toast {
+    animation: fadeIn 0.5s, fadeOut 0.5s 2.5s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(0); }
+    to { opacity: 1; transform: translateY(-10px); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; transform: translateY(-10px); }
+    to { opacity: 0; transform: translateY(0); }
+}

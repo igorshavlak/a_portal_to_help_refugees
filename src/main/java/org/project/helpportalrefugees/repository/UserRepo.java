@@ -68,7 +68,6 @@ public class UserRepo {
             }
         } else if (user instanceof Volunteer) {
             Volunteer volunteer = (Volunteer) user;
-            // Проверяем, существует ли уже запись для данного user_id
             String checkSql = "SELECT COUNT(*) FROM volunteer WHERE user_id = ?";
             Integer count = jdbcTemplate.queryForObject(checkSql, Integer.class, id);
             if (count != null && count > 0) {
