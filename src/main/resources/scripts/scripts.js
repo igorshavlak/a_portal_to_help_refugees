@@ -150,7 +150,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Закриття модальних вікон при кліку поза ними
+    // **Видалено: Закриття модальних вікон при кліку поза ними**
+    // Цей код був видалений відповідно до вашого запиту
+    /*
     window.addEventListener('click', (e) => {
         if (e.target === loginModal) {
             closeModal(loginModal);
@@ -162,6 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
             hideVolunteerFields();
         }
     });
+    */
 
     // Переключення з вікна входу на реєстрацію
     if (registerLink) {
@@ -323,7 +326,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const link = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
             if (entry.isIntersecting) {
                 navLinkItems.forEach((item) => item.classList.remove('active'));
-                link.classList.add('active');
+                if (link) {
+                    link.classList.add('active');
+                }
             }
         });
     }, options);
