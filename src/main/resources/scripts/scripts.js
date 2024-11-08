@@ -1,49 +1,54 @@
-// scripts.js
-
 document.addEventListener('DOMContentLoaded', () => {
     // --------------------------------------------------
-    // Elements Selection
+    // Вибір елементів
     // --------------------------------------------------
 
-    // Navigation Elements
+    // Елементи навігації
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
 
-    // Authentication Buttons
+    // Кнопки автентифікації
     const loginBtn = document.querySelector('.login-btn');
     const registerBtn = document.querySelector('.register-btn');
 
-    // Modals
+    // Модальні вікна
     const loginModal = document.getElementById('login-modal');
     const registerModal = document.getElementById('register-modal');
 
-    // Close Buttons
+    // Кнопки закриття
     const loginCloseBtn = loginModal.querySelector('.close-btn');
     const registerCloseBtn = registerModal.querySelector('.close-btn');
 
-    // Forms
+    // Форми
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
+    const contactForm = document.getElementById('contact-form');
 
-    // Links to switch between modals
+    // Посилання для переключення між модальними вікнами
     const registerLink = loginModal.querySelector('.register-link');
     const loginLink = registerModal.querySelector('.login-link');
 
-    // Additional Fields for Volunteers
+    // Додаткові поля для волонтерів
     const userTypeSelect = document.getElementById('user-type');
     const volunteerFields = document.getElementById('volunteer-fields');
 
-    // Toast Notification
+    // Елементи навігації для зміни активного класу
+    const navLinkItems = document.querySelectorAll('.nav-links li a');
+
+    // Секції з ідентифікаторами
+    const sections = document.querySelectorAll('section[id]');
+
+    // Сповіщення (Toast)
     const toast = document.createElement('div');
     toast.className = 'toast';
     document.body.appendChild(toast);
 
     // --------------------------------------------------
-    // Utility Functions
+    // Утиліти
     // --------------------------------------------------
 
     /**
-     * Toggles the hamburger menu on mobile devices.
+     * Перемикає гамбургер-меню на мобільних пристроях.
      */
     const toggleHamburgerMenu = () => {
         navLinks.classList.toggle('active');
@@ -51,61 +56,60 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     /**
-     * Opens a specified modal.
-     * @param {HTMLElement} modal - The modal element to open.
+     * Відкриває задане модальне вікно.
+     * @param {HTMLElement} modal - Елемент модального вікна для відкриття.
      */
     const openModal = (modal) => {
         modal.classList.add('show');
     };
 
     /**
-     * Closes a specified modal.
-     * @param {HTMLElement} modal - The modal element to close.
+     * Закриває задане модальне вікно.
+     * @param {HTMLElement} modal - Елемент модального вікна для закриття.
      */
     const closeModal = (modal) => {
         modal.classList.remove('show');
     };
 
     /**
-     * Displays a toast notification with the given message.
-     * @param {string} message - The message to display in the toast.
+     * Відображає сповіщення з заданим повідомленням.
+     * @param {string} message - Повідомлення для відображення.
      */
     const showToast = (message) => {
         toast.textContent = message;
         toast.classList.add('show');
 
-        // Automatically hide the toast after 3 seconds
+        // Автоматично приховує сповіщення через 3 секунди
         setTimeout(() => {
             toast.classList.remove('show');
         }, 3000);
     };
 
     /**
-     * Shows the additional fields for volunteers in the registration form.
+     * Показує додаткові поля для волонтерів у формі реєстрації.
      */
     const showVolunteerFields = () => {
-        volunteerFields.style.display = 'block';
+        volunteerFields.classList.add('show');
     };
 
     /**
-     * Hides the additional fields for volunteers in the registration form.
+     * Приховує додаткові поля для волонтерів у формі реєстрації.
      */
     const hideVolunteerFields = () => {
-        volunteerFields.style.display = 'none';
+        volunteerFields.classList.remove('show');
     };
 
     // --------------------------------------------------
-    // Event Listeners
+    // Обробники подій
     // --------------------------------------------------
 
-    // Toggle Hamburger Menu
+    // Перемикання гамбургер-меню
     if (hamburger) {
         hamburger.addEventListener('click', toggleHamburgerMenu);
     }
 
-    // Close Hamburger Menu when a navigation link is clicked
-    const navLinkItems = document.querySelectorAll('.nav-links li a');
-    navLinkItems.forEach(link => {
+    // Закриття гамбургер-меню при кліку на посилання
+    navLinkItems.forEach((link) => {
         link.addEventListener('click', () => {
             if (navLinks.classList.contains('active')) {
                 toggleHamburgerMenu();
@@ -113,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Open Login Modal
+    // Відкриття модального вікна входу
     if (loginBtn) {
         loginBtn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -121,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Open Register Modal
+    // Відкриття модального вікна реєстрації
     if (registerBtn) {
         registerBtn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -129,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Close Login Modal
+    // Закриття модального вікна входу
     if (loginCloseBtn) {
         loginCloseBtn.addEventListener('click', () => {
             closeModal(loginModal);
@@ -137,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Close Register Modal
+    // Закриття модального вікна реєстрації
     if (registerCloseBtn) {
         registerCloseBtn.addEventListener('click', () => {
             closeModal(registerModal);
@@ -146,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Close Modals When Clicking Outside the Modal Content
+    // Закриття модальних вікон при кліку поза ними
     window.addEventListener('click', (e) => {
         if (e.target === loginModal) {
             closeModal(loginModal);
@@ -159,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Switch from Login to Register Modal
+    // Переключення з вікна входу на реєстрацію
     if (registerLink) {
         registerLink.addEventListener('click', (e) => {
             e.preventDefault();
@@ -168,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Switch from Register to Login Modal
+    // Переключення з вікна реєстрації на вхід
     if (loginLink) {
         loginLink.addEventListener('click', (e) => {
             e.preventDefault();
@@ -177,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Show/Hide Volunteer Fields Based on User Type Selection
+    // Показ/приховування додаткових полів для волонтерів
     if (userTypeSelect) {
         userTypeSelect.addEventListener('change', (e) => {
             if (e.target.value === 'volunteer') {
@@ -188,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Handle Login Form Submission
+    // Обробка форми входу
     if (loginForm) {
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -196,27 +200,28 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
 
-            // Basic Validation
+            // Базова валідація
             if (!email || !password) {
                 showToast('Будь ласка, заповніть всі поля.');
                 return;
             }
-            login()
 
-            console.log('Login Details:', { email, password });
+            // TODO: Реалізувати логіку входу (наприклад, запит до API)
 
-            // Reset the form
+            console.log('Дані для входу:', { email, password });
+
+            // Скидання форми
             loginForm.reset();
 
-            // Show success message
+            // Відображення успішного повідомлення
             showToast('Ви успішно увійшли до облікового запису.');
 
-            // Close the modal
+            // Закриття модального вікна
             closeModal(loginModal);
         });
     }
 
-    // Handle Register Form Submission
+    // Обробка форми реєстрації
     if (registerForm) {
         registerForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -227,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const confirmPassword = document.getElementById('reg-confirm-password').value.trim();
             const userType = document.getElementById('user-type').value;
 
-            // Basic Validation
+            // Базова валідація
             if (!name || !email || !password || !confirmPassword || !userType) {
                 showToast('Будь ласка, заповніть всі обов\'язкові поля.');
                 return;
@@ -238,45 +243,97 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // If user is a volunteer, ensure additional fields are filled
+            // Якщо користувач — волонтер, перевіряємо додаткові поля
             let volunteerSkills = '';
-            let volunteerAvailability = '';
 
             if (userType === 'volunteer') {
                 volunteerSkills = document.getElementById('volunteer-skills').value.trim();
-                volunteerAvailability = document.getElementById('volunteer-availability').value.trim();
 
-                if (!volunteerSkills || !volunteerAvailability) {
+                if (!volunteerSkills) {
                     showToast('Будь ласка, заповніть всі додаткові поля для волонтера.');
                     return;
                 }
             }
 
-            // TODO: Implement actual registration logic (e.g., API call)
+            // TODO: Реалізувати логіку реєстрації (наприклад, запит до API)
 
-            console.log('Registration Details:', {
+            console.log('Дані для реєстрації:', {
                 name,
                 email,
                 password,
                 userType,
-                volunteerSkills,
-                volunteerAvailability
+                volunteerSkills
             });
 
-            // Reset the form
+            // Скидання форми
             registerForm.reset();
             hideVolunteerFields();
 
-            // Show success message
+            // Відображення успішного повідомлення
             showToast('Ви успішно зареєструвались. Тепер ви можете увійти до свого облікового запису.');
 
-            // Close the modal
+            // Закриття модального вікна
             closeModal(registerModal);
         });
     }
 
+    // Обробка контактної форми
+    if (contactForm) {
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('contact-name').value.trim();
+            const email = document.getElementById('contact-email').value.trim();
+            const message = document.getElementById('contact-message').value.trim();
+
+            if (!name || !email || !message) {
+                showToast('Будь ласка, заповніть всі поля контактної форми.');
+                return;
+            }
+
+            // TODO: Реалізувати логіку відправки повідомлення (наприклад, запит до API)
+
+            console.log('Контактна форма:', {
+                name,
+                email,
+                message
+            });
+
+            // Скидання форми
+            contactForm.reset();
+
+            // Відображення успішного повідомлення
+            showToast('Ваше повідомлення успішно відправлено. Дякуємо за звернення!');
+
+        });
+    }
+
     // --------------------------------------------------
-    // Toast Click to Close
+    // IntersectionObserver для оновлення активного посилання
+    // --------------------------------------------------
+
+    const options = {
+        root: null, // viewport
+        rootMargin: '0px',
+        threshold: 0.6 // Trigger when 60% of the section is visible
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            const link = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+            if (entry.isIntersecting) {
+                navLinkItems.forEach((item) => item.classList.remove('active'));
+                link.classList.add('active');
+            }
+        });
+    }, options);
+
+    sections.forEach((section) => {
+        observer.observe(section);
+    });
+
+    // --------------------------------------------------
+    // Закриття сповіщення при кліку
     // --------------------------------------------------
 
     toast.addEventListener('click', () => {

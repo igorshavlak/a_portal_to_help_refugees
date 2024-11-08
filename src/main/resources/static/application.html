@@ -16,10 +16,10 @@
             <a href="#">Портал допомоги</a>
         </div>
         <ul class="nav-links">
-            <li><a href="#" class="active">Головна</a></li>
-            <li><a href="#">Про нас</a></li>
-            <li><a href="#">Допомога</a></li>
-            <li><a href="#">Контакти</a></li>
+            <li><a href="#home" class="active">Головна</a></li>
+            <li><a href="#about-us">Про нас</a></li>
+            <li><a href="#help">Допомога</a></li>
+            <li><a href="#contacts">Контакти</a></li>
         </ul>
         <div class="auth-buttons">
             <a href="#" class="login-btn">Увійти</a>
@@ -35,11 +35,11 @@
 </header>
 
 <!-- Героїчна секція -->
-<section class="hero">
+<section id="home" class="hero">
     <div class="hero-content">
         <h1>Ласкаво просимо на портал допомоги біженцям</h1>
         <p>Допомагаємо знайти підтримку та необхідні ресурси тим, хто цього потребує.</p>
-        <a href="#" class="cta-btn">Дізнатися більше</a>
+        <a href="#about-us" class="cta-btn">Дізнатися більше</a>
     </div>
 </section>
 
@@ -56,6 +56,72 @@
     <div class="feature">
         <h2>Знайти ресурси</h2>
         <p>Перегляньте доступні ресурси та послуги у вашому регіоні.</p>
+    </div>
+</section>
+
+<!-- Про нас -->
+<section id="about-us" class="about-us">
+    <div class="container">
+        <h2>Про нас</h2>
+        <p>Ми — некомерційна організація, що надає допомогу біженцям. Наша місія — забезпечити підтримку та ресурси для тих, хто цього потребує, допомагаючи їм відновити своє життя.</p>
+        <div class="about-content">
+            <img src="/images/about-us.jpg" alt="Про нас">
+            <p>Наші волонтери працюють у багатьох країнах, надаючи безпосередню допомогу біженцям. Ми співпрацюємо з місцевими громадами та іншими організаціями для забезпечення найефективнішої підтримки.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Допомога -->
+<section id="help" class="help">
+    <div class="container">
+        <h2>Як отримати допомогу</h2>
+        <p>Ми надаємо різноманітну допомогу, включаючи житло, харчування, медичну підтримку та освітні ресурси. Якщо вам потрібна допомога, будь ласка, зв'яжіться з нами або подайте запит через наш портал.</p>
+        <div class="help-content">
+            <div class="help-item">
+                <h3>Житло</h3>
+                <p>Ми допомагаємо знайти тимчасове та постійне житло для біженців та їхніх сімей.</p>
+            </div>
+            <div class="help-item">
+                <h3>Медична підтримка</h3>
+                <p>Надаємо доступ до медичних послуг та психологічної підтримки.</p>
+            </div>
+            <div class="help-item">
+                <h3>Освіта</h3>
+                <p>Допомагаємо дітям та дорослим отримати освіту та навички для нового життя.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Контакти -->
+<section id="contacts" class="contacts">
+    <div class="container">
+        <h2>Контакти</h2>
+        <p>Якщо у вас є питання або ви бажаєте співпрацювати з нами, будь ласка, зв'яжіться з нами за допомогою наступних засобів:</p>
+        <div class="contact-details">
+            <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <p>Email: support@helpportal.com</p>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-phone"></i>
+                <p>Телефон: +38 (044) 123-45-67</p>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <p>Адреса: вул. Незалежності, 1, Київ, Україна</p>
+            </div>
+        </div>
+        <form id="contact-form">
+            <h3>Напишіть нам</h3>
+            <label for="contact-name">Ім'я:</label>
+            <input type="text" id="contact-name" name="contact-name" required>
+            <label for="contact-email">Електронна пошта:</label>
+            <input type="email" id="contact-email" name="contact-email" required>
+            <label for="contact-message">Повідомлення:</label>
+            <textarea id="contact-message" name="contact-message" rows="5" required></textarea>
+            <button type="submit">Відправити</button>
+        </form>
     </div>
 </section>
 
@@ -121,6 +187,7 @@
 </div>
 
 <!-- Підключення JavaScript -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 <script src="/scripts/scripts.js"></script>
 <script src="/scripts/authentification.js"></script>
 </body>
