@@ -723,6 +723,10 @@ button:hover {
     .about-content p {
         flex: 1 1 100%;
     }
+
+    .help-item {
+        max-width: 45%; /* Додаємо більше гнучкості для нових категорій */
+    }
 }
 
 @media screen and (max-width: 768px) {
