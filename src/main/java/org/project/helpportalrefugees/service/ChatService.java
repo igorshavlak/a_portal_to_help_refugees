@@ -39,6 +39,9 @@ public class ChatService {
         try {
             chatId = chatRepository.getChatIdByUsers(userId,volunteerId);
             messages = chatRepository.getChatMessages(chatId);
+            for(Message message : messages){
+                message.setSenderEmail(userRepository.getUsernameById(message.getUserId()));
+            }
         }catch (EmptyResultDataAccessException e){
             chatId = chatRepository.createChat(userId,volunteerId);
         }

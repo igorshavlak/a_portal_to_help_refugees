@@ -1,5 +1,7 @@
 package org.project.helpportalrefugees.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.time.LocalDateTime;
 
 public class Message {
@@ -7,6 +9,8 @@ public class Message {
     private int userId;
     private String message;
     private LocalDateTime dateTime;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String senderEmail;
 
 
     public Message(int id, int userId, String message) {
@@ -46,5 +50,13 @@ public class Message {
     }
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public void setSenderEmail(String senderEmail) {
+        this.senderEmail = senderEmail;
+    }
+
+    public String getSenderEmail() {
+        return senderEmail;
     }
 }

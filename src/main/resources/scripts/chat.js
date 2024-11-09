@@ -93,7 +93,7 @@ function connectChat() {
         // Підписка на особисту чергу повідомлень
         stompClient.subscribe('/user/queue/messages', function(messageOutput) {
             const message = messageOutput.body;
-            displayMessage(message);
+            displayMessage(message,false);
         });
     }, function(error) {
         console.error('STOMP error: ', error);
@@ -108,10 +108,15 @@ function fetchChatHistory() {
             return response.json();
         })
         .then(data => {
-            if (data && data.messages) { // Перевірка наявності даних
+            if (data && data.messages) {
                 chatId = data.id;
                 data.messages.forEach(message => {
-                    displayMessage(message.message);
+                    if(message.senderEmail === currentUser){
+                        displayMessage(message.message,true);
+                    } else {
+                        displayMessage(message.message,false);
+                    }
+
                 });
             } else {
                 chatId = data.id;
@@ -147,17 +152,20 @@ function sendMessage() {
     const messageText = messageInput.value.trim();
     if (messageText !== '') {
         stompClient.send(`/app/sendMessage/${chatId}`, {}, messageText);
-        displayMessage(messageText);
+        displayMessage(messageText,true);
         messageInput.value = '';
 
     }
 }
 
 
-function displayMessage(message) {
+function displayMessage(message,boolean) {
     const messageDiv = document.createElement('div');
-    //messageDiv.className = message.sender === 'user' ? 'message sent' : 'message received';
-    messageDiv.className = "message sent"
+    if(boolean === true){
+        messageDiv.className = "message sent"
+    } else {
+        messageDiv.className = "message received"
+    }
     const messageContent = document.createElement('p');
     messageContent.textContent = message;
     messageDiv.appendChild(messageContent);
