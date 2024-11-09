@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // TODO: Реалізувати логіку входу (наприклад, запит до API)
+            login();
 
             console.log('Дані для входу:', { email, password });
 

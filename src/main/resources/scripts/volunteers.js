@@ -1,5 +1,9 @@
+// /scripts/volunteers.js
+let currentApplicationId = null;
+
 document.addEventListener('DOMContentLoaded', function() {
     // Отримання елементів
+    window.currentRequestId = null;
 
     // Кнопки на головній сторінці
     const viewRequestsBtn = document.getElementById('view-requests-btn');
@@ -33,6 +37,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const notificationsCloseBtn = document.querySelector('.notifications-close-btn');
     const notificationsList = document.getElementById('notifications-list');
 
+    const chatModal = document.getElementById('chatModal');
+    const chatCloseBtn = document.querySelector('.chat-close-btn');
+
     // Повідомлення Toast
     const toast = document.getElementById('toast');
     const toastMessage = document.getElementById('toast-message');
@@ -40,6 +47,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Меню-гамбургер
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
+
+    // Кнопка відкриття чату (припускаємо, що є кнопка з ID "open-chat-btn")
+    const openChatBtn = document.getElementById('open-chat-btn');
 
     // Тимчасові дані активних запитів (можна видалити, якщо обробляються на бекенді)
     let myRequestsData = [
@@ -102,12 +112,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Функція для відкриття модального вікна
     function openModal(modal) {
-        modal.classList.add('show');
+        if (modal) {
+            modal.classList.add('show');
+        } else {
+            console.error('Модальне вікно не знайдено!');
+        }
     }
 
     // Функція для закриття модального вікна
     function closeModalFunction(modal) {
-        modal.classList.remove('show');
+        if (modal) {
+            modal.classList.remove('show');
+        } else {
+            console.error('Модальне вікно не знайдено!');
+        }
     }
 
     // Функція для відображення запитів на допомогу
@@ -136,6 +154,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Функція для відкриття модального вікна з деталями запиту
     function openRequestModal(request, canAccept = true) {
         // Перевіряємо, чи additionalData є рядком, і парсимо його, якщо так
+        currentApplicationId = request.id;
         let additionalData = request.additionalData;
         if (typeof additionalData === 'string') {
             try {
@@ -175,21 +194,23 @@ document.addEventListener('DOMContentLoaded', function() {
                     <li><strong>Країна:</strong> ${request.refugee.country}</li>
                 </ul>
             </div>
-        `;
+           
+            `;
         }
 
         // Об'єднуємо всі частини
         requestDetails.innerHTML = `
-        <p><strong>Тип допомоги:</strong> ${getHelpTypeName(request.type)}</p>
-        <p><strong>Опис ситуації:</strong> ${request.description}</p>
-        <p><strong>Статус:</strong> ${translatedStatus}</p>
-        ${additionalDataHTML}
-        ${refugeeHTML}
-    `;
+            <p><strong>Тип допомоги:</strong> ${getHelpTypeName(request.type)}</p>
+            <p><strong>Опис ситуації:</strong> ${request.description}</p>
+            <p><strong>Статус:</strong> ${translatedStatus}</p>
+            ${additionalDataHTML}
+            ${refugeeHTML}
+        `;
         acceptRequestBtn.dataset.requestId = request.id;
 
         // Показуємо або ховаємо кнопку прийняття запиту
         if (canAccept) {
+            openChatBtn.style.display = 'none';
             acceptRequestBtn.style.display = 'block';
         } else {
             acceptRequestBtn.style.display = 'none';
@@ -197,7 +218,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         openModal(requestModal);
     }
-
 
     // Функція для відображення власних активних запитів
     async function displayMyActiveRequests() {
@@ -211,7 +231,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Функція для рендерингу списку запитів
     // Функція для рендерингу списку запитів
     function renderHelpRequests(helpRequests, listElement, canAccept = true) {
         listElement.innerHTML = '';
@@ -412,6 +431,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (event.target === myActiveRequestsModal) {
             closeModalFunction(myActiveRequestsModal);
         }
+        if (event.target === chatModal) {
+            closeModalFunction(chatModal);
+        }
     });
 
     // Обробка кліку на кнопку "Прийняти запит"
@@ -472,6 +494,19 @@ document.addEventListener('DOMContentLoaded', function() {
         closeModalFunction(notificationsModal);
     });
 
+    // Закриття модального вікна чату
+    chatCloseBtn.addEventListener('click', () => {
+        closeModalFunction(chatModal);
+    });
+
+    // Відкриття модального вікна чату (якщо є кнопка з ID "open-chat-btn")
+    if (openChatBtn) {
+        openChatBtn.addEventListener('click', (event) => {
+            event.preventDefault();
+            openModal(chatModal);
+        });
+    }
+
     // Обробка відправки форми профілю
     profileForm.addEventListener('submit', async function (event) {
         event.preventDefault(); // Запобігаємо стандартній відправці форми
@@ -507,7 +542,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (result.success) {
                 showToast(result.message);
-                closeModalFunction(document.getElementById('profile-modal'));
+                closeModalFunction(profileModal);
             } else {
                 showToast('Сталася помилка при збереженні змін.');
             }
@@ -516,7 +551,6 @@ document.addEventListener('DOMContentLoaded', function() {
             showToast('Сталася помилка при відправці даних. Спробуйте пізніше.');
         }
     });
-
 
     // Обробка відправки форми категорій
     categoriesForm.addEventListener('submit', function(event) {

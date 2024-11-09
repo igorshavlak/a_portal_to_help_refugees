@@ -1,3 +1,5 @@
+let currentApplicationId = null;
+
 document.addEventListener('DOMContentLoaded', function() {
     // --------------------------------------------------
     // Elements Selection
@@ -40,6 +42,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Hamburger menu elements
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
+
+
+
 
     // --------------------------------------------------
     // Toast Notification Setup
@@ -270,10 +275,12 @@ document.addEventListener('DOMContentLoaded', function() {
      * @param {Object} request - The help request object
      */
     function openRequestDetailsModal(request) {
+        currentApplicationId = request.id;
         let additionalData = request.additionalData;
         if (typeof additionalData === 'string') {
             try {
                 additionalData = JSON.parse(additionalData);
+
             } catch (e) {
                 console.error('Помилка парсингу additionalData:', e);
                 additionalData = {};
@@ -564,6 +571,17 @@ document.addEventListener('DOMContentLoaded', function() {
     // Close notifications modal
     notificationsCloseBtn.addEventListener('click', function() {
         closeModalFunction(notificationsModal);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Знайдіть кнопку "Зв'язатися з волонтером"
+        const contactVolunteerBtn = document.getElementById('contact-volunteer-btn');
+
+        // Додайте слухач подій
+        contactVolunteerBtn.addEventListener('click', function() {
+            // Відкрийте модальне вікно чату
+            openChatModal();
+        });
     });
 
     // Open request details modal close button

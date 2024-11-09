@@ -19,6 +19,7 @@ public class UserRepo {
 
     private final String updateRefugeeDetailsSql = "UPDATE refugees SET first_name = ?, last_name = ?, birth_date = ?, phone_number = ?, city = ?,country = ? WHERE user_id = ?";
     private final String updateVolunteerDetailsSql = "UPDATE volunteer SET first_name = ?, last_name = ?, birth_date = ?, skills_or_experience = ?, phone_number = ?, city = ?,country = ? WHERE user_id = ?";
+    private final String getUsernameByIdSql = "SELECT email FROM users WHERE id = ?";
 
 
     JdbcTemplate jdbcTemplate;
@@ -97,6 +98,10 @@ public class UserRepo {
         } else {
             throw new IllegalArgumentException("Unsupported user type: " + user.getClass().getName());
         }
+    }
+    public String getUsernameById(int id) {
+        return jdbcTemplate.queryForObject(getUsernameByIdSql, (rs, rowNum) -> rs.getString("email"), id);
+
     }
 }
 

@@ -1,0 +1,244 @@
+/* --------------------------------------------------
+   Chat Styles
+-------------------------------------------------- */
+
+.open-chat-btn {
+    padding: 10px 20px; /* Зменшено відступи */
+    font-size: 14px; /* Зменшено розмір шрифту */
+    color: #fff;
+    background-color: #28a745;
+    border: none;
+    border-radius: 20px; /* Зменшено радіус */
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px; /* Зменшено відстань між іконкою та текстом */
+}
+
+.open-chat-btn:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+/* Ізоляція стилів чату за допомогою ID */
+#chatModal {
+    /* Стилі для контейнера чату, якщо необхідно */
+}
+
+#chatModal .modal-content {
+    background-color: #fff;
+    width: 100%;
+    max-width: 600px; /* Збільшено ширину для чату */
+    height: 1000px; /* Збільшено висоту для чату */
+    border: none; /* Видалено рамку */
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Можна змінити або видалити, якщо створює ефект рамки */
+    animation: slideDown 0.3s ease-out;
+}
+
+#chatModal .chat-header {
+    padding: 16px; /* Збільшено відступи */
+    background-color: #007bff;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#chatModal .profile-info {
+    display: flex;
+    align-items: center;
+}
+
+#chatModal .profile-pic {
+    width: 50px; /* Збільшено розмір */
+    height: 50px; /* Збільшено розмір */
+    border-radius: 50%;
+    margin-right: 12px; /* Збільшено відстань */
+    border: 2px solid #fff;
+}
+
+#chatModal .profile-info h3 {
+    margin: 0;
+    font-size: 18px; /* Збільшено розмір шрифту */
+}
+
+#chatModal #status {
+    font-size: 14px; /* Збільшено розмір шрифту */
+    color: #c8e6c9; /* Зелений для онлайн */
+}
+
+#chatModal .close-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 22px; /* Збільшено розмір */
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+#chatModal .close-btn:hover {
+    color: #ffdddd;
+}
+
+/* Тіло чату */
+#chatModal .chat-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px; /* Збільшено відступи */
+    background-color: #f1f1f1;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #ccc transparent;
+    flex: 1; /* Забезпечує, що чат займає всю доступну висоту */
+}
+
+#chatModal .chat-body::-webkit-scrollbar {
+    width: 8px; /* Збільшено ширину скролбара */
+}
+
+#chatModal .chat-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#chatModal .chat-body::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+}
+
+/* Загальні стилі для повідомлень */
+#chatModal .message {
+    padding: 12px 16px; /* Збільшено відступи */
+    margin: 8px 0; /* Збільшено відступи */
+    max-width: 75%; /* Збільшено максимальну ширину */
+    border-radius: 16px; /* Збільшено радіус */
+    font-size: 16px; /* Збільшено розмір шрифту */
+    line-height: 1.6;
+    word-wrap: break-word;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.3s forwards;
+}
+
+/* Стиль отриманих повідомлень */
+#chatModal .received {
+    background-color: #e2e2e2;
+    color: #333;
+    align-self: flex-start;
+    border-top-left-radius: 0;
+}
+
+/* Стиль відправлених повідомлень */
+#chatModal .sent {
+    background-color: #007bff;
+    color: #fff;
+    align-self: flex-end;
+    border-top-right-radius: 0;
+}
+
+/* Анімація появи повідомлень */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Відгук при наведенні */
+#chatModal .message:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Футер чату */
+#chatModal .chat-footer {
+    padding: 16px; /* Збільшено відступи */
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #ddd;
+}
+
+#chatModal .message-input {
+    flex: 1;
+    padding: 10px 16px; /* Збільшено відступи */
+    font-size: 16px; /* Збільшено розмір шрифту */
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+#chatModal .message-input:focus {
+    border-color: #007bff;
+}
+
+#chatModal .send-btn {
+    background: none;
+    border: none;
+    color: #007bff;
+    font-size: 22px; /* Збільшено розмір */
+    margin-left: 12px; /* Збільшено відстань */
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+#chatModal .send-btn:hover {
+    color: #0056b3;
+}
+
+/* Стиль для статусу онлайн */
+#chatModal .status.online {
+    color: green;
+}
+
+/* Стиль для статусу офлайн */
+#chatModal .status.offline {
+    color: red;
+}
+
+/* Адаптивність для чату */
+@media (max-width: 768px) {
+    #chatModal .modal-content {
+        max-width: 90%;
+        height: 80%;
+    }
+
+    #chatModal .profile-pic {
+        width: 45px;
+        height: 45px;
+    }
+
+    #chatModal .message {
+        max-width: 85%;
+    }
+}
+
+@media (max-width: 480px) {
+    #chatModal .modal-content {
+        max-width: 95%;
+        height: 90%;
+    }
+
+    #chatModal .profile-pic {
+        width: 40px;
+        height: 40px;
+    }
+
+    #chatModal .message {
+        max-width: 90%;
+    }
+}
+#chatWrapper {
+    border: none;
+    outline: none;
+}

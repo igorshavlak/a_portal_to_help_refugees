@@ -21,4 +21,7 @@ public class UserService {
     public boolean safeOrUpdateUser(User user,Principal principal) {
         return userRepo.saveOrUpdateUserDetails(user, userRepo.getIdByUsername(principal.getName()));
     }
+    public String getUsernameById(int id) {
+        return userRepo.getUsernameById(id);
+    }
 }

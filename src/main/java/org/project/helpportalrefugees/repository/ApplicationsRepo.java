@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Repository
 public class ApplicationsRepo {
@@ -33,20 +35,22 @@ public class ApplicationsRepo {
                     "FROM applications a " +
                     "JOIN refugees r ON a.user_id = r.user_id " +
                     "WHERE a.volunteer_id = ?";
+    private static final String getApplicationUsersSql = "SELECT user_id, volunteer_id FROM applications WHERE id = ?";
 
 
-
-
-
+    ChatRepo chatRepo;
     JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public ApplicationsRepo(JdbcTemplate jdbcTemplate) {
+    public ApplicationsRepo(JdbcTemplate jdbcTemplate, ChatRepo chatRepo) {
         this.jdbcTemplate = jdbcTemplate;
+        this.chatRepo = chatRepo;
     }
+
     public void save(Application application) {
-         jdbcTemplate.update(saveSql,application.getRefugeeId(),application.getType(),application.getDescription(),application.getAdditionalData(),application.getStatus());
+        jdbcTemplate.update(saveSql, application.getRefugeeId(), application.getType(), application.getDescription(), application.getAdditionalData(), application.getStatus());
     }
+
     public List<Application> getRefugeeApplications(int id) {
         return jdbcTemplate.query(getAllRefugeeApplicationsSql, (rs, rowNum) -> {
             Application application = new Application(
@@ -152,7 +156,11 @@ public class ApplicationsRepo {
     }
 
     public void acceptApplication(int applicationId, int volunteerId) {
-        jdbcTemplate.update(acceptSql,"processing",volunteerId,applicationId);
+        jdbcTemplate.update(acceptSql, "processing", volunteerId, applicationId);
     }
 
+    public List<Map<String, Object>>  getApplicationUsersId(int applicationId) {
+        return jdbcTemplate.queryForList(getApplicationUsersSql, applicationId);
+
+    }
 }
