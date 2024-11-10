@@ -2,8 +2,10 @@ package org.project.helpportalrefugees.controller;
 
 import org.project.helpportalrefugees.http.ApiResponse;
 import org.project.helpportalrefugees.model.Refugee;
+import org.project.helpportalrefugees.model.User;
+import org.project.helpportalrefugees.model.UserDetailDTO;
 import org.project.helpportalrefugees.model.Volunteer;
-import org.project.helpportalrefugees.model.VolunteerDetailDTO;
+import org.project.helpportalrefugees.repository.UserRepo;
 import org.project.helpportalrefugees.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +26,11 @@ public class UserController {
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
+
     }
 
     @PostMapping("/updateVolunteerDetails")
-    public ResponseEntity<String> saveVolunteerDetails(@Validated @RequestBody VolunteerDetailDTO dto,
+    public ResponseEntity<String> saveVolunteerDetails(@Validated @RequestBody UserDetailDTO dto,
                                                   Principal principal){
         if (principal instanceof Authentication) {
             Authentication authentication = (Authentication) principal;
@@ -54,6 +57,19 @@ public class UserController {
     public ResponseEntity<String> getAuthenticatedUser(Principal principal){
         try {
             return ResponseEntity.ok(principal.getName());
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+    }
+    @GetMapping("/getUserDetails")
+    public ResponseEntity<User> getAuthenticatedUserDetails(Principal principal){
+        try {
+            Authentication authentication = (Authentication) principal;
+            GrantedAuthority authority = authentication.getAuthorities().stream().findFirst().orElse(null);
+            assert authority != null;
+            User user = userService.getUserDetails(principal,authority.toString());
+            return ResponseEntity.ok(user);
         } catch (Exception e){
             e.printStackTrace();
             return ResponseEntity.status(500).build();

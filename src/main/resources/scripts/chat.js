@@ -21,6 +21,7 @@ openChatBtn.addEventListener("click", () => {
 // Закриття модального вікна при натисканні кнопки закриття
 closeBtn.addEventListener("click", () => {
     chatModal.style.display = "none";
+    disconnectChat();
 });
 
 // Закриття модального вікна при кліку поза його межами
@@ -72,6 +73,8 @@ function fetchCurrentUser() {
 
 
 function openChatModal() {
+  disconnectChat();
+
     chatBody.innerHTML = '';
     chatModal.style.display = 'flex';
     messageInput.focus();
@@ -90,17 +93,30 @@ function connectChat() {
     stompClient.connect({}, function(frame) {
         console.log('Connected: ' + frame);
 
-        // Підписка на особисту чергу повідомлень
-        stompClient.subscribe('/user/queue/messages', function(messageOutput) {
-            const message = messageOutput.body;
-            displayMessage(message,false);
+        if (chatSubscription) {
+            chatSubscription.unsubscribe();
+        }
+        chatSubscription = stompClient.subscribe('/user/queue/messages', function(messageOutput) {
+            const data = JSON.parse(messageOutput.body);
+            const message = data.message
+            if(chatId === data.chatId)
+            {
+                displayMessage(message, false);
+            } else {
+                console.log("Chat does not open")
+            }
+
         });
     }, function(error) {
         console.error('STOMP error: ', error);
     });
 }
 function fetchChatHistory() {
-    fetch(`/chat/history/${currentApplicationId}`)
+    if (window.currentApplicationId === null) {
+        console.error('currentApplicationId is not set');
+        return;
+    }
+    fetch(`/chat/history/${window.currentApplicationId}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Не вдалося отримати історію чату');

@@ -23,7 +23,6 @@ async function fetchHelpRequests(categories) {
     }
 }
 
-
  async function sendVolunteerData(volunteerData) {
      try {
          const response = await fetch('/user/updateVolunteerDetails', {

@@ -1,5 +1,5 @@
 // /scripts/volunteers.js
-let currentApplicationId = null;
+window.currentApplicationId = null;
 
 document.addEventListener('DOMContentLoaded', function() {
     // Отримання елементів
@@ -52,29 +52,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const openChatBtn = document.getElementById('open-chat-btn');
 
     // Тимчасові дані активних запитів (можна видалити, якщо обробляються на бекенді)
-    let myRequestsData = [
-        {
-            id: 1,
-            type: 'housing',
-            description: 'Допомагаю сім\'ї з 4 осіб у Львові.',
-            status: 'processing',
-            additionalData: {
-                familyMembers: '4',
-                specialNeeds: 'Немає'
-            }
-        },
-        {
-            id: 2,
-            type: 'medical',
-            description: 'Консультую щодо хронічної хвороби.',
-            status: 'completed',
-            additionalData: {
-                medicalCondition: 'Діабет'
-            }
-        },
-        // Додайте більше, якщо потрібно
-    ];
-
     // Тимчасові дані сповіщень (можна видалити, якщо обробляються на бекенді)
     const notificationsData = [
         {
@@ -87,6 +64,54 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         // Додайте більше, якщо потрібно
     ];
+
+    async function fetchUserProfile() {
+        try {
+            const response = await fetch('/user/getUserDetails', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Не вдалося отримати дані користувача.');
+            }
+
+            const userData = await response.json();
+            return userData;
+        } catch (error) {
+            console.error('Помилка при завантаженні профілю користувача:', error);
+            showToast('Не вдалося завантажити ваш профіль. Спробуйте пізніше.');
+            return null;
+        }
+    }
+
+    function populateUserProfile(user) {
+        if (!user) return;
+
+        // Оновлення імені користувача в героїчній секції
+        const userNameElement = document.querySelector('.user-name');
+        if (userNameElement) {
+            userNameElement.textContent = `${user.name} ${user.surname}`;
+        }
+
+        // Оновлення полів форми налаштувань профілю
+        document.getElementById('volunteer-first-name').value = user.name || '';
+        document.getElementById('volunteer-last-name').value = user.surname || '';
+        document.getElementById('volunteer-birth-date').value = user.dateOfBirth ? user.dateOfBirth.split('T')[0] : '';
+        document.getElementById('volunteer-phone').value = user.phone || '';
+        document.getElementById('volunteer-skills').value = user.skillsOrExperience || '';
+        document.getElementById('volunteer-city').value = user.city || '';
+        document.getElementById('volunteer-country').value = user.country || '';
+    }
+    async function initializeProfile() {
+        const user = await fetchUserProfile();
+        populateUserProfile(user);
+    }
+
+    initializeProfile();
+
 
     // Функція для перекладу статусу
     function getStatusName(statusKey) {
@@ -154,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Функція для відкриття модального вікна з деталями запиту
     function openRequestModal(request, canAccept = true) {
         // Перевіряємо, чи additionalData є рядком, і парсимо його, якщо так
-        currentApplicationId = request.id;
+        window.currentApplicationId = request.id;
         let additionalData = request.additionalData;
         if (typeof additionalData === 'string') {
             try {
@@ -210,7 +235,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Показуємо або ховаємо кнопку прийняття запиту
         if (canAccept) {
-            openChatBtn.style.display = 'none';
+          /*openChatBtn.style.display = 'none';*/
             acceptRequestBtn.style.display = 'block';
         } else {
             acceptRequestBtn.style.display = 'none';

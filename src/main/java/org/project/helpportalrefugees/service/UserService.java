@@ -24,4 +24,7 @@ public class UserService {
     public String getUsernameById(int id) {
         return userRepo.getUsernameById(id);
     }
+    public User getUserDetails(Principal principal,String role) {
+        return userRepo.getUserDetails(userRepo.getIdByUsername(principal.getName()),role);
+    }
 }

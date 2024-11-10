@@ -1,4 +1,4 @@
-let currentApplicationId = null;
+window.currentApplicationId = null;
 
 document.addEventListener('DOMContentLoaded', function() {
     // --------------------------------------------------
@@ -275,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function() {
      * @param {Object} request - The help request object
      */
     function openRequestDetailsModal(request) {
-        currentApplicationId = request.id;
+        window.currentApplicationId = request.id;
         let additionalData = request.additionalData;
         if (typeof additionalData === 'string') {
             try {
@@ -600,39 +600,89 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
 
         // Отримуємо значення з форми
-        const name = document.getElementById('refugee-name').value.trim();
+        const firstName = document.getElementById('refugee-name').value.trim();
         const lastName = document.getElementById('refugee-last-name').value.trim();
         const phone = document.getElementById('refugee-phone').value.trim();
-        const skills = document.getElementById('refugee-skills').value.trim();
         const city = document.getElementById('refugee-city').value.trim();
+        const birthDate = document.getElementById('refugee-birth-date').value;
         const country = document.getElementById('refugee-country').value.trim();
 
         // Валідація введених даних
-        if (!name || !lastName || !phone || !skills || !city || !country) {
+        if (!firstName || !lastName || !phone || !city || !birthDate || !country) {
             showToast('Будь ласка, заповніть всі поля.');
             return;
         }
 
-        // Створюємо об'єкт даних
         const refugeeData = {
-            firstName: name,
+            firstName: firstName,
             lastName: lastName,
             phone: phone,
-            skillsAndExperience: skills,
             city: city,
+            birthDate: birthDate,
             country: country
         };
 
-        // Відправляємо дані
-        const result = await sendRefugeeData(refugeeData);
+        try {
+            const result = await sendRefugeeData(refugeeData);
 
-        if (result.success) {
-            showToast(result.message || 'Зміни успішно збережено!');
-            closeModalFunction(profileModal);
-        } else {
-            showToast(result.message);
+            if (result.success) {
+                showToast(result.message || 'Зміни успішно збережено!');
+                closeModalFunction(profileModal);
+                populateUserProfile(refugeeData); // Оновлюємо DOM з новими даними
+            } else {
+                showToast(result.message || 'Сталася помилка при збереженні змін.');
+            }
+        } catch (error) {
+            console.error('Помилка при відправці даних біженця:', error);
+            showToast('Сталася помилка при відправці даних. Спробуйте пізніше.');
         }
     });
+
+    async function initializeProfile() {
+        try {
+            const response = await fetch('/user/getUserDetails', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Не вдалося отримати дані профілю.');
+            }
+
+            const userData = await response.json();
+            populateUserProfile(userData);
+        } catch (error) {
+            console.error('Помилка при завантаженні профілю:', error);
+            showToast('Не вдалося завантажити ваш профіль. Спробуйте пізніше.');
+        }
+    }
+
+    /**
+     * Function to populate the user's profile in the DOM
+     * @param {Object} user - The user profile data
+     */
+    function populateUserProfile(user) {
+        if (!user) return;
+
+        // Оновлення імені користувача в героїчній секції
+        const userNameElement = document.querySelector('.user-name');
+        if (userNameElement) {
+            userNameElement.textContent = `${user.name} ${user.surname}`;
+        }
+
+        // Оновлення полів форми налаштувань профілю
+        document.getElementById('refugee-name').value = user.name || '';
+        document.getElementById('refugee-last-name').value = user.surname || '';
+        document.getElementById('refugee-phone').value = user.phone || '';
+        document.getElementById('refugee-city').value = user.city || '';
+        document.getElementById('refugee-birth-date').value = user.dateOfBirth ? user.dateOfBirth.split('T')[0] : '';
+        document.getElementById('refugee-country').value = user.country || '';
+        document.getElementById('refugee-status').value = user.status || 'не підтверджено';
+    }
+
+
 
     // Toggle navigation menu on hamburger click
     if (hamburger && navLinks) {
@@ -662,4 +712,5 @@ document.addEventListener('DOMContentLoaded', function() {
             closeModalFunction(requestDetailsModal);
         }
     });
+    initializeProfile();
 });

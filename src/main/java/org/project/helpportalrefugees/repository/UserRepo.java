@@ -20,6 +20,8 @@ public class UserRepo {
     private final String updateRefugeeDetailsSql = "UPDATE refugees SET first_name = ?, last_name = ?, birth_date = ?, phone_number = ?, city = ?,country = ? WHERE user_id = ?";
     private final String updateVolunteerDetailsSql = "UPDATE volunteer SET first_name = ?, last_name = ?, birth_date = ?, skills_or_experience = ?, phone_number = ?, city = ?,country = ? WHERE user_id = ?";
     private final String getUsernameByIdSql = "SELECT email FROM users WHERE id = ?";
+    private final String getRefugeeDetailsSql = "SELECT * FROM refugees WHERE user_id = ?";
+    private final String getVolunteerDetailsSql = "SELECT * FROM volunteer WHERE user_id = ?";
 
 
     JdbcTemplate jdbcTemplate;
@@ -101,8 +103,37 @@ public class UserRepo {
     }
     public String getUsernameById(int id) {
         return jdbcTemplate.queryForObject(getUsernameByIdSql, (rs, rowNum) -> rs.getString("email"), id);
-
     }
+    public User getUserDetails(int user_id, String role) {
+        if (role.equals("ROLE_VOLUNTEER")) {
+            return jdbcTemplate.queryForObject(getVolunteerDetailsSql, (rs, rowNum) -> {
+                return new Volunteer(
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getDate("birth_date").toLocalDate(),
+                        rs.getString("phone_number"),
+                        rs.getString("city"),
+                        rs.getString("country"),
+                        rs.getString("skills_or_experience")
+                );
+            }, user_id);
+        } else if (role.equals("ROLE_USER")) {
+            return jdbcTemplate.queryForObject(getRefugeeDetailsSql, (rs, rowNum) -> {
+                return new Refugee(
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getDate("birth_date").toLocalDate(),
+                        rs.getString("phone_number"),
+                        rs.getString("city"),
+                        rs.getString("country"),
+                        rs.getString("status")
+                );
+            }, user_id);
+        } else {
+            throw new IllegalArgumentException("Invalid role specified");
+        }
+    }
+
 }
 
 

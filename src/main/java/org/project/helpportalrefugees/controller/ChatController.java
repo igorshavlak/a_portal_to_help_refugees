@@ -2,6 +2,7 @@ package org.project.helpportalrefugees.controller;
 
 
 import org.project.helpportalrefugees.model.Chat;
+import org.project.helpportalrefugees.model.ChatMessageDTO;
 import org.project.helpportalrefugees.service.ChatService;
 import org.project.helpportalrefugees.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,8 @@ public class ChatController {
     public void sendMessage(@DestinationVariable int chatId, @Payload String message, Principal principal) {
         try {
             chatService.saveChatMessage(chatId, message, principal);
-            messagingTemplate.convertAndSendToUser(Objects.requireNonNull(determineReceiver(chatId, principal.getName())), "/queue/messages", message);
+            System.out.println("Message sent to "  + Objects.requireNonNull(determineReceiver(chatId, principal.getName())));
+            messagingTemplate.convertAndSendToUser(Objects.requireNonNull(determineReceiver(chatId, principal.getName())), "/queue/messages", new ChatMessageDTO(message,chatId));
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e.getMessage());

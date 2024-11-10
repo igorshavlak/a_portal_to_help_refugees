@@ -4,7 +4,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
-public class VolunteerDetailDTO {
+public class UserDetailDTO {
 
     @NotBlank(message = "Ім'я є обов'язковим")
     private String firstName;
@@ -18,14 +18,14 @@ public class VolunteerDetailDTO {
     @NotBlank(message = "Номер телефону є обов'язковим")
     private String phone;
 
-    @NotBlank(message = "Це поле є обов'язковим")
-    private String skillsAndExperience;
-
     @NotBlank(message = "Місто є обов'язковим")
     private String city;
 
     @NotBlank(message = "Країна є обов'язковою")
     private String country;
+
+    private String skillsAndExperience;
+
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;

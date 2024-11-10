@@ -35,7 +35,7 @@
 
 <!-- Героїчна секція -->
 <section class="hero">
-
+    <img src="/images/02-14-2024-06-08-24-3176816066.png" alt="Героїчна секція фон" class="hero-bg">
     <div class="hero-content">
         <h1>Ласкаво просимо, <span class="user-name">[Ім'я користувача]</span></h1>
         <p>Ми раді вітати вас на нашому порталі. Тут ви можете знайти необхідну допомогу та підтримку.</p>
@@ -219,17 +219,15 @@
                 <label for="refugee-phone">Телефон:</label>
                 <input type="tel" id="refugee-phone" name="refugee-phone" value="[Телефон біженця]" required>
             </div>
-
-            <div class="form-group">
-                <label for="refugee-skills">Навички та досвід:</label>
-                <textarea id="refugee-skills" name="refugee-skills" rows="4" required>[Навички біженця]</textarea>
-            </div>
-
             <div class="form-group">
                 <label for="refugee-city">Місто:</label>
                 <input type="text" id="refugee-city" name="refugee-city" value="[Місто біженця]" required>
             </div>
-
+            <div class="form-group">
+                <label for="refugee-birth-date">Дата народження:</label>
+                <input type="date" id="refugee-birth-date" name="volunteer-birth-date"
+                       value="[Дата народження волонтера]" required>
+            </div>
             <div class="form-group">
                 <label for="refugee-country">Країна:</label>
                 <input type="text" id="refugee-country" name="refugee-country" value="[Країна біженця]" required>
@@ -303,6 +301,7 @@
 
 <!-- Підключення JavaScript -->
 <script src="/scripts/refugees.js"></script>
+    <script src="/scripts/refugeeFetch.js"></script>
 <script src="/scripts/map.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js" integrity="sha256-nkP8cj5xaTdWK/BsZl+57ZCE/Y/i4UNtbNTpgH+6Taw=" crossorigin="anonymous"></script>
