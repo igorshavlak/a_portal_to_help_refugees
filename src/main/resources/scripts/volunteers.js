@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // Кнопка відкриття чату (припускаємо, що є кнопка з ID "open-chat-btn")
-    const openChatBtn = document.getElementById('open-chat-btn');
+    const openChatBtn = document.getElementById('openChatBtn');
 
     // Тимчасові дані активних запитів (можна видалити, якщо обробляються на бекенді)
     // Тимчасові дані сповіщень (можна видалити, якщо обробляються на бекенді)
@@ -262,10 +262,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Показуємо або ховаємо кнопку прийняття запиту
         if (canAccept) {
-          /*openChatBtn.style.display = 'none';*/
+          openChatBtn.style.display = 'none';
             acceptRequestBtn.style.display = 'block';
         } else {
             acceptRequestBtn.style.display = 'none';
+            openChatBtn.style.display = 'block';
         }
 
         openModal(requestModal);

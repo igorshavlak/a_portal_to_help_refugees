@@ -925,3 +925,21 @@ footer {
     transform: translateY(-3px);
 }
 
+
+/* Додайте ці стилі до вашого CSS-файлу */
+.view-btn {
+    padding: 10px 20px;
+    background-color: #004080;
+    color: #fff;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.view-btn:hover {
+    background-color: #003060;
+    transform: translateY(-2px);
+}
