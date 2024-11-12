@@ -45,6 +45,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+    const refugeeImageInput = document.getElementById('refugee-profile-image');
+    const refugeeImagePreview = document.getElementById('refugee-profile-preview');
+
+    refugeeImageInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                refugeeImagePreview.src = e.target.result;
+                refugeeImagePreview.classList.add('show');
+            }
+            reader.readAsDataURL(file);
+        } else {
+            refugeeImagePreview.src = '#';
+            refugeeImagePreview.classList.remove('show');
+        }
+    });
+
 
     // --------------------------------------------------
     // Toast Notification Setup
@@ -612,6 +630,17 @@ document.addEventListener('DOMContentLoaded', function() {
             showToast('Будь ласка, заповніть всі поля.');
             return;
         }
+        let profileImageBase64 = '';
+        const file = refugeeImageInput.files[0];
+        if (file && file.type.startsWith('image/')) {
+            try {
+                profileImageBase64 = await readFileAsBase64(file);
+            } catch (error) {
+                console.error('Помилка при читанні файлу:', error);
+                showToast('Не вдалося завантажити зображення. Спробуйте ще раз.');
+                return;
+            }
+        }
 
         const refugeeData = {
             firstName: firstName,
@@ -619,24 +648,46 @@ document.addEventListener('DOMContentLoaded', function() {
             phone: phone,
             city: city,
             birthDate: birthDate,
-            country: country
+            country: country,
+            profileImage: profileImageBase64 // Додаємо зображення
         };
 
         try {
-            const result = await sendRefugeeData(refugeeData);
+            const response = await fetch('/user/updateVolunteerDetails', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(refugeeData)
+            });
 
-            if (result.success) {
-                showToast(result.message || 'Зміни успішно збережено!');
+            const result = await response.text();
+
+            if (response.ok) {
+                showToast(result || 'Зміни успішно збережено!');
                 closeModalFunction(profileModal);
                 populateUserProfile(refugeeData); // Оновлюємо DOM з новими даними
             } else {
-                showToast(result.message || 'Сталася помилка при збереженні змін.');
+                showToast(result || 'Сталася помилка при збереженні змін.');
             }
         } catch (error) {
             console.error('Помилка при відправці даних біженця:', error);
             showToast('Сталася помилка при відправці даних. Спробуйте пізніше.');
         }
     });
+
+    function readFileAsBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                resolve(event.target.result.split(',')[1]); // Вилучаємо префікс data:image/...;base64,
+            }
+            reader.onerror = function(error) {
+                reject(error);
+            }
+            reader.readAsDataURL(file);
+        });
+    }
 
     async function initializeProfile() {
         try {
@@ -659,6 +710,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+
     /**
      * Function to populate the user's profile in the DOM
      * @param {Object} user - The user profile data
@@ -680,6 +732,14 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('refugee-birth-date').value = user.dateOfBirth ? user.dateOfBirth.split('T')[0] : '';
         document.getElementById('refugee-country').value = user.country || '';
         document.getElementById('refugee-status').value = user.status || 'не підтверджено';
+        const refugeeImagePreview = document.getElementById('refugee-profile-preview');
+        if (user.profileImage) {
+            refugeeImagePreview.src = `data:image/jpeg;base64,${user.profileImage}`;
+            refugeeImagePreview.classList.add('show');
+        } else {
+            refugeeImagePreview.src = '#';
+            refugeeImagePreview.classList.remove('show');
+        }
     }
 
 

@@ -42,6 +42,38 @@ messageInput.addEventListener("keypress", (event) => {
         sendMessage();
     }
 });
+// Функция для получения деталей получателя чата
+function fetchChatReceiverDetails(chatId) {
+    return fetch(`/chat/getChatReceiverDetails/${chatId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Не вдалося отримати деталі отримувача чату');
+            }
+            return response.json();
+        })
+        .then(data => {
+            return data;
+        })
+        .catch(error => {
+            console.error('Помилка при отриманні деталей отримувача:', error);
+        });
+}
+
+// Функция для обновления профиля пользователя в чате
+function updateChatProfile(userDetails) {
+    const userNameElement = document.getElementById("username");
+    const profilePicElement = document.querySelector(".profile-pic");
+
+    if (userDetails.name && userDetails.surname) {
+        userNameElement.textContent = `${userDetails.name} ${userDetails.surname}`;
+    }
+
+    if (userDetails.profileImage) {
+        profilePicElement.src = `data:image/jpeg;base64,${userDetails.profileImage}`;
+    } else {
+        profilePicElement.src = "/images/default-profile.png"; // Путь к изображению по умолчанию
+    }
+}
 
 // Функція для оновлення статусу
 function updateStatus(isOnline) {
@@ -127,6 +159,11 @@ function fetchChatHistory() {
         .then(data => {
             if (data && data.messages) {
                 chatId = data.id;
+                fetchChatReceiverDetails(chatId).then(userDetails => {
+                    if (userDetails) {
+                        updateChatProfile(userDetails);
+                    }
+                });
                 data.messages.forEach(message => {
                     if(message.senderEmail === currentUser){
                         displayMessage(message.message,true);

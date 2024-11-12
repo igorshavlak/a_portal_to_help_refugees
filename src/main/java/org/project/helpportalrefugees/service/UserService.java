@@ -18,16 +18,27 @@ public class UserService {
         this.userRepo = userRepo;
     }
 
-    public boolean safeOrUpdateUser(User user,Principal principal) {
+    public boolean safeOrUpdateUser(User user, Principal principal) {
         return userRepo.saveOrUpdateUserDetails(user, userRepo.getIdByUsername(principal.getName()));
     }
+
     public String getUsernameById(int id) {
         return userRepo.getUsernameById(id);
     }
-    public User getUserDetails(Principal principal,String role) {
-        return userRepo.getUserDetails(userRepo.getIdByUsername(principal.getName()),role);
+
+    public User getUserDetails(Principal principal, String role) {
+        return userRepo.getUserDetails(userRepo.getIdByUsername(principal.getName()), role);
     }
+
+    public User getUserDetails(String username, String role) {
+        return userRepo.getUserDetails(userRepo.getIdByUsername(username), role);
+    }
+
     public int getIdByUsername(String username) {
         return userRepo.getIdByUsername(username);
+    }
+
+    public String getUserRoleByUsername(String username) {
+        return userRepo.getGetUserRoleByUsername(username);
     }
 }

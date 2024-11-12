@@ -12,16 +12,18 @@ import org.springframework.stereotype.Repository;
 public class UserRepo {
 
     private final String getIdByUsernameSql = "SELECT id FROM users WHERE email = ?";
-    private final String saveRefugeeDetailsSql = "INSERT INTO refugees (user_id,first_name, last_name, birth_date, phone_number, city,country) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?)";
-    private final String saveVolunteerDetailsSql = "INSERT INTO volunteer (user_id, first_name, last_name, birth_date, skills_or_experience, phone_number, city,country) " +
+    private final String saveRefugeeDetailsSql = "INSERT INTO refugees (user_id, first_name, last_name, birth_date, phone_number, city, country, profile_image) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    private final String saveVolunteerDetailsSql = "INSERT INTO volunteer (user_id, first_name, last_name, birth_date, skills_or_experience, phone_number, city, country, profile_image) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private final String updateRefugeeDetailsSql = "UPDATE refugees SET first_name = ?, last_name = ?, birth_date = ?, phone_number = ?, city = ?, country = ?, profile_image = ? WHERE user_id = ?";
+    private final String updateVolunteerDetailsSql = "UPDATE volunteer SET first_name = ?, last_name = ?, birth_date = ?, skills_or_experience = ?, phone_number = ?, city = ?, country = ?, profile_image = ? WHERE user_id = ?";
 
-    private final String updateRefugeeDetailsSql = "UPDATE refugees SET first_name = ?, last_name = ?, birth_date = ?, phone_number = ?, city = ?,country = ? WHERE user_id = ?";
-    private final String updateVolunteerDetailsSql = "UPDATE volunteer SET first_name = ?, last_name = ?, birth_date = ?, skills_or_experience = ?, phone_number = ?, city = ?,country = ? WHERE user_id = ?";
+
     private final String getUsernameByIdSql = "SELECT email FROM users WHERE id = ?";
     private final String getRefugeeDetailsSql = "SELECT * FROM refugees WHERE user_id = ?";
     private final String getVolunteerDetailsSql = "SELECT * FROM volunteer WHERE user_id = ?";
+    private final String getUserRole = "SELECT authority FROM authorities WHERE email = ?";
 
 
     JdbcTemplate jdbcTemplate;
@@ -55,6 +57,7 @@ public class UserRepo {
                         refugee.getPhone(),
                         refugee.getCity(),
                         refugee.getCountry(),
+                        refugee.getProfileImage(),
                         id);
                 return false;
             } else {
@@ -66,7 +69,9 @@ public class UserRepo {
                         refugee.getPhone(),
                         refugee.getCity(),
                         refugee.getCountry(),
-                        refugee.getCity());
+                        refugee.getCity(),
+                        refugee.getProfileImage()
+                );
                 return true;
             }
         } else if (user instanceof Volunteer) {
@@ -83,6 +88,7 @@ public class UserRepo {
                         volunteer.getPhone(),
                         volunteer.getCity(),
                         volunteer.getCountry(),
+                        volunteer.getProfileImage(),
                         id);
                 return false;
             } else {
@@ -94,7 +100,8 @@ public class UserRepo {
                         volunteer.getSkillsOrExperience(),
                         volunteer.getPhone(),
                         volunteer.getCity(),
-                        volunteer.getCountry());
+                        volunteer.getCountry(),
+                        volunteer.getProfileImage());
                 return true;
             }
         } else {
@@ -114,7 +121,8 @@ public class UserRepo {
                         rs.getString("phone_number"),
                         rs.getString("city"),
                         rs.getString("country"),
-                        rs.getString("skills_or_experience")
+                        rs.getString("skills_or_experience"),
+                        rs.getBytes("profile_image")
                 );
             }, user_id);
         } else if (role.equals("ROLE_USER")) {
@@ -126,12 +134,16 @@ public class UserRepo {
                         rs.getString("phone_number"),
                         rs.getString("city"),
                         rs.getString("country"),
-                        rs.getString("status")
+                        rs.getString("status"),
+                        rs.getBytes("profile_image")
                 );
             }, user_id);
         } else {
             throw new IllegalArgumentException("Invalid role specified");
         }
+    }
+    public String getGetUserRoleByUsername(String username) {
+        return jdbcTemplate.queryForObject(getUserRole, (rs, rowNum) -> rs.getString("authority"), username);
     }
 
 }

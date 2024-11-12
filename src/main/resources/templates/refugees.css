@@ -705,4 +705,20 @@ footer {
     width: 150px;
     color: #004080;
 }
+/* Додайте цей CSS у ваш основний CSS-файл */
+
+.profile-preview {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    display: none; /* Приховуємо, поки зображення не вибрано */
+    margin-top: 10px;
+    border: 2px solid #ddd;
+}
+
+.profile-preview.show {
+    display: block;
+}
+
 

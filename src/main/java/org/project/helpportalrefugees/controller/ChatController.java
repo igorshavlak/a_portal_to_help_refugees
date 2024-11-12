@@ -4,6 +4,7 @@ package org.project.helpportalrefugees.controller;
 import org.project.helpportalrefugees.model.Chat;
 import org.project.helpportalrefugees.DTO.ChatMessageDTO;
 import org.project.helpportalrefugees.model.Notification;
+import org.project.helpportalrefugees.model.User;
 import org.project.helpportalrefugees.service.ChatService;
 import org.project.helpportalrefugees.service.NotificationService;
 import org.project.helpportalrefugees.service.UserService;
@@ -20,6 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -64,6 +68,28 @@ public class ChatController {
             return ResponseEntity.ok(new Chat(chat.getId(), null));
         }
         return ResponseEntity.ok(new Chat(chat.getId(), chat.getMessages()));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(500).build();
+        }
+    }
+    @GetMapping("/getChatReceiverDetails/{chatId}")
+    public ResponseEntity<Map<String, Object>> getChatReceiverDetails(@PathVariable int chatId, Principal principal) {
+        try {
+            String receiver = Objects.requireNonNull(determineReceiver(chatId, principal.getName()));
+            User user = userService.getUserDetails(receiver, userService.getUserRoleByUsername(receiver));
+            String profileImageBase64 = "";
+            if (user.getProfileImage() != null) {
+                profileImageBase64 = Base64.getEncoder().encodeToString(user.getProfileImage());
+            }
+
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("name", user.getName());
+            response.put("surname", user.getSurname());
+            response.put("profileImage", profileImageBase64);
+
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return ResponseEntity.status(500).build();

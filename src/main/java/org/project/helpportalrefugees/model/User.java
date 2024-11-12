@@ -12,7 +12,18 @@ public abstract class User {
         private String phone;
         private String city;
         private String country;
+        private byte[] profileImage;
 
+    public User(String id, String name, String surname, LocalDate dateOfBirth, String phone, String city, String country, byte[] profileImage) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.dateOfBirth = dateOfBirth;
+        this.phone = phone;
+        this.city = city;
+        this.country = country;
+        this.profileImage = profileImage;
+    }
     public User(String id, String name, String surname, LocalDate dateOfBirth, String phone, String city, String country) {
         this.id = id;
         this.name = name;
@@ -21,6 +32,16 @@ public abstract class User {
         this.phone = phone;
         this.city = city;
         this.country = country;
+
+    }
+    public User(String name, String surname, LocalDate dateOfBirth, String phone, String city, String country, byte[] profileImage) {
+        this.name = name;
+        this.surname = surname;
+        this.dateOfBirth = dateOfBirth;
+        this.phone = phone;
+        this.city = city;
+        this.country = country;
+        this.profileImage = profileImage;
     }
     public User(String name, String surname, LocalDate dateOfBirth, String phone, String city, String country) {
         this.name = name;
@@ -83,4 +104,12 @@ public abstract class User {
     public String getSurname() {
         return surname;
     }
+
+    public byte[] getProfileImage() {
+        return profileImage;
+    }
+    public void setProfileImage(byte[] profileImage) {
+        this.profileImage = profileImage;
+    }
+
 }

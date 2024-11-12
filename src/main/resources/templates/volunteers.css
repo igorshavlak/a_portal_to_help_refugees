@@ -1,6 +1,4 @@
-/* --------------------------------------------------
-   General Styles
--------------------------------------------------- */
+/*volunteer.css*/
 * {
     box-sizing: border-box;
     margin: 0;
@@ -859,3 +857,71 @@ footer {
     from { opacity: 1; transform: translateY(-10px); }
     to { opacity: 0; transform: translateY(0); }
 }
+/* Додайте цей CSS у ваш основний CSS-файл */
+
+.profile-preview {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    display: none; /* Приховуємо, поки зображення не вибрано */
+    margin-top: 10px;
+    border: 2px solid #ddd;
+}
+
+.profile-preview.show {
+    display: block;
+}
+#profile-form {
+    display: flex;
+    flex-direction: column;
+}
+
+#profile-form label {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+#profile-form input,
+#profile-form textarea {
+    padding: 10px;
+    margin-bottom: 2px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    resize: none; /* Prevent resizing */
+    width: 100%;
+}
+
+#profile-form input:focus,
+#profile-form textarea:focus {
+    border-color: #0066cc;
+    outline: none;
+}
+
+#profile-form textarea {
+    resize: none; /* Prevent resizing */
+}
+
+#profile-form button {
+    padding: 15px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: 700;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    align-self: center;
+    width: 50%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#profile-form button:hover {
+    background-color: #218838;
+    transform: translateY(-3px);
+}
+

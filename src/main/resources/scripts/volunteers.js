@@ -48,6 +48,25 @@ document.addEventListener('DOMContentLoaded', function() {
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
 
+    const volunteerImageInput = document.getElementById('volunteer-profile-image');
+    const volunteerImagePreview = document.getElementById('volunteer-profile-preview');
+
+    volunteerImageInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                volunteerImagePreview.src = e.target.result;
+                volunteerImagePreview.classList.add('show');
+            }
+            reader.readAsDataURL(file);
+        } else {
+            volunteerImagePreview.src = '#';
+            volunteerImagePreview.classList.remove('show');
+        }
+    });
+
+
     // Кнопка відкриття чату (припускаємо, що є кнопка з ID "open-chat-btn")
     const openChatBtn = document.getElementById('open-chat-btn');
 
@@ -104,6 +123,14 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('volunteer-skills').value = user.skillsOrExperience || '';
         document.getElementById('volunteer-city').value = user.city || '';
         document.getElementById('volunteer-country').value = user.country || '';
+        const volunteerImagePreview = document.getElementById('volunteer-profile-preview');
+        if (user.profileImage) {
+            volunteerImagePreview.src = `data:image/jpeg;base64,${user.profileImage}`;
+            volunteerImagePreview.classList.add('show');
+        } else {
+            volunteerImagePreview.src = '#';
+            volunteerImagePreview.classList.remove('show');
+        }
     }
     async function initializeProfile() {
         const user = await fetchUserProfile();
@@ -550,32 +577,64 @@ document.addEventListener('DOMContentLoaded', function() {
             showToast('Будь ласка, заповніть всі поля.');
             return;
         }
-
+        let profileImageBase64 = '';
+        const file = volunteerImageInput.files[0];
+        if (file && file.type.startsWith('image/')) {
+            try {
+                profileImageBase64 = await readFileAsBase64(file);
+            } catch (error) {
+                console.error('Помилка при читанні файлу:', error);
+                showToast('Не вдалося завантажити зображення. Спробуйте ще раз.');
+                return;
+            }
+        }
         // Створюємо об'єкт даних
         const volunteerData = {
-            firstName,
-            lastName,
-            birthDate,
-            phone,
-            skillsAndExperience,
-            city,
-            country
+            firstName: firstName,
+            lastName: lastName,
+            birthDate: birthDate,
+            phone: phone,
+            skillsAndExperience: skillsAndExperience,
+            city: city,
+            country: country,
+            profileImage: profileImageBase64 // Додаємо зображення
         };
 
         try {
-            const result = await sendVolunteerData(volunteerData);
+            const response = await fetch('/user/updateVolunteerDetails', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(volunteerData)
+            });
 
-            if (result.success) {
-                showToast(result.message);
+            const result = await response.text();
+
+            if (response.ok) {
+                showToast(result || 'Зміни успішно збережено!');
                 closeModalFunction(profileModal);
+                populateUserProfile(volunteerData); // Оновлюємо DOM з новими даними
             } else {
-                showToast('Сталася помилка при збереженні змін.');
+                showToast(result || 'Сталася помилка при збереженні змін.');
             }
         } catch (error) {
             console.error('Помилка при відправці даних волонтера:', error);
             showToast('Сталася помилка при відправці даних. Спробуйте пізніше.');
         }
     });
+    function readFileAsBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                resolve(event.target.result.split(',')[1]); // Вилучаємо префікс data:image/...;base64,
+            }
+            reader.onerror = function(error) {
+                reject(error);
+            }
+            reader.readAsDataURL(file);
+        });
+    }
 
     // Обробка відправки форми категорій
     categoriesForm.addEventListener('submit', function(event) {

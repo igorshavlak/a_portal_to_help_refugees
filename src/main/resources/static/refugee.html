@@ -239,6 +239,15 @@
                 <label for="refugee-status">Статус біженця:</label>
                 <input type="text" id="refugee-status" name="refugee-status" value="не підтверджено" readonly>
             </div>
+            <div class="form-group">
+                <label for="refugee-profile-image">Завантажити зображення профілю:</label>
+                <input type="file" id="refugee-profile-image" name="refugee-profile-image" accept="image/*">
+            </div>
+
+            <div class="form-group">
+                <label>Ваше зображення:</label>
+                <img id="refugee-profile-preview" src="#" alt="Зображення профілю" class="profile-preview">
+            </div>
 
             <button type="submit" class="save-btn">Зберегти зміни</button>
         </form>
@@ -257,14 +266,12 @@
         </div>
     </div>
 </div>
-<div id="chatWrapper">
 
 
-
-<!-- Toast повідомлення -->
-<div id="toast" class="toast">
-    <p id="toast-message"></p>
-</div>
+    <!-- Toast повідомлення -->
+    <div id="toast" class="toast">
+        <p id="toast-message"></p>
+    </div>
 
     <!-- Модальне вікно чату -->
     <div id="chatModal" class="modal">
@@ -273,7 +280,7 @@
                 <div class="profile-info">
                     <img src="/images/istockphoto-1298261537-612x612.jpg" alt="Profile Picture" class="profile-pic">
                     <div>
-                        <h3>Re</h3>
+                        <h3 id="username">Re</h3>
                         <p id="status" class="status online">Онлайн</p>
                     </div>
                 </div>
@@ -320,17 +327,17 @@
     </div>
 
 
-
-<!-- Підключення JavaScript -->
-<script src="/scripts/refugees.js"></script>
+    <!-- Підключення JavaScript -->
+    <script src="/scripts/refugees.js"></script>
     <script src="/scripts/refugeeFetch.js"></script>
-<script src="/scripts/map.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js" integrity="sha256-nkP8cj5xaTdWK/BsZl+57ZCE/Y/i4UNtbNTpgH+6Taw=" crossorigin="anonymous"></script>
-<script src="/scripts/notification.js"></script>
-<script src="/scripts/chat.js"></script>
-<script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAnSRimv6X5mLrvhT2TT2w-mcP9eRkv6oo&callback=initMap"></script>
+    <script src="/scripts/map.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"
+            integrity="sha256-nkP8cj5xaTdWK/BsZl+57ZCE/Y/i4UNtbNTpgH+6Taw=" crossorigin="anonymous"></script>
+    <script src="/scripts/notification.js"></script>
+    <script src="/scripts/chat.js"></script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAnSRimv6X5mLrvhT2TT2w-mcP9eRkv6oo&callback=initMap"></script>
 
 </body>
 </html>

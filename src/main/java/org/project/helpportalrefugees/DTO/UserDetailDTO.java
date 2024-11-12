@@ -26,6 +26,7 @@ public class UserDetailDTO {
 
     private String skillsAndExperience;
 
+    private String profileImage;
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
@@ -82,5 +83,9 @@ public class UserDetailDTO {
 
     public String getSkillsAndExperience() {
         return skillsAndExperience;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
     }
 }

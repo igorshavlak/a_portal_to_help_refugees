@@ -16,12 +16,10 @@ public class NotificationService {
         this.notificationRepository = notificationRepository;
     }
 
-    // Создать уведомление
     public void createNotification(Notification notification) {
         notificationRepository.create(notification);
     }
 
-    // Получить уведомления пользователя
     public List<Notification> getNotifications(Integer receiver) {
         return notificationRepository.findByReceiver(receiver);
     }

@@ -6,6 +6,7 @@ import org.project.helpportalrefugees.DTO.UserDetailDTO;
 import org.project.helpportalrefugees.model.Volunteer;
 import org.project.helpportalrefugees.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Base64;
 
 @RestController
 @RequestMapping("/user")
@@ -28,27 +30,43 @@ public class UserController {
 
     @PostMapping("/updateVolunteerDetails")
     public ResponseEntity<String> saveVolunteerDetails(@Validated @RequestBody UserDetailDTO dto,
-                                                  Principal principal){
+                                                  Principal principal) {
         if (principal instanceof Authentication) {
             Authentication authentication = (Authentication) principal;
             GrantedAuthority authority = authentication.getAuthorities().stream().findFirst().orElse(null);
             assert authority != null;
-            if (authority.toString().equals("ROLE_USER")) {
-                if(userService.safeOrUpdateUser(new Refugee(dto.getFirstName(),dto.getLastName(),dto.getBirthDate(),dto.getPhone(),dto.getCity(),dto.getCountry()),principal)){
-                    return ResponseEntity.ok("Дані успішно збереглися");
-                } else {
-                    return ResponseEntity.ok("Дані успішно оновилися");
+
+            byte[] imageBytes = null;
+            String profileImageBase64 = dto.getProfileImage();
+            if (profileImageBase64 != null && !profileImageBase64.isEmpty()) {
+
+                try {
+                    imageBytes = Base64.getDecoder().decode(profileImageBase64);
+                    if (imageBytes.length > 5 * 1024 * 1024) { // 5MB
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Файл дуже великий");
+                    }
+                } catch (IllegalArgumentException e) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Невірний формат зображення");
                 }
 
-            } else if (authority.toString().equals("ROLE_VOLUNTEER")) {
-               if(userService.safeOrUpdateUser(new Volunteer(dto.getFirstName(), dto.getLastName(), dto.getBirthDate(), dto.getPhone(),  dto.getCity(), dto.getCountry(), dto.getSkillsAndExperience()),principal)){
-                   return ResponseEntity.ok("Дані успішно збереглися");
-               }else {
-                   return ResponseEntity.ok("Дані успішно оновилися");
-               }
+                if (authority.toString().equals("ROLE_USER")) {
+                    if (userService.safeOrUpdateUser(new Refugee(dto.getFirstName(), dto.getLastName(), dto.getBirthDate(), dto.getPhone(), dto.getCity(), dto.getCountry(), imageBytes), principal)) {
+                        return ResponseEntity.ok("Дані успішно збереглися");
+                    } else {
+                        return ResponseEntity.ok("Дані успішно оновилися");
+                    }
+
+                } else if (authority.toString().equals("ROLE_VOLUNTEER")) {
+                    if (userService.safeOrUpdateUser(new Volunteer(dto.getFirstName(), dto.getLastName(), dto.getBirthDate(), dto.getPhone(), dto.getCity(), dto.getCountry(), dto.getSkillsAndExperience(), imageBytes), principal)) {
+                        return ResponseEntity.ok("Дані успішно збереглися");
+                    } else {
+                        return ResponseEntity.ok("Дані успішно оновилися");
+                    }
+                }
             }
-        }
-       return ResponseEntity.status(500).build();
+            }
+            return ResponseEntity.status(500).build();
+
     }
     @GetMapping("/getUser")
     public ResponseEntity<String> getAuthenticatedUser(Principal principal){

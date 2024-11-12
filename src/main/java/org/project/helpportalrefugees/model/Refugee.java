@@ -4,13 +4,24 @@ import java.time.LocalDate;
 
 public class Refugee extends User{
     private String status;
+    public Refugee(String id, String name, String surname, LocalDate dateOfBirth, String phone, String city, String country, String status,byte[] image) {
+        super(id, name, surname,dateOfBirth, phone, city, country, image);
+        this.status = status;
+    }
     public Refugee(String id, String name, String surname, LocalDate dateOfBirth, String phone, String city, String country, String status) {
         super(id, name, surname,dateOfBirth, phone, city, country);
+        this.status = status;
+    }
+    public Refugee(String name, String surname, LocalDate dateOfBirth, String phone, String city, String country, String status, byte[] image) {
+        super(name, surname,dateOfBirth, phone, city, country, image);
         this.status = status;
     }
     public Refugee(String name, String surname, LocalDate dateOfBirth, String phone, String city, String country, String status) {
         super(name, surname,dateOfBirth, phone, city, country);
         this.status = status;
+    }
+    public Refugee(String name, String surname, LocalDate dateOfBirth, String phone, String city, String country, byte[] image) {
+        super(name, surname,dateOfBirth, phone, city, country, image);
     }
     public Refugee(String name, String surname, LocalDate dateOfBirth, String phone, String city, String country) {
         super(name, surname,dateOfBirth, phone, city, country);
