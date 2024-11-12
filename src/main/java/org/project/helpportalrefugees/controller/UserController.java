@@ -1,17 +1,14 @@
 package org.project.helpportalrefugees.controller;
 
-import org.project.helpportalrefugees.http.ApiResponse;
 import org.project.helpportalrefugees.model.Refugee;
 import org.project.helpportalrefugees.model.User;
-import org.project.helpportalrefugees.model.UserDetailDTO;
+import org.project.helpportalrefugees.DTO.UserDetailDTO;
 import org.project.helpportalrefugees.model.Volunteer;
-import org.project.helpportalrefugees.repository.UserRepo;
 import org.project.helpportalrefugees.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // --------------------------------------------------
 
     /**
-     * Function to show toast notification
+     * Function to show toast notification.css
      * @param {string} message - The message to display in the toast
      */
     function showToast(message) {
@@ -253,7 +253,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     /**
      * Function to render notifications
-     * @param {Array} notifications - Array of notification objects
+     * @param {Array} notifications - Array of notification.css objects
      */
     function renderNotifications(notifications) {
         notificationsList.innerHTML = '';

@@ -2,8 +2,10 @@ package org.project.helpportalrefugees.controller;
 
 
 import org.project.helpportalrefugees.model.Chat;
-import org.project.helpportalrefugees.model.ChatMessageDTO;
+import org.project.helpportalrefugees.DTO.ChatMessageDTO;
+import org.project.helpportalrefugees.model.Notification;
 import org.project.helpportalrefugees.service.ChatService;
+import org.project.helpportalrefugees.service.NotificationService;
 import org.project.helpportalrefugees.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @RestController
@@ -26,21 +29,27 @@ public class ChatController {
 
     ChatService chatService;
     UserService userService;
+    NotificationService notificationService;
     SimpMessagingTemplate messagingTemplate;
 
     @Autowired
-    public ChatController(ChatService chatService, SimpMessagingTemplate messagingTemplate, UserService userService) {
+    public ChatController(ChatService chatService, SimpMessagingTemplate messagingTemplate, UserService userService,NotificationService notificationService) {
         this.chatService = chatService;
         this.messagingTemplate = messagingTemplate;
         this.userService = userService;
+        this.notificationService = notificationService;
     }
 
     @MessageMapping("/sendMessage/{chatId}")
     public void sendMessage(@DestinationVariable int chatId, @Payload String message, Principal principal) {
         try {
             chatService.saveChatMessage(chatId, message, principal);
-            System.out.println("Message sent to "  + Objects.requireNonNull(determineReceiver(chatId, principal.getName())));
-            messagingTemplate.convertAndSendToUser(Objects.requireNonNull(determineReceiver(chatId, principal.getName())), "/queue/messages", new ChatMessageDTO(message,chatId));
+            String receiver = Objects.requireNonNull(determineReceiver(chatId, principal.getName()));
+            System.out.println("Message sent to "  + receiver);
+            messagingTemplate.convertAndSendToUser(receiver, "/queue/messages", new ChatMessageDTO(message,chatId));
+            Notification notification= new Notification("Нове повідомлення від: " + principal.getName(),false, userService.getIdByUsername(receiver), LocalDateTime.now());
+            notificationService.createNotification(notification);
+            messagingTemplate.convertAndSendToUser(receiver, "/queue/notifications",notification);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e.getMessage());

@@ -28,6 +28,7 @@ closeBtn.addEventListener("click", () => {
 window.addEventListener("click", (event) => {
     if (event.target === chatModal) {
         chatModal.style.display = "none";
+        disconnectChat();
     }
 });
 
@@ -73,7 +74,7 @@ function fetchCurrentUser() {
 
 
 function openChatModal() {
-  disconnectChat();
+
 
     chatBody.innerHTML = '';
     chatModal.style.display = 'flex';
@@ -87,7 +88,7 @@ function openChatModal() {
     });
 }
 function connectChat() {
-    const socket = new SockJS('/ws'); // Ваш STOMP endpoint
+    const socket = new SockJS('/ws');
     stompClient = Stomp.over(socket);
 
     stompClient.connect({}, function(frame) {

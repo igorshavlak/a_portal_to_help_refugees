@@ -1,24 +1,31 @@
-package org.project.helpportalrefugees.model;
+package org.project.helpportalrefugees.DTO;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
-public class RefugeeDetailDTO {
+public class UserDetailDTO {
 
-
-    @NotBlank(message = "Ім`я є обов`язковим")
+    @NotBlank(message = "Ім'я є обов'язковим")
     private String firstName;
-    @NotBlank(message = "Фамілія є обов`язкова")
+
+    @NotBlank(message = "Прізвище є обов'язковим")
     private String lastName;
-    @NotBlank(message = "Дата народження є обов`язкова")
+
+    @NotNull(message = "Дата народження є обов'язковою")
     private LocalDate birthDate;
-    @NotBlank(message = "Номер телефону є обов`язковим")
+
+    @NotBlank(message = "Номер телефону є обов'язковим")
     private String phone;
-    @NotBlank(message = "Гендер є обов`язковим")
+
+    @NotBlank(message = "Місто є обов'язковим")
     private String city;
-    @NotBlank(message = "Країна є обов`язкова")
+
+    @NotBlank(message = "Країна є обов'язковою")
     private String country;
+
+    private String skillsAndExperience;
+
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
@@ -67,5 +74,13 @@ public class RefugeeDetailDTO {
 
     public String getCountry() {
         return country;
+    }
+
+    public void setSkillsAndExperience(String skillsAndExperience) {
+        this.skillsAndExperience = skillsAndExperience;
+    }
+
+    public String getSkillsAndExperience() {
+        return skillsAndExperience;
     }
 }

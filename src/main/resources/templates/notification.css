@@ -1,0 +1,213 @@
+/* Общие стили */
+
+/* Стили для контейнера уведомлений */
+#notification-container {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    width: 400px; /* Увеличенная ширина контейнера */
+    display: flex;
+    flex-direction: column;
+    z-index: 10000;
+}
+
+/* Стили для отдельного уведомления */
+.notification {
+    background: #ffffff;
+    color: #333333;
+    padding: 20px 25px; /* Увеличенные отступы */
+    margin-bottom: 20px; /* Увеличенный отступ между уведомлениями */
+    border-radius: 10px; /* Увеличенный радиус скругления */
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1); /* Увеличенная тень */
+    opacity: 0;
+    transform: translateX(100%);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    position: relative;
+    display: flex;
+    align-items: center;
+    font-size: 18px; /* Увеличенный размер шрифта */
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Кнопка закрытия уведомления */
+.notification .close-btn {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: #888888;
+    font-size: 20px; /* Увеличенный размер иконки крестика */
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.notification .close-btn:hover {
+    color: #555555;
+}
+
+/* Круглая кнопка уведомлений */
+#notification-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 70px; /* Увеличенная ширина кнопки */
+    height: 70px; /* Увеличенная высота кнопки */
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3); /* Увеличенная тень */
+    cursor: pointer;
+    font-size: 28px; /* Увеличенный размер иконки колокольчика */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#notification-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.35);
+}
+
+/* Значок количества уведомлений */
+.badge {
+    position: absolute;
+    top: -8px; /* Скорректировано позиционирование */
+    right: -8px; /* Скорректировано позиционирование */
+    background-color: #ff3b30;
+    color: white;
+    border-radius: 50%;
+    padding: 5px 8px; /* Увеличены отступы */
+    font-size: 14px; /* Увеличен размер шрифта */
+    display: none; /* Скрыт по умолчанию */
+    font-weight: bold;
+}
+
+/* Стили для попапа уведомлений */
+.popup {
+    position: fixed;
+    bottom: 120px; /* Подогнано под увеличенную кнопку */
+    right: 30px;
+    width: 400px; /* Увеличенная ширина попапа */
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2); /* Увеличенная тень */
+    display: none; /* Скрыт по умолчанию */
+    flex-direction: column;
+    z-index: 10001;
+    animation: fadeIn 0.3s ease;
+}
+
+.popup-header {
+    padding: 20px 25px; /* Увеличены отступы */
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9f9f9;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.popup-header h3 {
+    margin: 0;
+    font-size: 22px; /* Увеличен размер шрифта */
+    color: #333333;
+}
+
+.close-popup {
+    background: none;
+    border: none;
+    color: #888888;
+    font-size: 22px; /* Увеличен размер иконки крестика */
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-popup:hover {
+    color: #555555;
+}
+
+.popup-notifications {
+    max-height: 450px; /* Увеличена максимальная высота */
+    overflow-y: auto;
+    padding: 20px 25px; /* Увеличены отступы */
+}
+
+.popup-notifications::-webkit-scrollbar {
+    width: 8px;
+}
+
+.popup-notifications::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.popup-notifications::-webkit-scrollbar-thumb {
+    background: #cccccc;
+    border-radius: 4px;
+}
+
+.popup-notifications::-webkit-scrollbar-thumb:hover {
+    background: #999999;
+}
+
+/* Единый цвет уведомлений */
+.notification {
+    background-color: #ffffff;
+    border-left: 5px solid #2575fc;
+}
+
+.notification .message {
+    margin-left: 15px; /* Увеличен отступ */
+    flex: 1;
+    color: #333333;
+    font-size: 18px; /* Увеличен размер шрифта */
+}
+
+/* Анимации */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 480px) {
+    #notification-container, .popup {
+        width: 90%;
+        right: 5%;
+    }
+
+    #notification-button {
+        width: 60px; /* Немного уменьшен размер для мобильных */
+        height: 60px;
+        font-size: 24px;
+    }
+
+    .popup-notifications {
+        max-height: 350px;
+        padding: 15px 20px;
+    }
+
+    .notification {
+        padding: 18px 22px;
+        font-size: 16px;
+    }
+
+    .badge {
+        padding: 4px 7px;
+        font-size: 12px;
+    }
+
+    .popup-header h3 {
+        font-size: 20px;
+    }
+
+    .close-popup {
+        font-size: 20px;
+    }
+}

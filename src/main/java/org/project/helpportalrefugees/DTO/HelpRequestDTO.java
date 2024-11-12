@@ -1,4 +1,4 @@
-package org.project.helpportalrefugees.model;
+package org.project.helpportalrefugees.DTO;
 
 
 

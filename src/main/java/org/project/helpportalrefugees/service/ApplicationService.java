@@ -3,8 +3,7 @@ package org.project.helpportalrefugees.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.project.helpportalrefugees.model.Application;
-import org.project.helpportalrefugees.model.HelpRequestDTO;
-import org.project.helpportalrefugees.model.Volunteer;
+import org.project.helpportalrefugees.DTO.HelpRequestDTO;
 import org.project.helpportalrefugees.repository.ApplicationsRepo;
 import org.project.helpportalrefugees.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -59,6 +57,9 @@ public class ApplicationService {
 
     public void accept(int id, Principal principal) {
         applicationsRepo.acceptApplication(id, userRepo.getIdByUsername(principal.getName()));
+    }
+    public Integer getRefugeeByApplicationId(int id){
+       return applicationsRepo.getRefugeeByApplicationId(id);
     }
 
 }

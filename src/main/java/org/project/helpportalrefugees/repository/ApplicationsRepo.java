@@ -36,6 +36,7 @@ public class ApplicationsRepo {
                     "JOIN refugees r ON a.user_id = r.user_id " +
                     "WHERE a.volunteer_id = ?";
     private static final String getApplicationUsersSql = "SELECT user_id, volunteer_id FROM applications WHERE id = ?";
+    private static final String getRefugeeApplicationById = "SELECT user_id FROM applications WHERE id = ?";
 
 
     ChatRepo chatRepo;
@@ -161,6 +162,8 @@ public class ApplicationsRepo {
 
     public List<Map<String, Object>>  getApplicationUsersId(int applicationId) {
         return jdbcTemplate.queryForList(getApplicationUsersSql, applicationId);
-
+    }
+    public Integer getRefugeeByApplicationId(int id){
+        return jdbcTemplate.queryForObject(getRefugeeApplicationById,Integer.class,id);
     }
 }
