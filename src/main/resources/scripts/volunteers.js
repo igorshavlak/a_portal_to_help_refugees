@@ -112,15 +112,15 @@ document.addEventListener('DOMContentLoaded', function() {
         // Оновлення імені користувача в героїчній секції
         const userNameElement = document.querySelector('.user-name');
         if (userNameElement) {
-            userNameElement.textContent = `${user.name} ${user.surname}`;
+            userNameElement.textContent = `${user.firstName} ${user.lastName}`;
         }
 
         // Оновлення полів форми налаштувань профілю
-        document.getElementById('volunteer-first-name').value = user.name || '';
-        document.getElementById('volunteer-last-name').value = user.surname || '';
-        document.getElementById('volunteer-birth-date').value = user.dateOfBirth ? user.dateOfBirth.split('T')[0] : '';
+        document.getElementById('volunteer-first-name').value = user.firstName || '';
+        document.getElementById('volunteer-last-name').value = user.lastName || '';
+        document.getElementById('volunteer-birth-date').value = user.birthDate ? user.birthDate.split('T')[0] : '';
         document.getElementById('volunteer-phone').value = user.phone || '';
-        document.getElementById('volunteer-skills').value = user.skillsOrExperience || '';
+        document.getElementById('volunteer-skills').value = user.skillsAndExperience || '';
         document.getElementById('volunteer-city').value = user.city || '';
         document.getElementById('volunteer-country').value = user.country || '';
         const volunteerImagePreview = document.getElementById('volunteer-profile-preview');
@@ -134,7 +134,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     async function initializeProfile() {
         const user = await fetchUserProfile();
-        populateUserProfile(user);
+        const volunteerData = {
+            firstName: user.name,
+            lastName: user.surname,
+            birthDate: user.dateOfBirth,
+            phone: user.phone,
+            skillsAndExperience: user.skillsOrExperience,
+            city: user.city,
+            country: user.country,
+            profileImage: user.profileImage
+        };
+        populateUserProfile(volunteerData);
     }
 
     initializeProfile();

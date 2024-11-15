@@ -703,7 +703,17 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             const userData = await response.json();
-            populateUserProfile(userData);
+            const refugeeData = {
+                firstName: userData.name,
+                lastName: userData.surname,
+                phone: userData.phone,
+                city: userData.city,
+                birthDate: userData.dateOfBirth,
+                country: userData.country,
+                profileImage: userData.profileImage
+            };
+
+            populateUserProfile(refugeeData);
         } catch (error) {
             console.error('Помилка при завантаженні профілю:', error);
             showToast('Не вдалося завантажити ваш профіль. Спробуйте пізніше.');
@@ -721,15 +731,15 @@ document.addEventListener('DOMContentLoaded', function() {
         // Оновлення імені користувача в героїчній секції
         const userNameElement = document.querySelector('.user-name');
         if (userNameElement) {
-            userNameElement.textContent = `${user.name} ${user.surname}`;
+            userNameElement.textContent = `${user.firstName} ${user.lastName}`;
         }
 
         // Оновлення полів форми налаштувань профілю
-        document.getElementById('refugee-name').value = user.name || '';
-        document.getElementById('refugee-last-name').value = user.surname || '';
+        document.getElementById('refugee-name').value = user.firstName || '';
+        document.getElementById('refugee-last-name').value = user.lastName || '';
         document.getElementById('refugee-phone').value = user.phone || '';
         document.getElementById('refugee-city').value = user.city || '';
-        document.getElementById('refugee-birth-date').value = user.dateOfBirth ? user.dateOfBirth.split('T')[0] : '';
+        document.getElementById('refugee-birth-date').value = user.birthDate ? user.birthDate.split('T')[0] : '';
         document.getElementById('refugee-country').value = user.country || '';
         document.getElementById('refugee-status').value = user.status || 'не підтверджено';
         const refugeeImagePreview = document.getElementById('refugee-profile-preview');
