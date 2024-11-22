@@ -17,7 +17,7 @@ import java.util.Objects;
 
 @Repository
 public class ApplicationsRepo {
-    private static final String saveSql = "INSERT INTO applications (user_id,type,description,additional_data,status) VALUES (?,?,?,?,?)";
+    private static final String saveSql = "INSERT INTO applications (user_id,type,description,additional_data,status,supporting_document) VALUES (?,?,?,?,?,?)";
     private static final String acceptSql = "UPDATE applications SET status=?, volunteer_id=? WHERE id=?";
     private static final String getAllRefugeeApplicationsSql =
             "SELECT a.id, a.user_id, a.type, a.description, a.additional_data, a.status, a.created_at, " +
@@ -49,7 +49,7 @@ public class ApplicationsRepo {
     }
 
     public void save(Application application) {
-        jdbcTemplate.update(saveSql, application.getRefugeeId(), application.getType(), application.getDescription(), application.getAdditionalData(), application.getStatus());
+        jdbcTemplate.update(saveSql, application.getRefugeeId(), application.getType(), application.getDescription(), application.getAdditionalData(), application.getStatus(), application.getFile());
     }
 
     public List<Application> getRefugeeApplications(int id) {

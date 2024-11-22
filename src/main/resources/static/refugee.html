@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/templates/chat.css">
     <link rel="stylesheet" href="/templates/notification.css">
     <link rel="stylesheet" href="/templates/refugees.css">
+    <link rel="stylesheet" href="/templates/filtration.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -169,6 +170,14 @@
                 <label for="financial-purpose">Мета фінансової допомоги:</label>
                 <textarea id="financial-purpose" name="financial-purpose" rows="2"></textarea>
             </div>
+            <div class="file-upload-wrapper">
+                <label for="supporting-document" class="custom-file-upload">
+                    <i class="fa fa-cloud-upload"></i> Обрати файл
+                </label>
+                <input type="file" id="supporting-document" name="supporting-document" accept=".pdf,.doc,.docx,.jpg,.png">
+                <span id="file-name-display">Файл не обрано</span>
+            </div>
+
 
             <button type="submit" class="save-btn">Подати запит</button>
         </form>
@@ -180,6 +189,28 @@
     <div class="modal-content">
         <span class="close-btn my-requests-close-btn">&times;</span>
         <h2>Мої активні запити</h2>
+        <div class="filter-controls">
+            <input type="date" id="filter-start-date" placeholder="Від дати">
+            <input type="date" id="filter-end-date" placeholder="До дати">
+            <input type="text" id="search-name" placeholder="Пошук за назвою">
+            <select id="filter-type">
+                <option value="">Всі типи</option>
+                <option value="housing">Житло</option>
+                <option value="medical">Медична допомога</option>
+                <option value="legal">Юридична допомога</option>
+                <option value="employment">Допомога у працевлаштуванні</option>
+                <option value="education">Освітні та професійні програми</option>
+                <option value="food">Продукти харчування та предмети першої необхідності</option>
+                <option value="financial">Фінансова допомога</option>
+            </select>
+            <select id="filter-status">
+                <option value="">Всі статуси</option>
+                <option value="pending">Очікує</option>
+                <option value="processing">В процесі</option>
+                <option value="completed">Виконано</option>
+                <option value="rejected">Відхилено</option>
+            </select>
+        </div>
         <div id="my-requests-list">
             <!-- Список активних запитів буде завантажуватися динамічно -->
             <p>Наразі у вас немає активних запитів.</p>

@@ -1,5 +1,8 @@
 // /scripts/volunteers.js
 window.currentApplicationId = null;
+let myActiveRequestsData = [];
+let helpRequestsData = [];
+
 
 document.addEventListener('DOMContentLoaded', function() {
     // Отримання елементів
@@ -43,13 +46,120 @@ document.addEventListener('DOMContentLoaded', function() {
     // Повідомлення Toast
     const toast = document.getElementById('toast');
     const toastMessage = document.getElementById('toast-message');
+    // Всередині DOMContentLoaded
+    const searchNameInput = document.getElementById('search-name');
+    const filterTypeSelect = document.getElementById('filter-type');
+    const filterStatusSelect = document.getElementById('filter-status');
+
+    // Елементи фільтрації для "Запитів на допомогу"
+    const helpSearchNameInput = document.getElementById('help-search-name');
+    const helpFilterTypeSelect = document.getElementById('help-filter-type');
+    const helpFilterStatusSelect = document.getElementById('help-filter-status');
+    // Для "Мої активні запити"
+    const filterCitySelect = document.getElementById('filter-city');
+    filterCitySelect.addEventListener('change', applyFiltersAndRender);
+
+// Для "Запити на допомогу"
+    const helpFilterCitySelect = document.getElementById('help-filter-city');
+    helpFilterCitySelect.addEventListener('change', applyHelpFiltersAndRender);
+
+
 
     // Меню-гамбургер
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
 
+
     const volunteerImageInput = document.getElementById('volunteer-profile-image');
     const volunteerImagePreview = document.getElementById('volunteer-profile-preview');
+
+
+    searchNameInput.addEventListener('input', applyFiltersAndRender);
+    filterTypeSelect.addEventListener('change', applyFiltersAndRender);
+    filterStatusSelect.addEventListener('change', applyFiltersAndRender);
+
+    function applyHelpFiltersAndRender() {
+        let filteredData = helpRequestsData;
+
+        // Отримуємо значення фільтрів
+        const searchName = helpSearchNameInput.value.toLowerCase();
+        const filterCity = helpFilterCitySelect.value.toLowerCase();
+
+        // Застосовуємо фільтри
+        filteredData = filteredData.filter(request => {
+            let matchesSearch = true;
+            let matchesCity = true;
+
+            // Перевіряємо наявність та приводимо до нижнього регістру
+            const typeName = getHelpTypeName(request.type || '').toLowerCase();
+            const description = (request.description || '').toLowerCase();
+            const city = (request.refugee && request.refugee.city) ? request.refugee.city.toLowerCase() : '';
+
+            // Фільтр за пошуком
+            if (searchName) {
+                matchesSearch = typeName.includes(searchName) || description.includes(searchName);
+            }
+
+            // Фільтр за містом
+            if (filterCity) {
+                matchesCity = city === filterCity;
+            }
+
+            return matchesSearch && matchesCity;
+        });
+
+        renderHelpRequests(filteredData, helpRequestsList, true);
+    }
+
+
+
+
+    function applyFiltersAndRender() {
+        let filteredData = myActiveRequestsData;
+
+        // Отримуємо значення фільтрів
+        const searchName = document.getElementById('search-name').value.toLowerCase();
+        const filterType = document.getElementById('filter-type').value;
+        const filterStatus = document.getElementById('filter-status').value;
+        const filterCity = document.getElementById('filter-city').value.toLowerCase();
+
+        // Застосовуємо фільтри
+        filteredData = filteredData.filter(request => {
+            let matchesSearch = true;
+            let matchesType = true;
+            let matchesStatus = true;
+            let matchesCity = true;
+
+            // Перевірка наявності полів у об'єкті
+            const typeName = getHelpTypeName(request.type || '').toLowerCase();
+            const description = (request.description || '').toLowerCase();
+            const status = (request.status || '').toLowerCase();
+            const city = (request.refugee && request.refugee.city) ? request.refugee.city.toLowerCase() : '';
+
+            if (searchName) {
+                matchesSearch = typeName.includes(searchName) || description.includes(searchName);
+            }
+
+            if (filterType) {
+                matchesType = request.type === filterType;
+            }
+
+            if (filterStatus) {
+                matchesStatus = status === filterStatus.toLowerCase();
+            }
+
+            if (filterCity) {
+                matchesCity = city === filterCity;
+            }
+
+            return matchesSearch && matchesType && matchesStatus && matchesCity;
+        });
+
+        renderHelpRequests(filteredData, myActiveRequestsList, false);
+    }
+
+
+
 
     volunteerImageInput.addEventListener('change', function(event) {
         const file = event.target.files[0];
@@ -206,13 +316,13 @@ document.addEventListener('DOMContentLoaded', function() {
         // Здійснюємо запит до бекенду
         fetchHelpRequests(selectedCategories)
             .then(data => {
-                renderHelpRequests(data, helpRequestsList, true);
+                helpRequestsData = data; // Зберігаємо отримані заявки
+                applyHelpFiltersAndRender(); // Застосовуємо фільтри та рендеримо список
             })
             .catch(error => {
                 helpRequestsList.innerHTML = '<p>Сталася помилка при завантаженні запитів. Спробуйте ще раз пізніше.</p>';
             });
     }
-
     // Функція для відкриття модального вікна з деталями запиту
     function openRequestModal(request, canAccept = true) {
         // Перевіряємо, чи additionalData є рядком, і парсимо його, якщо так
@@ -286,7 +396,8 @@ document.addEventListener('DOMContentLoaded', function() {
     async function displayMyActiveRequests() {
         try {
             const helpRequests = await getUserApplications();
-            renderHelpRequests(helpRequests, myActiveRequestsList, false);
+            myActiveRequestsData = helpRequests;
+            applyFiltersAndRender();
             openModal(myActiveRequestsModal);
         } catch (error) {
             console.error('Помилка при отриманні запитів:', error);
@@ -313,6 +424,14 @@ document.addEventListener('DOMContentLoaded', function() {
             const requestDesc = document.createElement('p');
             requestDesc.textContent = request.description;
 
+            const requestStatus = document.createElement('p');
+            requestStatus.innerHTML = `<strong>Статус:</strong> ${getStatusName(request.status)}`;
+
+            // Відображення міста
+            const requestCity = document.createElement('p');
+            const city = (request.refugee && request.refugee.city) ? request.refugee.city : 'Невідомо';
+            requestCity.innerHTML = `<strong>Місто:</strong> ${city}`;
+
             const viewButton = document.createElement('button');
             viewButton.textContent = 'Переглянути';
             viewButton.classList.add('view-btn');
@@ -322,62 +441,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
             requestCard.appendChild(requestTitle);
             requestCard.appendChild(requestDesc);
+            requestCard.appendChild(requestStatus);
+            requestCard.appendChild(requestCity);
             requestCard.appendChild(viewButton);
 
             listElement.appendChild(requestCard);
         });
     }
 
-    // Функція для обробки відправки форми запиту
-    async function handleRequestFormSubmit(event) {
-        event.preventDefault();
 
-        const requestType = document.getElementById('request-type').value;
-        const requestDescription = document.getElementById('request-description').value;
 
-        // Збираємо додаткові дані залежно від типу запиту
-        let additionalData = {};
-
-        switch (requestType) {
-            case 'housing':
-                const familyMembers = document.getElementById('family-members').value;
-                const specialNeeds = document.getElementById('special-needs').value;
-                additionalData = {
-                    familyMembers: familyMembers,
-                    specialNeeds: specialNeeds
-                };
-                break;
-            case 'medical':
-                const medicalCondition = document.getElementById('medical-condition').value;
-                additionalData = {
-                    medicalCondition: medicalCondition
-                };
-                break;
-            // ... інші кейси
-            default:
-                additionalData = {};
-        }
-        const requestData = {
-            type: requestType,
-            description: requestDescription,
-            additionalData: additionalData
-        };
-
-        try {
-            const data = await saveApplication(requestData); // Глобальна функція
-
-            showToast(data.message || 'Заявка успішно відправлена.');
-
-            requestForm.reset();
-            hideAllAdditionalFields();
-
-            closeModalFunction(requestModal);
-
-        } catch (error) {
-            console.error('Помилка при відправці запиту:', error);
-            showToast(error.message || 'Сталася помилка при відправці запиту. Спробуйте пізніше.');
-        }
-    }
 
     // Функція для отримання ключа типу допомоги
     function getHelpTypeKey(typeName) {

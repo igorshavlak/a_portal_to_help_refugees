@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,9 +38,13 @@ public class ApplicationController {
         this.messagingTemplate = messagingTemplate;
         this.userService = userService;
     }
-
     @PostMapping("/save")
-    public ResponseEntity<?> save(@Validated @RequestBody HelpRequestDTO helpRequestDTO, Principal principal) {
+    public ResponseEntity<?> save(@Validated @ModelAttribute HelpRequestDTO helpRequestDTO, BindingResult bindingResult, Principal principal) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.status(400).body(
+                    new ApiResponse(false, "Помилка валідації: " + bindingResult.getAllErrors().get(0).getDefaultMessage())
+            );
+        }
         try {
             applicationService.save(helpRequestDTO, principal);
             return ResponseEntity.status(201).body(
@@ -56,7 +61,6 @@ public class ApplicationController {
             );
         }
     }
-
     @GetMapping("/getUserApplications")
     public ResponseEntity<List<Application>> getUserApplications(Principal principal) {
         try {
@@ -84,20 +88,16 @@ public class ApplicationController {
     }
 
     @PutMapping("/{requestId}/accept")
-    public ResponseEntity<?> accept(@PathVariable int requestId, Principal principal) {
+    public ResponseEntity<String> accept(@PathVariable int requestId, Principal principal) {
         try {
             String receiver = userService.getUsernameById(applicationService.getRefugeeByApplicationId(requestId));
             applicationService.accept(requestId, principal);
             messagingTemplate.convertAndSendToUser(receiver, "/queue/notification",
                     new Notification("Волонтер : " + principal.getName() + "прийняв вашу заявку",false, userService.getIdByUsername(receiver), LocalDateTime.now()));
-            return ResponseEntity.status(201).body(
-                    new ApiResponse(true, "Заявка прийнята")
-            );
+            return ResponseEntity.status(200).body("Заявка прийнята");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).body(
-                    new ApiResponse(false, "Сталася помилка")
-            );
+            return ResponseEntity.status(500).build();
         }
     }
 }

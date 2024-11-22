@@ -677,6 +677,33 @@ footer {
     color: #004080;
 }
 
+#request-details-modal .modal-content {
+    padding: 30px;
+    border-radius: 10px;
+    background-color: #fff;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    max-width: 700px;
+    width: 90%;
+    animation: slideDown 0.3s ease-out;
+}
+
+.request-details-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.request-details-container h2 {
+    text-align: center;
+    color: #004080;
+    margin-bottom: 20px;
+    font-size: 2rem;
+}
+
+
+
+
 .volunteer-info {
     margin-top: 20px;
     padding: 15px;
@@ -736,6 +763,54 @@ footer {
 .view-btn:hover {
     background-color: #003060;
     transform: translateY(-2px);
+}
+
+#supporting-document {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+/* Сховати стандартне поле завантаження файлу */
+.file-upload-wrapper input[type="file"] {
+    display: none;
+}
+
+/* Стилі для кастомної кнопки */
+.custom-file-upload {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #004080;
+    color: #fff;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 15px;
+}
+
+.custom-file-upload:hover {
+    background-color: #003060;
+}
+
+/* Стилі для відображення назви файлу */
+#file-name-display {
+    font-size: 1rem;
+    color: #555;
+    vertical-align: middle;
+}
+
+/* Додатково можна додати іконку */
+.custom-file-upload i {
+    margin-right: 8px;
+}
+
+/* Стилізація контейнера */
+.file-upload-wrapper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 

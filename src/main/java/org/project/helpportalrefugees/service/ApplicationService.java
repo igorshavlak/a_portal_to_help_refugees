@@ -10,9 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ApplicationService {
@@ -29,9 +33,16 @@ public class ApplicationService {
         this.userRepo = refugeeRepo;
     }
 
-    public void save(HelpRequestDTO helpRequestDTO, Principal principal) throws JsonProcessingException {
+    public void save(HelpRequestDTO helpRequestDTO, Principal principal) throws IOException {
         String additionalDataJson = objectMapper.writeValueAsString(helpRequestDTO.getAdditionalData());
-        Application application = new Application(userRepo.getIdByUsername(principal.getName()), helpRequestDTO.getType(), helpRequestDTO.getDescription(), additionalDataJson, "pending");
+        MultipartFile file = helpRequestDTO.getSupportingDocument();
+        byte[] fileData;
+        if (file != null && !file.isEmpty()) {
+           fileData = file.getBytes();
+        } else {
+            throw new IllegalArgumentException("Файл є обов'язковим");
+        }
+        Application application = new Application(userRepo.getIdByUsername(principal.getName()), helpRequestDTO.getType(), helpRequestDTO.getDescription(), additionalDataJson, "pending",fileData);
         applicationsRepo.save(application);
     }
 

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/templates/volunteers.css">
     <link rel="stylesheet" href="/templates/chat.css">
     <link rel="stylesheet" href="/templates/notification.css">
+    <link rel="stylesheet" href="/templates/filtration.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -22,6 +23,7 @@
             <li><a href="#">Про нас</a></li>
             <li><a href="#">Контакти</a></li>
         </ul>
+
         <div class="auth-buttons">
             <a href="#" class="logout-btn">Вийти</a>
         </div>
@@ -101,6 +103,35 @@
     <div class="modal-content">
         <span class="close-btn help-requests-close-btn">&times;</span>
         <h2>Запити на допомогу</h2>
+        <div class="filter-controls">
+            <input type="text" id="help-search-name" placeholder="Пошук за назвою">
+            <select id="help-filter-city">
+                <option value="Вінниця">Вінниця</option>
+                <option value="Дніпро">Дніпро</option>
+                <option value="Донецьк">Донецьк</option>
+                <option value="Житомир">Житомир</option>
+                <option value="Запоріжжя">Запоріжжя</option>
+                <option value="Івано-Франківськ">Івано-Франківськ</option>
+                <option value="Київ">Київ</option>
+                <option value="Кропивницький">Кропивницький</option>
+                <option value="Луганськ">Луганськ</option>
+                <option value="Луцьк">Луцьк</option>
+                <option value="Львів">Львів</option>
+                <option value="Миколаїв">Миколаїв</option>
+                <option value="Одеса">Одеса</option>
+                <option value="Полтава">Полтава</option>
+                <option value="Рівне">Рівне</option>
+                <option value="Суми">Суми</option>
+                <option value="Тернопіль">Тернопіль</option>
+                <option value="Ужгород">Ужгород</option>
+                <option value="Харків">Харків</option>
+                <option value="Херсон">Херсон</option>
+                <option value="Хмельницький">Хмельницький</option>
+                <option value="Черкаси">Черкаси</option>
+                <option value="Чернівці">Чернівці</option>
+                <option value="Чернігів">Чернігів</option>
+            </select>
+        </div>
         <div class="requests-list" id="help-requests-list">
             <!-- Список запитів буде завантажуватися динамічно за допомогою JavaScript -->
         </div>
@@ -112,6 +143,52 @@
     <div class="modal-content">
         <span class="close-btn my-active-requests-close-btn">&times;</span>
         <h2>Мої активні запити</h2>
+        <div class="filter-controls">
+            <input type="text" id="search-name" placeholder="Пошук за назвою">
+            <select id="filter-type">
+                <option value="">Всі типи</option>
+                <option value="housing">Житло</option>
+                <option value="medical">Медична допомога</option>
+                <option value="legal">Юридична допомога</option>
+                <option value="employment">Допомога у працевлаштуванні</option>
+                <option value="education">Освітні та професійні програми</option>
+                <option value="food">Продукти харчування та предмети першої необхідності</option>
+                <option value="financial">Фінансова допомога</option>
+            </select>
+            <select id="filter-status">
+                <option value="">Всі статуси</option>
+                <option value="pending">Очікує</option>
+                <option value="processing">В процесі</option>
+                <option value="completed">Виконано</option>
+                <option value="rejected">Відхилено</option>
+            </select>
+            <select id="filter-city">
+                <option value="Вінниця">Вінниця</option>
+                <option value="Дніпро">Дніпро</option>
+                <option value="Донецьк">Донецьк</option>
+                <option value="Житомир">Житомир</option>
+                <option value="Запоріжжя">Запоріжжя</option>
+                <option value="Івано-Франківськ">Івано-Франківськ</option>
+                <option value="Київ">Київ</option>
+                <option value="Кропивницький">Кропивницький</option>
+                <option value="Луганськ">Луганськ</option>
+                <option value="Луцьк">Луцьк</option>
+                <option value="Львів">Львів</option>
+                <option value="Миколаїв">Миколаїв</option>
+                <option value="Одеса">Одеса</option>
+                <option value="Полтава">Полтава</option>
+                <option value="Рівне">Рівне</option>
+                <option value="Суми">Суми</option>
+                <option value="Тернопіль">Тернопіль</option>
+                <option value="Ужгород">Ужгород</option>
+                <option value="Харків">Харків</option>
+                <option value="Херсон">Херсон</option>
+                <option value="Хмельницький">Хмельницький</option>
+                <option value="Черкаси">Черкаси</option>
+                <option value="Чернівці">Чернівці</option>
+                <option value="Чернігів">Чернігів</option>
+                  </select>
+        </div>
         <div class="my-requests-list" id="my-active-requests-list">
             <!-- Список активних запитів буде завантажуватися динамічно -->
         </div>

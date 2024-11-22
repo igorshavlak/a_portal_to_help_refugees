@@ -16,6 +16,8 @@ public class Application {
     private Volunteer volunteer;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Refugee refugee;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private byte[] file;
 
     public Application(int id, int refugeeId, String type, String description, String additionalData, String status, LocalDateTime createdAt) {
         this.id = id;
@@ -32,6 +34,14 @@ public class Application {
         this.description = description;
         this.additionalData = additionalData;
         this.status = status;
+    }
+    public Application(int refugeeId, String type, String description, String additionalData, String status,byte[] file) {
+        this.refugeeId = refugeeId;
+        this.type = type;
+        this.description = description;
+        this.additionalData = additionalData;
+        this.status = status;
+        this.file = file;
     }
     public Application(int id,int refugeeId, String type, String description, String additionalData, String status) {
         this.id = id;
@@ -112,5 +122,12 @@ public class Application {
 
     public void setRefugee(Refugee refugee) {
         this.refugee = refugee;
+    }
+
+    public byte[] getFile() {
+        return file;
+    }
+    public void setFile(byte[] file) {
+        this.file = file;
     }
 }

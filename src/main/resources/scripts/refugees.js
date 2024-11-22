@@ -1,4 +1,6 @@
 window.currentApplicationId = null;
+let myRequestsData = [];
+
 
 document.addEventListener('DOMContentLoaded', function() {
     // --------------------------------------------------
@@ -48,6 +50,35 @@ document.addEventListener('DOMContentLoaded', function() {
     const refugeeImageInput = document.getElementById('refugee-profile-image');
     const refugeeImagePreview = document.getElementById('refugee-profile-preview');
 
+    // Елементи фільтрації для "Мої активні запити"
+    const filterStartDateInput = document.getElementById('filter-start-date');
+    const filterEndDateInput = document.getElementById('filter-end-date');
+    const searchNameInput = document.getElementById('search-name');
+    const filterTypeSelect = document.getElementById('filter-type');
+    const filterStatusSelect = document.getElementById('filter-status');
+
+// Додайте обробники подій для нових селектів
+    filterStartDateInput.addEventListener('change', applyFiltersAndRender);
+    filterEndDateInput.addEventListener('change', applyFiltersAndRender);
+    searchNameInput.addEventListener('input', applyFiltersAndRender);
+    filterTypeSelect.addEventListener('change', applyFiltersAndRender);
+    filterStatusSelect.addEventListener('change', applyFiltersAndRender);
+
+    const fileInput = document.getElementById('supporting-document');
+    const fileNameDisplay = document.getElementById('file-name-display');
+
+    fileInput.addEventListener('change', function() {
+        if (fileInput.files.length > 0) {
+            fileNameDisplay.textContent = fileInput.files[0].name;
+        } else {
+            fileNameDisplay.textContent = 'Файл не обрано';
+        }
+    });
+
+
+
+
+
     refugeeImageInput.addEventListener('change', function(event) {
         const file = event.target.files[0];
         if (file && file.type.startsWith('image/')) {
@@ -62,6 +93,69 @@ document.addEventListener('DOMContentLoaded', function() {
             refugeeImagePreview.classList.remove('show');
         }
     });
+
+
+
+    function applyFiltersAndRender() {
+        let filteredData = myRequestsData;
+
+        // Отримуємо значення фільтрів
+        const searchName = searchNameInput.value.toLowerCase();
+        const filterStartDate = filterStartDateInput.value ? new Date(filterStartDateInput.value) : null;
+        const filterEndDate = filterEndDateInput.value ? new Date(filterEndDateInput.value) : null;
+        const filterType = filterTypeSelect.value;
+        const filterStatus = filterStatusSelect.value;
+
+        // Валідація дат
+        if (filterStartDate && filterEndDate && filterStartDate > filterEndDate) {
+            showToast('Дата початку не може бути пізнішою за дату закінчення.');
+            return;
+        }
+
+        // Застосовуємо фільтри
+        filteredData = filteredData.filter(request => {
+            let matchesSearch = true;
+            let matchesDate = true;
+            let matchesType = true;
+            let matchesStatus = true;
+
+            // Перевірка наявності полів у об'єкті
+            const typeName = getHelpTypeName(request.type || '').toLowerCase();
+            const description = (request.description || '').toLowerCase();
+            const createdAt = new Date(request.createdAt);
+            const type = request.type;
+            const status = request.status;
+
+            // Фільтр за пошуком
+            if (searchName) {
+                matchesSearch = typeName.includes(searchName) || description.includes(searchName);
+            }
+
+            // Фільтр за датою
+            if (filterStartDate && filterEndDate) {
+                matchesDate = createdAt >= filterStartDate && createdAt <= filterEndDate;
+            } else if (filterStartDate) {
+                matchesDate = createdAt >= filterStartDate;
+            } else if (filterEndDate) {
+                matchesDate = createdAt <= filterEndDate;
+            }
+
+            // Фільтр за типом
+            if (filterType) {
+                matchesType = type === filterType;
+            }
+
+            // Фільтр за статусом
+            if (filterStatus) {
+                matchesStatus = status.toLowerCase() === filterStatus.toLowerCase();
+            }
+
+            return matchesSearch && matchesDate && matchesType && matchesStatus;
+        });
+
+        renderMyRequests(filteredData);
+    }
+
 
 
     // --------------------------------------------------
@@ -186,7 +280,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             const helpRequests = await response.json();
-            renderMyRequests(helpRequests);
+            myRequestsData = helpRequests;
+            applyFiltersAndRender();
             openModal(myRequestsModal);
         } catch (error) {
             console.error('Помилка при отриманні запитів:', error);
@@ -217,11 +312,11 @@ document.addEventListener('DOMContentLoaded', function() {
             requestDesc.textContent = request.description;
 
             const requestStatus = document.createElement('p');
-            requestStatus.innerHTML = `<span class="status">Статус:</span> ${getStatusName(request.status)}`;
+            requestStatus.innerHTML = `<strong>Статус:</strong> ${getStatusName(request.status)}`;
 
             const requestDate = document.createElement('p');
             const date = new Date(request.createdAt || Date.now());
-            requestDate.innerHTML = `<span class="date">Дата створення:</span> ${date.toLocaleString()}`;
+            requestDate.innerHTML = `<strong>Дата створення:</strong> ${date.toLocaleDateString()}`;
 
             // Додати кнопку "Переглянути"
             const viewButton = document.createElement('button');
@@ -240,7 +335,6 @@ document.addEventListener('DOMContentLoaded', function() {
             myRequestsList.appendChild(requestCard);
         });
     }
-
 
     /**
      * Function to render notifications in the modal
@@ -465,37 +559,54 @@ document.addEventListener('DOMContentLoaded', function() {
             default:
                 additionalData = {};
         }
+        // Отримуємо файл з поля введення
+        const fileInput = document.getElementById('supporting-document');
+        const file = fileInput.files[0];
 
-        const requestData = {
-            type: requestType,
-            description: requestDescription,
-            additionalData: additionalData
-        };
+        // Створюємо FormData для відправки даних, включаючи файл
+        const formData = new FormData();
+        formData.append('type', requestType);
+        formData.append('description', requestDescription);
+        formData.append('additionalData', JSON.stringify(additionalData));
+
+        // Додаємо файл, якщо він обраний
+        // У функції handleRequestFormSubmit
+        if (file) {
+            const maxSize = 5 * 1024 * 1024;
+
+            if (file.size > maxSize) {
+                showToast('Розмір файлу перевищує 5 МБ.');
+                return;
+            }
+
+            // Допустимі типи файлів
+            const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/jpeg', 'image/png'];
+
+            if (!allowedTypes.includes(file.type)) {
+                showToast('Непідтримуваний формат файлу.');
+                return;
+            }
+
+            formData.append('supportingDocument', file);
+        }
 
         try {
             // Відправка даних на сервер
             const response = await fetch('/applications/save', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(requestData)
+                body: formData
             });
 
             const data = await response.json();
 
             if (data.success) {
                 showToast(data.message || 'Заявка успішно подана.');
-                // Опціонально, можна оновити список запитів
-                // await displayMyRequests();
+                requestForm.reset();
+                hideAllAdditionalFields();
+                closeModalFunction(requestModal);
             } else {
                 showToast(data.message || 'Сталася помилка при подачі заявки.');
             }
-
-            requestForm.reset();
-            hideAllAdditionalFields();
-
-            closeModalFunction(requestModal);
 
         } catch (error) {
             console.error('Помилка при відправці запиту:', error);

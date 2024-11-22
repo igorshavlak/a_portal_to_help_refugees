@@ -53,7 +53,6 @@ async function fetchHelpRequests(categories) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ status: 'В процесі' })
         });
 
         if (!response.ok) {
