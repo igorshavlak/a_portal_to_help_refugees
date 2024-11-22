@@ -91,3 +91,11 @@ ALTER TABLE volunteer
 
 ALTER TABLE applications
     ADD COLUMN supporting_document BYTEA;
+
+-- Удаляем текущее ограничение CHECK
+ALTER TABLE applications DROP CONSTRAINT applications_status_check;
+
+-- Добавляем новое ограничение CHECK с новым статусом
+ALTER TABLE applications ADD CONSTRAINT applications_status_check
+    CHECK (status IN ('pending', 'processing', 'completed', 'rejected', 'consideration'));
+

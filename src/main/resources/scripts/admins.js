@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
             phone: '+380987654321',
             status: 'Активний'
         },
-        // Додайте більше біженців за потреби
+
     ];
 
     // Тимчасові дані заявок

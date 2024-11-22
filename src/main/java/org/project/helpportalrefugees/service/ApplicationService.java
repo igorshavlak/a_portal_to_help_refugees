@@ -42,7 +42,8 @@ public class ApplicationService {
         } else {
             throw new IllegalArgumentException("Файл є обов'язковим");
         }
-        Application application = new Application(userRepo.getIdByUsername(principal.getName()), helpRequestDTO.getType(), helpRequestDTO.getDescription(), additionalDataJson, "pending",fileData);
+        Application application = new Application(userRepo.getIdByUsername(principal.getName()), helpRequestDTO.getType(), helpRequestDTO.getDescription(), additionalDataJson, "\n" +
+                "consideration",fileData);
         applicationsRepo.save(application);
     }
 

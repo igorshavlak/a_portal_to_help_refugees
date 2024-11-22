@@ -100,4 +100,8 @@ public class ApplicationController {
             return ResponseEntity.status(500).build();
         }
     }
+    @GetMapping("/getConsiderationApplications")
+    public ResponseEntity<String> getConsiderationApplications(){
+        return null;
+    }
 }
