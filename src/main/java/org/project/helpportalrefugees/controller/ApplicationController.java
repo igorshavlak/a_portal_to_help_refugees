@@ -8,6 +8,7 @@ import org.project.helpportalrefugees.DTO.HelpRequestDTO;
 import org.project.helpportalrefugees.model.Chat;
 import org.project.helpportalrefugees.model.Notification;
 import org.project.helpportalrefugees.service.ApplicationService;
+import org.project.helpportalrefugees.service.NotificationService;
 import org.project.helpportalrefugees.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,15 +29,17 @@ import java.util.Objects;
 public class ApplicationController {
 
     private static final Logger log = LoggerFactory.getLogger(ApplicationController.class);
+    private final NotificationService notificationService;
     ApplicationService applicationService;
     SimpMessagingTemplate messagingTemplate;
     UserService userService;
 
     @Autowired
-    public ApplicationController(ApplicationService applicationService, SimpMessagingTemplate messagingTemplate, UserService userService) {
+    public ApplicationController(ApplicationService applicationService, SimpMessagingTemplate messagingTemplate, UserService userService, NotificationService notificationService) {
         this.applicationService = applicationService;
         this.messagingTemplate = messagingTemplate;
         this.userService = userService;
+        this.notificationService = notificationService;
     }
     @PostMapping("/save")
     public ResponseEntity<?> save(@Validated @ModelAttribute HelpRequestDTO helpRequestDTO, BindingResult bindingResult, Principal principal) {
@@ -92,8 +95,10 @@ public class ApplicationController {
         try {
             String receiver = userService.getUsernameById(applicationService.getRefugeeByApplicationId(requestId));
             applicationService.accept(requestId, principal);
-            messagingTemplate.convertAndSendToUser(receiver, "/queue/notification",
-                    new Notification("Волонтер : " + principal.getName() + "прийняв вашу заявку",false, userService.getIdByUsername(receiver), LocalDateTime.now()));
+            Notification notification =  new Notification("Волонтер : " + principal.getName() + "прийняв вашу заявку",false, userService.getIdByUsername(receiver), LocalDateTime.now(), "accept");
+            notificationService.createNotification(notification);
+            messagingTemplate.convertAndSendToUser(receiver, "/queue/notifications",
+                   notification);
             return ResponseEntity.status(200).body("Заявка прийнята");
         } catch (Exception e) {
             e.printStackTrace();
@@ -101,7 +106,58 @@ public class ApplicationController {
         }
     }
     @GetMapping("/getConsiderationApplications")
-    public ResponseEntity<String> getConsiderationApplications(){
-        return null;
+    public ResponseEntity<List<Application>> getConsiderationApplications(){
+        try {
+            return ResponseEntity.status(200).body(applicationService.getConsiderationApplications());
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+    }
+    @PostMapping("/approve/{requestId}")
+    public ResponseEntity<String> approveApplication(@PathVariable int requestId) {
+        try {
+            String receiver = userService.getUsernameById(applicationService.getRefugeeByApplicationId(requestId));
+            Notification notification = new Notification("Ваша заявка була підтверджена ",false, userService.getIdByUsername(receiver), LocalDateTime.now(),"confirm");
+            applicationService.approve(requestId);
+            notificationService.createNotification(notification);
+            messagingTemplate.convertAndSendToUser(receiver, "/queue/notifications",
+                    notification );
+            return ResponseEntity.status(200).body("Заявка підтверджена");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+    }
+    @PostMapping("/reject/{requestId}")
+    public ResponseEntity<String> rejectApplication(@PathVariable int requestId) {
+        try {
+            applicationService.reject(requestId);
+            String receiver = userService.getUsernameById(applicationService.getRefugeeByApplicationId(requestId));
+            Notification notification = new Notification("Ваша заявка була відхилина ",false, userService.getIdByUsername(receiver), LocalDateTime.now(),"reject");
+            notificationService.createNotification(notification);
+            messagingTemplate.convertAndSendToUser(receiver, "/queue/notifications",
+                    notification );
+            return ResponseEntity.status(200).body("Заявка відхилена");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+    }
+    @PostMapping("/complete/{requestId}")
+    public ResponseEntity<String> completeApplication(@PathVariable int requestId, Principal principal) {
+        try {
+            String receiver = userService.getUsernameById(applicationService.getRefugeeByApplicationId(requestId));
+            Notification notification = new Notification("Волонтер : " + principal.getName() + " відправив запит для завершення заявки ",false, userService.getIdByUsername(receiver), LocalDateTime.now(),"finish");
+            notificationService.createNotification(notification);
+            messagingTemplate.convertAndSendToUser(receiver, "/queue/notifications",
+                    notification );
+            return ResponseEntity.status(200).body("Запит відпралено");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
     }
 }

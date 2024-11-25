@@ -787,7 +787,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    function readFileAsBase64(file) {
+    function readFileAsBase64(file){
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = function(event) {

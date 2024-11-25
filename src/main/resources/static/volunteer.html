@@ -1,368 +1,382 @@
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Особистий кабінет волонтера</title>
-    <link rel="stylesheet" href="/templates/volunteers.css">
-    <link rel="stylesheet" href="/templates/chat.css">
-    <link rel="stylesheet" href="/templates/notification.css">
-    <link rel="stylesheet" href="/templates/filtration.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
-<!-- Шапка сайту -->
-<header>
-    <nav class="navbar">
-        <div class="logo">
-            <a href="#">Портал допомоги</a>
-        </div>
-        <ul class="nav-links">
-            <li><a href="application.html" class="active">Головна</a></li>
-            <li><a href="#">Про нас</a></li>
-            <li><a href="#">Контакти</a></li>
-        </ul>
+    <!DOCTYPE html>
+    <html lang="uk">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Особистий кабінет волонтера</title>
+        <link rel="stylesheet" href="/templates/volunteers.css">
+        <link rel="stylesheet" href="/templates/chat.css">
+        <link rel="stylesheet" href="/templates/notification.css">
+        <link rel="stylesheet" href="/templates/filtration.css">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </head>
+    <body>
+    <!-- Шапка сайту -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <a href="#">Портал допомоги</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="application.html" class="active">Головна</a></li>
+                <li><a href="#">Про нас</a></li>
+                <li><a href="#">Контакти</a></li>
+            </ul>
 
-        <div class="auth-buttons">
-            <a href="#" class="logout-btn">Вийти</a>
-        </div>
-        <div class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-    </nav>
-</header>
+            <div class="auth-buttons">
+                <a href="#" class="logout-btn">Вийти</a>
+            </div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
 
-<!-- Героїчна секція -->
-<section class="hero">
+    <!-- Героїчна секція -->
+    <section class="hero">
 
-    <img src="/images/02-14-2024-06-08-24-3176816066.png" alt="Героїчна секція фон" class="hero-bg">
-    <div class="hero-content">
-        <h1>Ласкаво просимо, <span class="user-name">[Ім'я волонтера]</span></h1>
-        <p>Дякуємо за вашу допомогу та підтримку. Разом ми робимо світ кращим!</p>
-        <a href="#" class="cta-btn" id="view-requests-btn">Переглянути запити на допомогу</a>
-    </div>
-</section>
-
-<!-- Головний контент -->
-<main>
-    <section class="dashboard">
-        <h2>Ваші можливості</h2>
-        <div class="dashboard-actions">
-            <a href="#" class="action-btn" id="my-active-requests-btn">Мої активні запити</a>
-            <a href="#" class="action-btn" id="profile-settings-btn">Налаштування профілю</a>
-            <a href="#" class="action-btn" id="notifications-btn">Сповіщення</a>
+        <img src="/images/02-14-2024-06-08-24-3176816066.png" alt="Героїчна секція фон" class="hero-bg">
+        <div class="hero-content">
+            <h1>Ласкаво просимо, <span class="user-name">[Ім'я волонтера]</span></h1>
+            <p>Дякуємо за вашу допомогу та підтримку. Разом ми робимо світ кращим!</p>
+            <a href="#" class="cta-btn" id="view-requests-btn">Переглянути запити на допомогу</a>
         </div>
     </section>
 
-    <!-- Секція "Мої категорії допомоги" -->
-    <section class="my-categories" id="my-categories-section">
-        <h2>Мої категорії допомоги</h2>
-        <form id="categories-form">
-            <div class="categories-list">
-                <label>
-                    <input type="checkbox" name="categories" value="housing">
-                    <span>Житло</span>
-                </label>
-                <label>
-                    <input type="checkbox" name="categories" value="medical">
-                    <span>Медична допомога</span>
-                </label>
-                <label>
-                    <input type="checkbox" name="categories" value="legal">
-                    <span>Юридична допомога</span>
-                </label>
-                <label>
-                    <input type="checkbox" name="categories" value="employment">
-                    <span>Допомога у працевлаштуванні</span>
-                </label>
-                <label>
-                    <input type="checkbox" name="categories" value="education">
-                    <span>Освітні та професійні програми</span>
-                </label>
-                <label>
-                    <input type="checkbox" name="categories" value="food">
-                    <span>Продукти харчування та предмети першої необхідності</span>
-                </label>
-                <label>
-                    <input type="checkbox" name="categories" value="financial">
-                    <span>Фінансова допомога</span>
-                </label>
+    <!-- Головний контент -->
+    <main>
+        <section class="dashboard">
+            <h2>Ваші можливості</h2>
+            <div class="dashboard-actions">
+                <a href="#" class="action-btn" id="my-active-requests-btn">Мої активні запити</a>
+                <a href="#" class="action-btn" id="profile-settings-btn">Налаштування профілю</a>
+                <a href="#" class="action-btn" id="notifications-btn">Сповіщення</a>
             </div>
-            <!-- Кнопка "Зберегти категорії" видалена -->
-        </form>
-    </section>
-</main>
+        </section>
 
-<!-- Всі модальні вікна повинні бути розміщені тут, поза основним контентом -->
+        <!-- Секція "Мої категорії допомоги" -->
+        <section class="my-categories" id="my-categories-section">
+            <h2>Мої категорії допомоги</h2>
+            <form id="categories-form">
+                <div class="categories-list">
+                    <label>
+                        <input type="checkbox" name="categories" value="housing">
+                        <span>Житло</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" name="categories" value="medical">
+                        <span>Медична допомога</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" name="categories" value="legal">
+                        <span>Юридична допомога</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" name="categories" value="employment">
+                        <span>Допомога у працевлаштуванні</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" name="categories" value="education">
+                        <span>Освітні та професійні програми</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" name="categories" value="food">
+                        <span>Продукти харчування та предмети першої необхідності</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" name="categories" value="financial">
+                        <span>Фінансова допомога</span>
+                    </label>
+                </div>
+                <!-- Кнопка "Зберегти категорії" видалена -->
+            </form>
+        </section>
+    </main>
 
-<!-- Модальне вікно "Запити на допомогу" -->
-<div id="help-requests-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn help-requests-close-btn">&times;</span>
-        <h2>Запити на допомогу</h2>
-        <div class="filter-controls">
-            <input type="text" id="help-search-name" placeholder="Пошук за назвою">
-            <select id="help-filter-city">
-                <option value="Вінниця">Вінниця</option>
-                <option value="Дніпро">Дніпро</option>
-                <option value="Донецьк">Донецьк</option>
-                <option value="Житомир">Житомир</option>
-                <option value="Запоріжжя">Запоріжжя</option>
-                <option value="Івано-Франківськ">Івано-Франківськ</option>
-                <option value="Київ">Київ</option>
-                <option value="Кропивницький">Кропивницький</option>
-                <option value="Луганськ">Луганськ</option>
-                <option value="Луцьк">Луцьк</option>
-                <option value="Львів">Львів</option>
-                <option value="Миколаїв">Миколаїв</option>
-                <option value="Одеса">Одеса</option>
-                <option value="Полтава">Полтава</option>
-                <option value="Рівне">Рівне</option>
-                <option value="Суми">Суми</option>
-                <option value="Тернопіль">Тернопіль</option>
-                <option value="Ужгород">Ужгород</option>
-                <option value="Харків">Харків</option>
-                <option value="Херсон">Херсон</option>
-                <option value="Хмельницький">Хмельницький</option>
-                <option value="Черкаси">Черкаси</option>
-                <option value="Чернівці">Чернівці</option>
-                <option value="Чернігів">Чернігів</option>
-            </select>
-        </div>
-        <div class="requests-list" id="help-requests-list">
-            <!-- Список запитів буде завантажуватися динамічно за допомогою JavaScript -->
-        </div>
-    </div>
-</div>
+    <!-- Всі модальні вікна повинні бути розміщені тут, поза основним контентом -->
 
-<!-- Модальне вікно "Мої активні запити" -->
-<div id="my-active-requests-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn my-active-requests-close-btn">&times;</span>
-        <h2>Мої активні запити</h2>
-        <div class="filter-controls">
-            <input type="text" id="search-name" placeholder="Пошук за назвою">
-            <select id="filter-type">
-                <option value="">Всі типи</option>
-                <option value="housing">Житло</option>
-                <option value="medical">Медична допомога</option>
-                <option value="legal">Юридична допомога</option>
-                <option value="employment">Допомога у працевлаштуванні</option>
-                <option value="education">Освітні та професійні програми</option>
-                <option value="food">Продукти харчування та предмети першої необхідності</option>
-                <option value="financial">Фінансова допомога</option>
-            </select>
-            <select id="filter-status">
-                <option value="">Всі статуси</option>
-                <option value="pending">Очікує</option>
-                <option value="processing">В процесі</option>
-                <option value="completed">Виконано</option>
-                <option value="rejected">Відхилено</option>
-            </select>
-            <select id="filter-city">
-                <option value="Вінниця">Вінниця</option>
-                <option value="Дніпро">Дніпро</option>
-                <option value="Донецьк">Донецьк</option>
-                <option value="Житомир">Житомир</option>
-                <option value="Запоріжжя">Запоріжжя</option>
-                <option value="Івано-Франківськ">Івано-Франківськ</option>
-                <option value="Київ">Київ</option>
-                <option value="Кропивницький">Кропивницький</option>
-                <option value="Луганськ">Луганськ</option>
-                <option value="Луцьк">Луцьк</option>
-                <option value="Львів">Львів</option>
-                <option value="Миколаїв">Миколаїв</option>
-                <option value="Одеса">Одеса</option>
-                <option value="Полтава">Полтава</option>
-                <option value="Рівне">Рівне</option>
-                <option value="Суми">Суми</option>
-                <option value="Тернопіль">Тернопіль</option>
-                <option value="Ужгород">Ужгород</option>
-                <option value="Харків">Харків</option>
-                <option value="Херсон">Херсон</option>
-                <option value="Хмельницький">Хмельницький</option>
-                <option value="Черкаси">Черкаси</option>
-                <option value="Чернівці">Чернівці</option>
-                <option value="Чернігів">Чернігів</option>
-                  </select>
-        </div>
-        <div class="my-requests-list" id="my-active-requests-list">
-            <!-- Список активних запитів буде завантажуватися динамічно -->
+    <!-- Модальне вікно "Запити на допомогу" -->
+    <div id="help-requests-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn help-requests-close-btn">&times;</span>
+            <h2>Запити на допомогу</h2>
+            <div class="filter-controls">
+                <input type="text" id="help-search-name" placeholder="Пошук за назвою">
+                <select id="help-filter-city">
+                    <option value="Вінниця">Вінниця</option>
+                    <option value="Дніпро">Дніпро</option>
+                    <option value="Донецьк">Донецьк</option>
+                    <option value="Житомир">Житомир</option>
+                    <option value="Запоріжжя">Запоріжжя</option>
+                    <option value="Івано-Франківськ">Івано-Франківськ</option>
+                    <option value="Київ">Київ</option>
+                    <option value="Кропивницький">Кропивницький</option>
+                    <option value="Луганськ">Луганськ</option>
+                    <option value="Луцьк">Луцьк</option>
+                    <option value="Львів">Львів</option>
+                    <option value="Миколаїв">Миколаїв</option>
+                    <option value="Одеса">Одеса</option>
+                    <option value="Полтава">Полтава</option>
+                    <option value="Рівне">Рівне</option>
+                    <option value="Суми">Суми</option>
+                    <option value="Тернопіль">Тернопіль</option>
+                    <option value="Ужгород">Ужгород</option>
+                    <option value="Харків">Харків</option>
+                    <option value="Херсон">Херсон</option>
+                    <option value="Хмельницький">Хмельницький</option>
+                    <option value="Черкаси">Черкаси</option>
+                    <option value="Чернівці">Чернівці</option>
+                    <option value="Чернігів">Чернігів</option>
+                </select>
+            </div>
+            <div class="requests-list" id="help-requests-list">
+                <!-- Список запитів буде завантажуватися динамічно за допомогою JavaScript -->
+            </div>
         </div>
     </div>
-</div>
 
-<!-- Модальне вікно з деталями запиту -->
-<div id="request-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn request-close-btn">&times;</span>
-        <div class="request-details-container">
-            <h2>Деталі запиту</h2>
-            <div id="request-details">
-                <!-- Деталі запиту будуть завантажуватися динамічно -->
+    <!-- Модальне вікно "Мої активні запити" -->
+    <div id="my-active-requests-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn my-active-requests-close-btn">&times;</span>
+            <h2>Мої активні запити</h2>
+            <div class="filter-controls">
+                <input type="text" id="search-name" placeholder="Пошук за назвою">
+                <select id="filter-type">
+                    <option value="">Всі типи</option>
+                    <option value="housing">Житло</option>
+                    <option value="medical">Медична допомога</option>
+                    <option value="legal">Юридична допомога</option>
+                    <option value="employment">Допомога у працевлаштуванні</option>
+                    <option value="education">Освітні та професійні програми</option>
+                    <option value="food">Продукти харчування та предмети першої необхідності</option>
+                    <option value="financial">Фінансова допомога</option>
+                </select>
+                <select id="filter-status">
+                    <option value="">Всі статуси</option>
+                    <option value="pending">Очікує</option>
+                    <option value="processing">В процесі</option>
+                    <option value="completed">Виконано</option>
+                    <option value="rejected">Відхилено</option>
+                </select>
+                <select id="filter-city">
+                    <option value="Вінниця">Вінниця</option>
+                    <option value="Дніпро">Дніпро</option>
+                    <option value="Донецьк">Донецьк</option>
+                    <option value="Житомир">Житомир</option>
+                    <option value="Запоріжжя">Запоріжжя</option>
+                    <option value="Івано-Франківськ">Івано-Франківськ</option>
+                    <option value="Київ">Київ</option>
+                    <option value="Кропивницький">Кропивницький</option>
+                    <option value="Луганськ">Луганськ</option>
+                    <option value="Луцьк">Луцьк</option>
+                    <option value="Львів">Львів</option>
+                    <option value="Миколаїв">Миколаїв</option>
+                    <option value="Одеса">Одеса</option>
+                    <option value="Полтава">Полтава</option>
+                    <option value="Рівне">Рівне</option>
+                    <option value="Суми">Суми</option>
+                    <option value="Тернопіль">Тернопіль</option>
+                    <option value="Ужгород">Ужгород</option>
+                    <option value="Харків">Харків</option>
+                    <option value="Херсон">Херсон</option>
+                    <option value="Хмельницький">Хмельницький</option>
+                    <option value="Черкаси">Черкаси</option>
+                    <option value="Чернівці">Чернівці</option>
+                    <option value="Чернігів">Чернігів</option>
+                      </select>
             </div>
-            <button id="accept-request-btn" class="accept-btn">Прийняти запит</button>
-            <button id="openChatBtn" class="open-chat-btn">
-                <i class="fas fa-comments"></i> Відкрити чат з волонтером
-            </button>
+            <div class="my-requests-list" id="my-active-requests-list">
+                <!-- Список активних запитів буде завантажуватися динамічно -->
+            </div>
         </div>
     </div>
-</div>
 
-<!-- Модальне вікно "Налаштування профілю" -->
-<div id="profile-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn profile-close-btn">&times;</span>
-        <h2>Налаштування профілю</h2>
-        <form id="profile-form">
-            <div class="form-group">
-                <label for="volunteer-first-name">Ім'я:</label>
-                <input type="text" id="volunteer-first-name" name="volunteer-first-name"
-                       value="[Ім'я волонтера]" required>
+    <!-- Модальне вікно з деталями запиту -->
+    <div id="request-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn request-close-btn">&times;</span>
+            <div class="request-details-container">
+                <h2>Деталі запиту</h2>
+                <div id="request-details">
+                    <!-- Деталі запиту будуть завантажуватися динамічно -->
+                </div>
+                <button id="accept-request-btn" class="accept-btn">Прийняти запит</button>
+                <button id="complete-request-btn" class="complete-btn">Завершити заявку</button>
+                <button id="openChatBtn" class="open-chat-btn">
+                    <i class="fas fa-comments"></i> Відкрити чат з волонтером
+                </button>
             </div>
-
-            <div class="form-group">
-                <label for="volunteer-last-name">Прізвище:</label>
-                <input type="text" id="volunteer-last-name" name="volunteer-last-name"
-                       value="[Прізвище волонтера]" required>
-            </div>
-
-            <!-- Додане поле дати народження -->
-            <div class="form-group">
-                <label for="volunteer-birth-date">Дата народження:</label>
-                <input type="date" id="volunteer-birth-date" name="volunteer-birth-date"
-                       value="[Дата народження волонтера]" required>
-            </div>
-
-            <div class="form-group">
-                <label for="volunteer-phone">Телефон:</label>
-                <input type="tel" id="volunteer-phone" name="volunteer-phone" value="[Телефон волонтера]"
-                       required>
-            </div>
-
-            <div class="form-group">
-                <label for="volunteer-skills">Навички та досвід:</label>
-                <textarea id="volunteer-skills" name="volunteer-skills" rows="4" required>[Навички та досвід волонтера]</textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="volunteer-city">Місто:</label>
-                <input type="text" id="volunteer-city" name="volunteer-city" value="[Місто волонтера]" required>
-            </div>
-
-
-            <div class="form-group">
-                <label for="volunteer-country">Країна:</label>
-                <input type="text" id="volunteer-country" name="volunteer-country" value="[Країна волонтера]"
-                       required>
-            </div>
-            <div class="form-group">
-                <label for="volunteer-profile-image">Завантажити зображення профілю:</label>
-                <input type="file" id="volunteer-profile-image" name="volunteer-profile-image" accept="image/*">
-            </div>
-            <div class="form-group">
-                <label>Ваше зображення:</label>
-                <img id="volunteer-profile-preview" src="#" alt="Зображення профілю" class="profile-preview">
-            </div>
-
-            <button type="submit" class="save-btn">Зберегти зміни</button>
-        </form>
-    </div>
-</div>
-
-<!-- Модальне вікно "Сповіщення" -->
-<div id="notifications-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn notifications-close-btn">&times;</span>
-        <h2>Сповіщення</h2>
-        <div id="notifications-list">
-            <!-- Список сповіщень буде завантажуватися динамічно -->
-            <p>Наразі у вас немає нових сповіщень.</p>
         </div>
     </div>
-</div>
+    <!-- Модальне вікно підтвердження завершення заявки -->
+    <div id="confirm-complete-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn confirm-complete-close-btn">&times;</span>
+            <h2>Підтвердіть завершення заявки</h2>
+            <form id="confirm-complete-form">
+                <label>
+                    <input type="checkbox" id="confirm-help-provided" required>
+                    Я надав всю необхідну допомогу біженцю.
+                </label>
+                <button type="submit" class="confirm-btn">Підтвердити</button>
+            </form>
+        </div>
+    </div>
+    <!-- Модальне вікно "Налаштування профілю" -->
+    <div id="profile-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn profile-close-btn">&times;</span>
+            <h2>Налаштування профілю</h2>
+            <form id="profile-form">
+                <div class="form-group">
+                    <label for="volunteer-first-name">Ім'я:</label>
+                    <input type="text" id="volunteer-first-name" name="volunteer-first-name"
+                           value="[Ім'я волонтера]" required>
+                </div>
 
-<!-- Модальне вікно чату -->
-<div id="chatModal" class="modal">
-    <div class="modal-content">
-        <div class="chat-header">
-            <div class="profile-info">
-                <img src="/images/istockphoto-1298261537-612x612.jpg" alt="Profile Picture" class="profile-pic">
-                <div>
-                    <h3 id="username">Re</h3>
-                    <p id="status" class="status online">Онлайн</p>
+                <div class="form-group">
+                    <label for="volunteer-last-name">Прізвище:</label>
+                    <input type="text" id="volunteer-last-name" name="volunteer-last-name"
+                           value="[Прізвище волонтера]" required>
+                </div>
+
+                <!-- Додане поле дати народження -->
+                <div class="form-group">
+                    <label for="volunteer-birth-date">Дата народження:</label>
+                    <input type="date" id="volunteer-birth-date" name="volunteer-birth-date"
+                           value="[Дата народження волонтера]" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="volunteer-phone">Телефон:</label>
+                    <input type="tel" id="volunteer-phone" name="volunteer-phone" value="[Телефон волонтера]"
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <label for="volunteer-skills">Навички та досвід:</label>
+                    <textarea id="volunteer-skills" name="volunteer-skills" rows="4" required>[Навички та досвід волонтера]</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="volunteer-city">Місто:</label>
+                    <input type="text" id="volunteer-city" name="volunteer-city" value="[Місто волонтера]" required>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="volunteer-country">Країна:</label>
+                    <input type="text" id="volunteer-country" name="volunteer-country" value="[Країна волонтера]"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label for="volunteer-profile-image">Завантажити зображення профілю:</label>
+                    <input type="file" id="volunteer-profile-image" name="volunteer-profile-image" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label>Ваше зображення:</label>
+                    <img id="volunteer-profile-preview" src="#" alt="Зображення профілю" class="profile-preview">
+                </div>
+
+                <button type="submit" class="save-btn">Зберегти зміни</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальне вікно "Сповіщення" -->
+    <div id="notifications-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn notifications-close-btn">&times;</span>
+            <h2>Сповіщення</h2>
+            <div id="notifications-list">
+                <!-- Список сповіщень буде завантажуватися динамічно -->
+                <p>Наразі у вас немає нових сповіщень.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальне вікно чату -->
+    <div id="chatModal" class="modal">
+        <div class="modal-content">
+            <div class="chat-header">
+                <div class="profile-info">
+                    <img src="/images/istockphoto-1298261537-612x612.jpg" alt="Profile Picture" class="profile-pic">
+                    <div>
+                        <h3 id="username">Re</h3>
+                        <p id="status" class="status online">Онлайн</p>
+                    </div>
+                </div>
+                <button class="close-btn chat-close-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="chat-body" id="chatBody">
+                <div class="message received">
+                    <p>Привіт, як справи?</p>
+                </div>
+                <div class="message sent">
+                    <p>Дякую :)</p>
+                </div>
+                <div class="message received">
+                    <p>Що щодо обіду?</p>
+                </div>
+                <div class="message sent">
+                    <p>Добре, до зустрічі.</p>
                 </div>
             </div>
-            <button class="close-btn chat-close-btn"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="chat-body" id="chatBody">
-            <div class="message received">
-                <p>Привіт, як справи?</p>
-            </div>
-            <div class="message sent">
-                <p>Дякую :)</p>
-            </div>
-            <div class="message received">
-                <p>Що щодо обіду?</p>
-            </div>
-            <div class="message sent">
-                <p>Добре, до зустрічі.</p>
+            <div class="chat-footer">
+                <input type="text" id="messageInput" placeholder="Введіть повідомлення..." class="message-input">
+                <button id="sendBtn" class="send-btn"><i class="fas fa-paper-plane"></i></button>
             </div>
         </div>
-        <div class="chat-footer">
-            <input type="text" id="messageInput" placeholder="Введіть повідомлення..." class="message-input">
-            <button id="sendBtn" class="send-btn"><i class="fas fa-paper-plane"></i></button>
+    </div>
+
+    <!-- Toast повідомлення -->
+    <div id="toast" class="toast">
+        <p id="toast-message"></p>
+    </div>
+
+    <!-- Футер -->
+    <footer>
+        <p>&copy; 2024 Портал допомоги біженцям. Всі права захищені.</p>
+    </footer>
+
+    <!-- Підключення модального вікна чату -->
+    <div id="chat-container">
+        <!-- Вміст чату буде завантажений сюди -->
+    </div>
+    <!-- Контейнер для уведомлений -->
+    <div id="notification-container"></div>
+
+    <!-- Круглая кнопка уведомлений -->
+    <button id="notification-button" title="Уведомления">
+        <i class="fas fa-bell"></i> <!-- Иконка колокольчика -->
+        <span id="notification-count" class="badge">0</span>
+    </button>
+
+    <!-- Попап для отображения последних 5 уведомлений -->
+    <div id="notification-popup" class="popup">
+        <div class="popup-header">
+            <h3>Уведомления</h3>
+            <button id="close-popup" class="close-popup"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="popup-notifications" class="popup-notifications">
+            <!-- Уведомления будут динамически добавляться здесь -->
         </div>
     </div>
-</div>
-
-<!-- Toast повідомлення -->
-<div id="toast" class="toast">
-    <p id="toast-message"></p>
-</div>
-
-<!-- Футер -->
-<footer>
-    <p>&copy; 2024 Портал допомоги біженцям. Всі права захищені.</p>
-</footer>
-
-<!-- Підключення модального вікна чату -->
-<div id="chat-container">
-    <!-- Вміст чату буде завантажений сюди -->
-</div>
-<!-- Контейнер для уведомлений -->
-<div id="notification-container"></div>
-
-<!-- Круглая кнопка уведомлений -->
-<button id="notification-button" title="Уведомления">
-    <i class="fas fa-bell"></i> <!-- Иконка колокольчика -->
-    <span id="notification-count" class="badge">0</span>
-</button>
-
-<!-- Попап для отображения последних 5 уведомлений -->
-<div id="notification-popup" class="popup">
-    <div class="popup-header">
-        <h3>Уведомления</h3>
-        <button id="close-popup" class="close-popup"><i class="fas fa-times"></i></button>
-    </div>
-    <div id="popup-notifications" class="popup-notifications">
-        <!-- Уведомления будут динамически добавляться здесь -->
-    </div>
-</div>
 
 
 
-<!-- Підключення JavaScript -->
-<!-- volunteerFetch.js підключений перед volunteers.js -->
+    <!-- Підключення JavaScript -->
+    <!-- volunteerFetch.js підключений перед volunteers.js -->
 
-<script src="/scripts/volunteers.js"></script>
-<script src="/scripts/volunteerFetch.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js" integrity="sha256-nkP8cj5xaTdWK/BsZl+57ZCE/Y/i4UNtbNTpgH+6Taw=" crossorigin="anonymous"></script>
-<script src="/scripts/chat.js"></script>
-<script src="/scripts/notification.js"></script>
-</body>
-</html>
+    <script src="/scripts/volunteers.js"></script>
+    <script src="/scripts/volunteerFetch.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js" integrity="sha256-nkP8cj5xaTdWK/BsZl+57ZCE/Y/i4UNtbNTpgH+6Taw=" crossorigin="anonymous"></script>
+    <script src="/scripts/chat.js"></script>
+    <script src="/scripts/notification.js"></script>
+    </body>
+    </html>

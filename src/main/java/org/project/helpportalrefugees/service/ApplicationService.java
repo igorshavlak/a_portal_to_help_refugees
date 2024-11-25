@@ -34,7 +34,6 @@ public class ApplicationService {
     }
 
     public void save(HelpRequestDTO helpRequestDTO, Principal principal) throws IOException {
-        String additionalDataJson = objectMapper.writeValueAsString(helpRequestDTO.getAdditionalData());
         MultipartFile file = helpRequestDTO.getSupportingDocument();
         byte[] fileData;
         if (file != null && !file.isEmpty()) {
@@ -42,8 +41,7 @@ public class ApplicationService {
         } else {
             throw new IllegalArgumentException("Файл є обов'язковим");
         }
-        Application application = new Application(userRepo.getIdByUsername(principal.getName()), helpRequestDTO.getType(), helpRequestDTO.getDescription(), additionalDataJson, "\n" +
-                "consideration",fileData);
+        Application application = new Application(userRepo.getIdByUsername(principal.getName()), helpRequestDTO.getType(), helpRequestDTO.getDescription(), helpRequestDTO.getAdditionalData(), "consideration",fileData);
         applicationsRepo.save(application);
     }
 
@@ -70,8 +68,18 @@ public class ApplicationService {
     public void accept(int id, Principal principal) {
         applicationsRepo.acceptApplication(id, userRepo.getIdByUsername(principal.getName()));
     }
+    public void approve(int id){
+        applicationsRepo.approveApplication(id);
+    }
+    public void reject(int id){
+        applicationsRepo.rejectApplication(id);
+    }
     public Integer getRefugeeByApplicationId(int id){
        return applicationsRepo.getRefugeeByApplicationId(id);
+    }
+
+    public List<Application> getConsiderationApplications(){
+        return applicationsRepo.getConsiderationApplications();
     }
 
 }

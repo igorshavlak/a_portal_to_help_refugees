@@ -63,7 +63,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const helpFilterCitySelect = document.getElementById('help-filter-city');
     helpFilterCitySelect.addEventListener('change', applyHelpFiltersAndRender);
 
-
+// Додайте це в розділ отримання елементів
+    const completeRequestBtn = document.getElementById('complete-request-btn');
+    const confirmCompleteModal = document.getElementById('confirm-complete-modal');
+    const confirmCompleteCloseBtn = document.querySelector('.confirm-complete-close-btn');
+    const confirmCompleteForm = document.getElementById('confirm-complete-form');
+    const confirmHelpProvidedCheckbox = document.getElementById('confirm-help-provided');
 
     // Меню-гамбургер
     const hamburger = document.querySelector('.hamburger');
@@ -110,6 +115,50 @@ document.addEventListener('DOMContentLoaded', function() {
 
         renderHelpRequests(filteredData, helpRequestsList, true);
     }
+    // Обробка кліку на кнопку "Завершити заявку"
+    completeRequestBtn.addEventListener('click', () => {
+        openModal(confirmCompleteModal);
+    });
+    // Закриття модального вікна підтвердження
+    confirmCompleteCloseBtn.addEventListener('click', () => {
+        closeModalFunction(confirmCompleteModal);
+        confirmCompleteForm.reset();
+    });
+    // Обробка відправки форми підтвердження
+    confirmCompleteForm.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        if (!confirmHelpProvidedCheckbox.checked) {
+            showToast('Будь ласка, підтвердіть, що ви надали всю необхідну допомогу.');
+            return;
+        }
+
+        try {
+            // Отримайте id заявки (вже збережено в window.currentApplicationId)
+            const applicationId = window.currentApplicationId;
+
+            // Відправте запит на бекенд
+            const response = await fetch(`/applications/complete/${applicationId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                showToast('Заявку успішно завершено!');
+                closeModalFunction(confirmCompleteModal);
+                closeModalFunction(requestModal);
+
+            } else {
+                const errorText = await response.text();
+                showToast('Помилка при завершенні заявки: ' + errorText);
+            }
+
+        } catch (error) {
+            console.error('Помилка при відправці запиту:', error);
+            showToast('Сталася помилка при завершенні заявки.');
+        }
+    });
 
 
 

@@ -18,6 +18,8 @@ public class Application {
     private Refugee refugee;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private byte[] file;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String base64File;
 
     public Application(int id, int refugeeId, String type, String description, String additionalData, String status, LocalDateTime createdAt) {
         this.id = id;
@@ -50,6 +52,26 @@ public class Application {
         this.description = description;
         this.additionalData = additionalData;
         this.status = status;
+    }
+    public Application(int id, int refugeeId, String type, String description, String additionalData, String status, LocalDateTime createdAt,byte[] file) {
+        this.id = id;
+        this.refugeeId = refugeeId;
+        this.type = type;
+        this.description = description;
+        this.additionalData = additionalData;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.file = file;
+    }
+    public Application(int id, int refugeeId, String type, String description, String additionalData, String status, LocalDateTime createdAt,String base64File) {
+        this.id = id;
+        this.refugeeId = refugeeId;
+        this.type = type;
+        this.description = description;
+        this.additionalData = additionalData;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.base64File = base64File;
     }
 
     public int getId() {
@@ -129,5 +151,13 @@ public class Application {
     }
     public void setFile(byte[] file) {
         this.file = file;
+    }
+
+    public void setBase64File(String base64File) {
+        this.base64File = base64File;
+    }
+
+    public String getBase64File() {
+        return base64File;
     }
 }

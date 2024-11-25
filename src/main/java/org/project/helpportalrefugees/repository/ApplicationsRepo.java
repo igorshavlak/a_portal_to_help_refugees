@@ -10,15 +10,14 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Repository
 public class ApplicationsRepo {
-    private static final String saveSql = "INSERT INTO applications (user_id,type,description,additional_data,status,supporting_document) VALUES (?,?,?,?,?,?)";
+    private static final String saveSql = "INSERT INTO applications (user_id,type,description,additional_data,status,supporting_document) VALUES (?,?,?,?,'consideration',?)";
     private static final String acceptSql = "UPDATE applications SET status=?, volunteer_id=? WHERE id=?";
+    private static final String deleteSql = "DELETE FROM applications WHERE id=?";
+    private static final String approveSql = "UPDATE applications SET status=? WHERE id=?";
     private static final String getAllRefugeeApplicationsSql =
             "SELECT a.id, a.user_id, a.type, a.description, a.additional_data, a.status, a.created_at, " +
                     "v.user_id AS volunteer_user_id, v.first_name AS volunteer_first_name, v.last_name AS volunteer_last_name, " +
@@ -26,7 +25,7 @@ public class ApplicationsRepo {
                     "v.city AS volunteer_city, v.country AS volunteer_country " +
                     "FROM applications a " +
                     "LEFT JOIN volunteer v ON a.volunteer_id = v.user_id " +
-                    "WHERE a.user_id = ?";
+                    "WHERE a.user_id = ? AND a.status != 'consideration'";
     private static final String getAllVolunteerApplicationsSql =
             "SELECT a.id, a.user_id, a.type, a.description, a.additional_data, a.status, a.created_at, " +
                     "r.user_id AS refugee_user_id, r.first_name AS refugee_first_name, r.last_name AS refugee_last_name, " +
@@ -34,9 +33,15 @@ public class ApplicationsRepo {
                     "r.city AS refugee_city, r.country AS refugee_country " +
                     "FROM applications a " +
                     "JOIN refugees r ON a.user_id = r.user_id " +
-                    "WHERE a.volunteer_id = ?";
+                    "WHERE a.volunteer_id = ? AND a.status != 'consideration'";
     private static final String getApplicationUsersSql = "SELECT user_id, volunteer_id FROM applications WHERE id = ?";
     private static final String getRefugeeApplicationById = "SELECT user_id FROM applications WHERE id = ?";
+    private static final String getConsiderationApplicationsSql =
+            "SELECT a.*, r.first_name, r.last_name, r.birth_date, r.phone_number, r.city, r.country, r.status AS refugee_status " +
+                    "FROM applications a " +
+                    "JOIN refugees r ON a.user_id = r.user_id " +
+                    "WHERE a.status = 'consideration'";
+
 
 
     ChatRepo chatRepo;
@@ -49,8 +54,37 @@ public class ApplicationsRepo {
     }
 
     public void save(Application application) {
-        jdbcTemplate.update(saveSql, application.getRefugeeId(), application.getType(), application.getDescription(), application.getAdditionalData(), application.getStatus(), application.getFile());
+        jdbcTemplate.update(saveSql, application.getRefugeeId(), application.getType(), application.getDescription(), application.getAdditionalData(), application.getFile());
     }
+    public List<Application> getConsiderationApplications() {
+        return jdbcTemplate.query(getConsiderationApplicationsSql, (rs, rowNum) -> {
+            byte[] file = rs.getBytes("supporting_document");
+            Application application = new Application(
+                    rs.getInt("id"),
+                    rs.getInt("user_id"),
+                    rs.getString("type"),
+                    rs.getString("description"),
+                    rs.getString("additional_data"),
+                    rs.getString("status"),
+                    rs.getTimestamp("created_at").toLocalDateTime(),
+                    Base64.getEncoder().encodeToString(rs.getBytes("supporting_document"))
+            );
+            Refugee refugee = new Refugee(
+                    rs.getString("first_name"),
+                    rs.getString("last_name"),
+                    rs.getDate("birth_date").toLocalDate(),
+                    rs.getString("phone_number"),
+                    rs.getString("city"),
+                    rs.getString("country"),
+                    rs.getString("refugee_status")
+            );
+
+            application.setRefugee(refugee);
+
+            return application;
+        });
+    }
+
 
     public List<Application> getRefugeeApplications(int id) {
         return jdbcTemplate.query(getAllRefugeeApplicationsSql, (rs, rowNum) -> {
@@ -159,7 +193,12 @@ public class ApplicationsRepo {
     public void acceptApplication(int applicationId, int volunteerId) {
         jdbcTemplate.update(acceptSql, "processing", volunteerId, applicationId);
     }
-
+    public void approveApplication(int id){
+        jdbcTemplate.update(approveSql,"pending", id);
+    }
+    public void rejectApplication(int id){
+        jdbcTemplate.update(deleteSql,id);
+    }
     public List<Map<String, Object>>  getApplicationUsersId(int applicationId) {
         return jdbcTemplate.queryForList(getApplicationUsersSql, applicationId);
     }

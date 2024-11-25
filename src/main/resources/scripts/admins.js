@@ -17,7 +17,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const requestDetailsModal = document.getElementById('request-details-modal');
     const requestDetailsCloseBtn = document.querySelector('.request-details-close-btn');
     const requestDetails = document.getElementById('request-details');
+
+    const downloadDocumentBtn = document.getElementById('download-document-btn');
     const approveRequestBtn = document.getElementById('approve-request-btn');
+    const rejectRequestBtn = document.getElementById('reject-request-btn');
+
+    // Модальне вікно для введення причини відмови
+    const rejectReasonModal = document.getElementById('reject-reason-modal');
+    const rejectReasonCloseBtn = document.querySelector('.reject-reason-close-btn');
+    const rejectReasonTextarea = document.getElementById('reject-reason-textarea');
+    const submitRejectReasonBtn = document.getElementById('submit-reject-reason-btn');
 
     // Пошук біженців
     const refugeeSearchInput = document.getElementById('refugee-search-input');
@@ -34,53 +43,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
 
-    // Тимчасові дані біженців (поки немає серверної частини)
-    let refugeesData = [
-        {
-            id: 1,
-            name: 'Іван Іванов',
-            email: 'ivan@example.com',
-            phone: '+380123456789',
-            status: 'Активний'
-        },
-        {
-            id: 2,
-            name: 'Петро Петренко',
-            email: 'petro@example.com',
-            phone: '+380987654321',
-            status: 'Активний'
-        },
-
-    ];
-
-    // Тимчасові дані заявок
-    let requestsData = [
-        {
-            id: 1,
-            refugeeName: 'Іван Іванов',
-            type: 'Житло',
-            typeKey: 'housing',
-            description: 'Потребую тимчасове житло у Львові.',
-            status: 'На розгляді'
-        },
-        {
-            id: 2,
-            refugeeName: 'Петро Петренко',
-            type: 'Медична допомога',
-            typeKey: 'medical',
-            description: 'Потрібна консультація лікаря.',
-            status: 'На розгляді'
-        },
-        {
-            id: 3,
-            refugeeName: 'Ольга Ольгович',
-            type: 'Юридична допомога',
-            typeKey: 'legal',
-            description: 'Потрібна допомога з документами.',
-            status: 'На розгляді'
-        },
-        // Додайте більше заявок за потреби
-    ];
+    // Дані біженців та заявок
+    let refugeesData = [];
+    let requestsData = [];
 
     // Функція для відкриття модального вікна
     function openModal(modal) {
@@ -103,44 +68,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Функція для відображення списку біженців
     function displayRefugees(filterEmail = '') {
-        refugeesList.innerHTML = '';
+        // Реалізуйте цю функцію відповідно до ваших потреб
+    }
 
-        let filteredRefugees = refugeesData;
+    // Функція для отримання заявок з бекенду
+    async function fetchRequests() {
+        try {
+            const response = await fetch('/applications/getConsiderationApplications', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
 
-        if (filterEmail.trim() !== '') {
-            filteredRefugees = refugeesData.filter(refugee =>
-                refugee.email.toLowerCase().includes(filterEmail.toLowerCase())
-            );
+            if (!response.ok) {
+                throw new Error(`Помилка HTTP: ${response.status}`);
+            }
+
+            requestsData = await response.json();
+        } catch (error) {
+            console.error('Помилка при отриманні заявок:', error);
+            showToast('Сталася помилка при завантаженні заявок. Спробуйте пізніше.');
         }
-
-        if (filteredRefugees.length === 0) {
-            refugeesList.innerHTML = '<p>Біженців не знайдено.</p>';
-            return;
-        }
-
-        filteredRefugees.forEach(refugee => {
-            const refugeeCard = document.createElement('div');
-            refugeeCard.className = 'refugee-card';
-
-            const refugeeName = document.createElement('h3');
-            refugeeName.textContent = refugee.name;
-
-            const refugeeEmail = document.createElement('p');
-            refugeeEmail.innerHTML = `<strong>Email:</strong> ${refugee.email}`;
-
-            const refugeePhone = document.createElement('p');
-            refugeePhone.innerHTML = `<strong>Телефон:</strong> ${refugee.phone}`;
-
-            const refugeeStatus = document.createElement('p');
-            refugeeStatus.innerHTML = `<strong>Статус:</strong> ${refugee.status}`;
-
-            refugeeCard.appendChild(refugeeName);
-            refugeeCard.appendChild(refugeeEmail);
-            refugeeCard.appendChild(refugeePhone);
-            refugeeCard.appendChild(refugeeStatus);
-
-            refugeesList.appendChild(refugeeCard);
-        });
     }
 
     // Функція для відображення списку заявок
@@ -150,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let filteredRequests = requestsData;
 
         if (filterCategory !== 'all') {
-            filteredRequests = requestsData.filter(request => request.typeKey === filterCategory);
+            filteredRequests = requestsData.filter(request => request.type === filterCategory);
         }
 
         if (filteredRequests.length === 0) {
@@ -162,8 +111,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const requestCard = document.createElement('div');
             requestCard.className = 'request-card';
 
+            const refugeeName = request.refugee ? `${request.refugee.name} ${request.refugee.surname}` : 'Невідомий';
+
             const requestTitle = document.createElement('h3');
-            requestTitle.textContent = `${request.type} від ${request.refugeeName}`;
+            requestTitle.textContent = `${getHelpTypeName(request.type)} від ${refugeeName}`;
 
             const requestDesc = document.createElement('p');
             requestDesc.textContent = request.description;
@@ -184,13 +135,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Функція для відкриття модального вікна з деталями заявки
     function openRequestDetailsModal(request) {
-        requestDetails.innerHTML = `
-            <p><strong>Ім'я біженця:</strong> ${request.refugeeName}</p>
-            <p><strong>Тип допомоги:</strong> ${request.type}</p>
-            <p><strong>Опис ситуації:</strong> ${request.description}</p>
-            <p><strong>Статус:</strong> ${request.status}</p>
+        // Отримуємо об'єкт біженця з заявки
+        const refugeeData = request.refugee;
+
+        // Створюємо HTML для відображення даних біженця
+        const refugeeInfoHTML = `
+        <h3>Дані біженця</h3>
+        <p><strong>Ім'я:</strong> ${refugeeData.name} ${refugeeData.surname}</p>
+        <p><strong>Email:</strong> ${refugeeData.email}</p>
+        <p><strong>Телефон:</strong> ${refugeeData.phone}</p>
+        <p><strong>Місто:</strong> ${refugeeData.city}</p>
+        <p><strong>Країна:</strong> ${refugeeData.country}</p>
         `;
-        approveRequestBtn.dataset.requestId = request.id;
+
+        // Створюємо HTML для відображення деталей заявки
+        const requestDetailsHTML = `
+        <h3>Деталі заявки</h3>
+        <p><strong>Тип допомоги:</strong> ${getHelpTypeName(request.type)}</p>
+        <p><strong>Опис ситуації:</strong> ${request.description}</p>
+        <p><strong>Статус:</strong> ${getStatusName(request.status)}</p>
+        `;
+
+        // Об'єднуємо інформацію про біженця та заявку
+        requestDetails.innerHTML = refugeeInfoHTML + requestDetailsHTML;
+
+        // Зберігаємо поточну заявку для подальшого використання
+        window.currentRequest = request;
+
         openModal(requestDetailsModal);
     }
 
@@ -215,8 +186,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Відкриття модального вікна "Заявки на підтвердження"
-    viewRequestsBtn.addEventListener('click', (event) => {
+    viewRequestsBtn.addEventListener('click', async (event) => {
         event.preventDefault();
+        await fetchRequests();
         displayRequests();
         openModal(requestsModal);
     });
@@ -237,25 +209,113 @@ document.addEventListener('DOMContentLoaded', function() {
         closeModal(requestDetailsModal);
     });
 
+    downloadDocumentBtn.addEventListener('click', () => {
+        const request = window.currentRequest;
+
+        if (!request.base64File) {
+            showToast('Файл недоступний для завантаження.');
+            return;
+        }
+
+        try {
+            // Декодуємо Base64-рядок у бінарні дані
+            const byteCharacters = atob(request.base64File);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+
+            // Встановлюємо MIME-тип за замовчуванням
+            const fileType = 'application/pdf';
+
+            // Створюємо Blob з бінарних даних
+            const blob = new Blob([byteArray], { type: fileType });
+
+            // Встановлюємо ім'я файлу за замовчуванням
+            const fileName = `document_${request.id}`;
+
+            // Створюємо посилання для завантаження
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('Помилка при обробці файлу:', error);
+            showToast('Сталася помилка при завантаженні файлу.');
+        }
+    });
+
+
     // Обробник події для кнопки "Підтвердити заявку"
-    approveRequestBtn.addEventListener('click', () => {
-        const requestId = approveRequestBtn.dataset.requestId;
-        // Знайти заявку за ID
-        const requestIndex = requestsData.findIndex(req => req.id == requestId);
+    approveRequestBtn.addEventListener('click', async () => {
+        const requestId = window.currentRequest.id;
+        try {
+            const response = await fetch(`/applications/approve/${requestId}`, {
+                method: 'POST',
+            });
 
-        if (requestIndex !== -1) {
-            // Оновити статус заявки
-            requestsData[requestIndex].status = 'Підтверджено';
-            showToast(`Заявку №${requestId} підтверджено.`);
+            if (!response.ok) {
+                throw new Error(`Помилка HTTP: ${response.status}`);
+            }
+
+            showToast('Заявку успішно підтверджено.');
             closeModal(requestDetailsModal);
-
-            // Видалити заявку зі списку "На розгляді"
-            requestsData.splice(requestIndex, 1);
-
-            // Оновити список заявок
+            // Оновлюємо список заявок
+            await fetchRequests();
             displayRequests(categorySelect.value);
-        } else {
-            showToast('Помилка: Заявку не знайдено.');
+        } catch (error) {
+            console.error('Помилка при підтвердженні заявки:', error);
+            showToast('Сталася помилка при підтвердженні заявки.');
+        }
+    });
+
+    // Обробник події для кнопки "Відхилити заявку"
+    rejectRequestBtn.addEventListener('click', () => {
+        openModal(rejectReasonModal);
+    });
+
+    // Закриття модального вікна "Причина відмови"
+    rejectReasonCloseBtn.addEventListener('click', () => {
+        closeModal(rejectReasonModal);
+    });
+
+    // Обробник події для відправки причини відмови
+    submitRejectReasonBtn.addEventListener('click', async () => {
+        const requestId = window.currentRequest.id;
+        const reason = rejectReasonTextarea.value.trim();
+
+        if (!reason) {
+            showToast('Будь ласка, введіть причину відмови.');
+            return;
+        }
+
+        try {
+            const response = await fetch(`/applications/reject/${requestId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ reason })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Помилка HTTP: ${response.status}`);
+            }
+
+            showToast('Заявку успішно відхилено.');
+            closeModal(rejectReasonModal);
+            closeModal(requestDetailsModal);
+            // Оновлюємо список заявок
+            await fetchRequests();
+            displayRequests(categorySelect.value);
+        } catch (error) {
+            console.error('Помилка при відхиленні заявки:', error);
+            showToast('Сталася помилка при відхиленні заявки.');
         }
     });
 
@@ -269,6 +329,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         if (event.target === requestDetailsModal) {
             closeModal(requestDetailsModal);
+        }
+        if (event.target === rejectReasonModal) {
+            closeModal(rejectReasonModal);
         }
     });
 
@@ -285,4 +348,27 @@ document.addEventListener('DOMContentLoaded', function() {
             hamburger.classList.remove('active');
         }
     });
+
+    // Допоміжні функції
+    function getHelpTypeName(typeKey) {
+        const typeMapping = {
+            'housing': 'Житло',
+            'medical': 'Медична допомога',
+            'legal': 'Юридична допомога',
+            'employment': 'Допомога у працевлаштуванні',
+            'education': 'Освітні та професійні програми',
+            'food': 'Продукти харчування та предмети першої необхідності',
+            'financial': 'Фінансова допомога'
+        };
+        return typeMapping[typeKey] || 'Інше';
+    }
+
+    function getStatusName(statusKey) {
+        const statusMapping = {
+            'pending': 'На розгляді',
+            'approved': 'Підтверджено',
+            'rejected': 'Відхилено'
+        };
+        return statusMapping[statusKey.toLowerCase()] || 'Невідомий статус';
+    }
 });

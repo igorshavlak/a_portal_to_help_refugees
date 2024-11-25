@@ -2,14 +2,11 @@ let notificationCount = 0;
 const MAX_NOTIFICATIONS = 5;
 let notifications = [];
 
-/**
- * Инициализация WebSocket соединения и подписка на уведомления
- */
 function initializeWebSocket() {
-    const socket = new SockJS('/ws'); // Убедитесь, что это совпадает с бэкендом
+    const socket = new SockJS('/ws');
     const stompClient = Stomp.over(socket);
 
-    // Отключаем дебаггер, если не нужен
+
     stompClient.debug = null;
 
     stompClient.connect({}, frame => {
@@ -29,10 +26,7 @@ function initializeWebSocket() {
     return stompClient;
 }
 
-/**
- * Добавление уведомления в интерфейс и внутренний массив
- * @param {Object} notification - Объект уведомления
- */
+
 function addNotification(notification) {
     // Добавляем уведомление в контейнер
     const container = document.getElementById('notification-container');

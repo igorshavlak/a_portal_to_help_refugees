@@ -943,3 +943,6 @@ footer {
     background-color: #003060;
     transform: translateY(-2px);
 }
+ul, ol {
+    list-style: none;
+}
