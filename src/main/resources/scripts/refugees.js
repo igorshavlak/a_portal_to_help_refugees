@@ -309,6 +309,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const requestTitle = document.createElement('h3');
             requestTitle.textContent = getHelpTypeName(request.type);
 
+            const requestId = document.createElement('p');
+            requestId.textContent = "Номер заявки: " + request.id;
+
             const requestDesc = document.createElement('p');
             requestDesc.textContent = request.description;
 
@@ -328,6 +331,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             requestCard.appendChild(requestTitle);
+            requestCard.appendChild(requestId);
             requestCard.appendChild(requestDesc);
             requestCard.appendChild(requestStatus);
             requestCard.appendChild(requestDate);

@@ -2,6 +2,7 @@ package org.project.helpportalrefugees.controller;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.project.helpportalrefugees.http.ApiResponse;
 import org.project.helpportalrefugees.model.Application;
 import org.project.helpportalrefugees.DTO.HelpRequestDTO;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -131,12 +133,15 @@ public class ApplicationController {
         }
     }
     @PostMapping("/reject/{requestId}")
-    public ResponseEntity<String> rejectApplication(@PathVariable int requestId) {
+    public ResponseEntity<String> rejectApplication(@PathVariable int requestId, @RequestBody String reason) {
         try {
 
             String receiver = userService.getUsernameById(applicationService.getRefugeeByApplicationId(requestId));
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, String> map = mapper.readValue(reason, Map.class);
+            reason = map.get("reason");
             applicationService.reject(requestId);
-            Notification notification = new Notification("Ваша заявка була відхилина. Номер заявки №" + requestId,false, userService.getIdByUsername(receiver), LocalDateTime.now(),"reject");
+            Notification notification = new Notification("Ваша заявка була відхилина. Причина відмови: " + reason + " Номер заявки №" + requestId,false, userService.getIdByUsername(receiver), LocalDateTime.now(),"reject");
             notificationService.createNotification(notification);
             messagingTemplate.convertAndSendToUser(receiver, "/queue/notifications",
                     notification);

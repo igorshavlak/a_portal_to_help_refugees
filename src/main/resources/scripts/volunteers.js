@@ -482,8 +482,12 @@ document.addEventListener('DOMContentLoaded', function() {
             const requestTitle = document.createElement('h3');
             requestTitle.textContent = getHelpTypeName(request.type);
 
+            const requestId = document.createElement('p');
+            requestId.textContent = "Номер заявки: " + request.id;
+
             const requestDesc = document.createElement('p');
             requestDesc.textContent = request.description;
+
 
             const requestStatus = document.createElement('p');
             requestStatus.innerHTML = `<strong>Статус:</strong> ${getStatusName(request.status)}`;
@@ -501,6 +505,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             requestCard.appendChild(requestTitle);
+            requestCard.appendChild(requestId)
             requestCard.appendChild(requestDesc);
             requestCard.appendChild(requestStatus);
             requestCard.appendChild(requestCity);
@@ -645,12 +650,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(updatedRequest => {
                 showToast(`Ви прийняли запит №${requestId}. Дякуємо за вашу допомогу!`);
                 closeModalFunction(requestModal);
-
-                // Додаємо запит до "Мої активні запити", якщо його ще немає
-                if (!myRequestsData.find(req => req.id === updatedRequest.id)) {
-                    myRequestsData.push(updatedRequest);
-                    displayMyActiveRequests();
-                }
+                showToast(updatedRequest);
             })
             .catch(error => {
                 showToast('Не вдалося прийняти запит. Спробуйте ще раз пізніше.');
