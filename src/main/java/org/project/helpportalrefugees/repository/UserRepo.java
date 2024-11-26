@@ -1,12 +1,19 @@
 package org.project.helpportalrefugees.repository;
 
+import org.project.helpportalrefugees.DTO.RegistrationRequestDTO;
 import org.project.helpportalrefugees.model.Refugee;
 import org.project.helpportalrefugees.model.User;
 import org.project.helpportalrefugees.model.Volunteer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
+
+import static org.apache.coyote.http11.Constants.a;
 
 @Repository
 public class UserRepo {
@@ -26,11 +33,13 @@ public class UserRepo {
     private final String getUserRole = "SELECT authority FROM authorities WHERE email = ?";
 
 
-    JdbcTemplate jdbcTemplate;
+    private  JdbcTemplate jdbcTemplate;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder) {
         this.jdbcTemplate = jdbcTemplate;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public int getIdByUsername(String username) {
@@ -144,6 +153,57 @@ public class UserRepo {
     }
     public String getGetUserRoleByUsername(String username) {
         return jdbcTemplate.queryForObject(getUserRole, (rs, rowNum) -> rs.getString("authority"), username);
+    }
+
+
+    public void registerUser(RegistrationRequestDTO dto) throws Exception {
+
+        String checkEmailSql = "SELECT COUNT(*) FROM users WHERE email = ?";
+        Integer count = jdbcTemplate.queryForObject(checkEmailSql, new Object[]{dto.getEmail()}, Integer.class);
+        if (count != null && count > 0) {
+            throw new Exception("Користувач з такою електронною поштою вже існує");
+        }
+        String hashedPassword = passwordEncoder.encode(dto.getPassword());
+        String insertUserSql = "INSERT INTO users (email, password) VALUES (?, ?) RETURNING id";
+        int userId = jdbcTemplate.queryForObject(insertUserSql, new Object[]{dto.getEmail(), hashedPassword}, Integer.class);
+        String insertAuthoritySql = "INSERT INTO authorities (email, authority) VALUES (?, ?)";
+        String authority;
+        if(dto.getUserType().equals("refugee")){
+            authority = "ROLE_USER";
+        } else if(dto.getUserType().equals("volunteer")){
+            authority = "ROLE_VOLUNTEER";
+        }
+        else {
+            throw new Exception("Роль користувача не визначена");
+        }
+        jdbcTemplate.update(insertAuthoritySql, dto.getEmail(), authority);
+
+        if ("refugee".equalsIgnoreCase(dto.getUserType())) {
+            String insertRefugeeSql = "INSERT INTO refugees (user_id, first_name, last_name, birth_date, phone_number, city, country) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            jdbcTemplate.update(insertRefugeeSql,
+                    userId,
+                    dto.getName(),
+                    dto.getSurname(),
+                    dto.getBirthDate(),
+                    dto.getPhone(),
+                    dto.getCity(),
+                    "Україна"
+            );
+        } else if ("volunteer".equalsIgnoreCase(dto.getUserType())) {
+            String insertVolunteerSql = "INSERT INTO volunteer (user_id, first_name, last_name, birth_date, skills_or_experience, phone_number, city, country) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            jdbcTemplate.update(insertVolunteerSql,
+                    userId,
+                    dto.getName(),
+                    dto.getSurname(),
+                    dto.getBirthDate(),
+                    dto.getVolunteerSkills(),
+                    dto.getPhone(),
+                    dto.getCity(),
+                    "Україна"
+            );
+        } else {
+            throw new Exception("Невідомий тип користувача");
+        }
     }
 
 }

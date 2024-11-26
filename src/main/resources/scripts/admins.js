@@ -142,7 +142,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const refugeeInfoHTML = `
         <h3>Дані біженця</h3>
         <p><strong>Ім'я:</strong> ${refugeeData.name} ${refugeeData.surname}</p>
-        <p><strong>Email:</strong> ${refugeeData.email}</p>
         <p><strong>Телефон:</strong> ${refugeeData.phone}</p>
         <p><strong>Місто:</strong> ${refugeeData.city}</p>
         <p><strong>Країна:</strong> ${refugeeData.country}</p>
@@ -367,7 +366,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const statusMapping = {
             'pending': 'На розгляді',
             'approved': 'Підтверджено',
-            'rejected': 'Відхилено'
+            'rejected': 'Відхилено',
+            'consideration':'Очікує підтвердження'
         };
         return statusMapping[statusKey.toLowerCase()] || 'Невідомий статус';
     }

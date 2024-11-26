@@ -191,7 +191,8 @@ document.addEventListener('DOMContentLoaded', function() {
             'pending': 'Очікує',
             'processing': 'В процесі',
             'completed': 'Виконано',
-            'rejected': 'Відхилено'
+            'rejected': 'Відхилено',
+            'consideration':'Очікує підтвердження'
         };
         return statusMapping[statusKey.toLowerCase()] || 'Невідомий статус';
     }
@@ -429,14 +430,31 @@ document.addEventListener('DOMContentLoaded', function() {
                 </ul>
             </div>
         `;
-        } else if (request.status.toLowerCase() === 'processing') {
+
+            const chatButton = document.getElementById('openChatBtn');
+            if (chatButton) {
+                chatButton.style.display = 'block'; // Переконаємося, що кнопка видима
+            }
+        } else if (request.status.toLowerCase() === 'pending' || request.status.toLowerCase() === 'consideration') {
             // Якщо статус "В процесі", але волонтер не призначений
-            volunteerHTML += `
+            const chatButton = document.getElementById('openChatBtn');
+            if (chatButton) {
+                chatButton.style.display = 'none';
+            }
+            if(request.status.toLowerCase() === 'consideration'){
+                volunteerHTML += `
             <div class="volunteer-info">
-                <h4>Дані Волонтера:</h4>
                 <p>Волонтер ще не прийняв цю заявку.</p>
             </div>
         `;
+            } else {
+                volunteerHTML += `
+            <div class="volunteer-info">
+                <p>Заявка обробляється.</p>
+            </div>
+        `;
+            }
+
         }
 
         // Об'єднуємо всі частини

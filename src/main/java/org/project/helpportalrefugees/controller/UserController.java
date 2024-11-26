@@ -1,5 +1,6 @@
 package org.project.helpportalrefugees.controller;
 
+import org.project.helpportalrefugees.DTO.RegistrationRequestDTO;
 import org.project.helpportalrefugees.model.Refugee;
 import org.project.helpportalrefugees.model.User;
 import org.project.helpportalrefugees.DTO.UserDetailDTO;
@@ -10,11 +11,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Base64;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -89,6 +93,22 @@ public class UserController {
             e.printStackTrace();
             return ResponseEntity.status(500).build();
         }
+    }
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@Valid @RequestBody RegistrationRequestDTO registrationRequestDTO, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body("Помилки валідації: " + bindingResult.getAllErrors().get(0).getDefaultMessage());
+        }
+        try {
+            userService.register(registrationRequestDTO);
+            return ResponseEntity.ok("Користувач зареєстрований");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+
     }
 
 }

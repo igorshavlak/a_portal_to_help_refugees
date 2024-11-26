@@ -46,6 +46,4 @@ public class LoginController {
             response.sendRedirect("/application.html?error=true");
         }
     }
-
-
 }

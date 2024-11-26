@@ -16,6 +16,7 @@ import java.util.*;
 public class ApplicationsRepo {
     private static final String saveSql = "INSERT INTO applications (user_id,type,description,additional_data,status,supporting_document) VALUES (?,?,?,?,'consideration',?)";
     private static final String acceptSql = "UPDATE applications SET status=?, volunteer_id=? WHERE id=?";
+    private static final String finishSql = "UPDATE applications SET status=? WHERE id=?";
     private static final String deleteSql = "DELETE FROM applications WHERE id=?";
     private static final String approveSql = "UPDATE applications SET status=? WHERE id=?";
     private static final String getAllRefugeeApplicationsSql =
@@ -25,7 +26,7 @@ public class ApplicationsRepo {
                     "v.city AS volunteer_city, v.country AS volunteer_country " +
                     "FROM applications a " +
                     "LEFT JOIN volunteer v ON a.volunteer_id = v.user_id " +
-                    "WHERE a.user_id = ? AND a.status != 'consideration'";
+                    "WHERE a.user_id = ? AND (a.status != 'consideration' AND a.status != 'completed')";
     private static final String getAllVolunteerApplicationsSql =
             "SELECT a.id, a.user_id, a.type, a.description, a.additional_data, a.status, a.created_at, " +
                     "r.user_id AS refugee_user_id, r.first_name AS refugee_first_name, r.last_name AS refugee_last_name, " +
@@ -33,9 +34,10 @@ public class ApplicationsRepo {
                     "r.city AS refugee_city, r.country AS refugee_country " +
                     "FROM applications a " +
                     "JOIN refugees r ON a.user_id = r.user_id " +
-                    "WHERE a.volunteer_id = ? AND a.status != 'consideration'";
+                    "WHERE a.volunteer_id = ? AND (a.status != 'consideration' AND a.status != 'completed')";
     private static final String getApplicationUsersSql = "SELECT user_id, volunteer_id FROM applications WHERE id = ?";
     private static final String getRefugeeApplicationById = "SELECT user_id FROM applications WHERE id = ?";
+    private static final String getVolunteerApplicationById = "SELECT volunteer_id FROM applications WHERE id = ?";
     private static final String getConsiderationApplicationsSql =
             "SELECT a.*, r.first_name, r.last_name, r.birth_date, r.phone_number, r.city, r.country, r.status AS refugee_status " +
                     "FROM applications a " +
@@ -204,5 +206,11 @@ public class ApplicationsRepo {
     }
     public Integer getRefugeeByApplicationId(int id){
         return jdbcTemplate.queryForObject(getRefugeeApplicationById,Integer.class,id);
+    }
+    public Integer getVolunteerByApplicationId(int id){
+        return jdbcTemplate.queryForObject(getVolunteerApplicationById,Integer.class,id);
+    }
+    public void finishApplication(int id){
+         jdbcTemplate.update(finishSql, "completed",id);
     }
 }

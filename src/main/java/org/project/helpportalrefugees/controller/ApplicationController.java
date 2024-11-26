@@ -95,7 +95,7 @@ public class ApplicationController {
         try {
             String receiver = userService.getUsernameById(applicationService.getRefugeeByApplicationId(requestId));
             applicationService.accept(requestId, principal);
-            Notification notification =  new Notification("Волонтер : " + principal.getName() + "прийняв вашу заявку",false, userService.getIdByUsername(receiver), LocalDateTime.now(), "accept");
+            Notification notification =  new Notification("Волонтер : " + principal.getName() + "прийняв вашу заявку. Номер заявки №" + requestId,false, userService.getIdByUsername(receiver), LocalDateTime.now(), "accept");
             notificationService.createNotification(notification);
             messagingTemplate.convertAndSendToUser(receiver, "/queue/notifications",
                    notification);
@@ -119,7 +119,7 @@ public class ApplicationController {
     public ResponseEntity<String> approveApplication(@PathVariable int requestId) {
         try {
             String receiver = userService.getUsernameById(applicationService.getRefugeeByApplicationId(requestId));
-            Notification notification = new Notification("Ваша заявка була підтверджена ",false, userService.getIdByUsername(receiver), LocalDateTime.now(),"confirm");
+            Notification notification = new Notification("Ваша заявка була підтверджена. Номер заявки №" + requestId,false, userService.getIdByUsername(receiver), LocalDateTime.now(),"confirm");
             applicationService.approve(requestId);
             notificationService.createNotification(notification);
             messagingTemplate.convertAndSendToUser(receiver, "/queue/notifications",
@@ -133,12 +133,13 @@ public class ApplicationController {
     @PostMapping("/reject/{requestId}")
     public ResponseEntity<String> rejectApplication(@PathVariable int requestId) {
         try {
-            applicationService.reject(requestId);
+
             String receiver = userService.getUsernameById(applicationService.getRefugeeByApplicationId(requestId));
-            Notification notification = new Notification("Ваша заявка була відхилина ",false, userService.getIdByUsername(receiver), LocalDateTime.now(),"reject");
+            applicationService.reject(requestId);
+            Notification notification = new Notification("Ваша заявка була відхилина. Номер заявки №" + requestId,false, userService.getIdByUsername(receiver), LocalDateTime.now(),"reject");
             notificationService.createNotification(notification);
             messagingTemplate.convertAndSendToUser(receiver, "/queue/notifications",
-                    notification );
+                    notification);
             return ResponseEntity.status(200).body("Заявка відхилена");
         } catch (Exception e) {
             e.printStackTrace();
@@ -149,7 +150,7 @@ public class ApplicationController {
     public ResponseEntity<String> completeApplication(@PathVariable int requestId, Principal principal) {
         try {
             String receiver = userService.getUsernameById(applicationService.getRefugeeByApplicationId(requestId));
-            Notification notification = new Notification("Волонтер : " + principal.getName() + " відправив запит для завершення заявки ",false, userService.getIdByUsername(receiver), LocalDateTime.now(),"finish");
+            Notification notification = new Notification("Волонтер : " + principal.getName() + " відправив запит для завершення заявка. Номер заявки №" + requestId,false, userService.getIdByUsername(receiver), LocalDateTime.now(),"finish");
             notificationService.createNotification(notification);
             messagingTemplate.convertAndSendToUser(receiver, "/queue/notifications",
                     notification );
@@ -157,6 +158,28 @@ public class ApplicationController {
         }
         catch (Exception e) {
             e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+    }
+    @PostMapping("/{requestId}/acceptFinishApplication")
+    public ResponseEntity<String> acceptFinishApplication(@PathVariable int requestId) {
+        try{
+            applicationService.finishApplication(requestId);
+            return ResponseEntity.ok("заявка оброблена");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
+    @PostMapping("/{requestId}/rejectFinishApplication")
+    public ResponseEntity<String> rejectFinishApplication(@PathVariable int requestId, Principal principal) {
+        try{
+            String receiver = userService.getUsernameById(applicationService.getVolunteerByApplicationId(requestId));
+            Notification notification = new Notification("Біженець : " + principal.getName() + " відхилив завершення заявки. Номер заявки №" + requestId,false, userService.getIdByUsername(receiver), LocalDateTime.now(),"reject");
+            notificationService.createNotification(notification);
+            messagingTemplate.convertAndSendToUser(receiver, "/queue/notifications",
+                    notification );
+            return ResponseEntity.ok("заявка оброблена");
+        } catch (Exception e) {
             return ResponseEntity.status(500).build();
         }
     }

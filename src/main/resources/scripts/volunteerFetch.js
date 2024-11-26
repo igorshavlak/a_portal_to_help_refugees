@@ -14,8 +14,7 @@ async function fetchHelpRequests(categories) {
         if (!response.ok) {
             throw new Error(`Server error: ${response.status} ${response.statusText}`);
         }
-
-        const data = await response.json();
+        const data = await response.text();
         return data; // Should be an array of help requests
     } catch (error) {
         console.error('Error fetching help requests:', error);

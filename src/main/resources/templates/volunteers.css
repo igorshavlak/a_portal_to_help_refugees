@@ -759,10 +759,23 @@ footer {
     display: block;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+.complete-btn {
+    padding: 12px 25px;
+    background-color: rgba(245, 0, 0, 0.5);
+    color: #fff;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    align-self: center;
+    display: block;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
 .accept-btn:hover {
-    background-color: #218838;
-    transform: translateY(-2px);
+    background-color: #dc0f0f;
+    transform: translateY(-6px);
 }
 
 /* Стилі для кнопки закриття */

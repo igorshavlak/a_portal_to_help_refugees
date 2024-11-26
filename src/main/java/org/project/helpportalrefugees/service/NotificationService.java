@@ -23,6 +23,9 @@ public class NotificationService {
     public List<Notification> getNotifications(Integer receiver) {
         return notificationRepository.findByReceiver(receiver);
     }
+    public void deleteNotification(Integer id) {
+        notificationRepository.deleteById(id);
+    }
 
     public boolean markAsRead(int id) {
         int rowsAffected = notificationRepository.markAsRead(id);

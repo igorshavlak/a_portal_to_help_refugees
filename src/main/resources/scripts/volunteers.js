@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const requestDetails = document.getElementById('request-details');
     const acceptRequestBtn = document.getElementById('accept-request-btn');
 
+
     const profileModal = document.getElementById('profile-modal');
     const profileCloseBtn = document.querySelector('.profile-close-btn');
     const profileForm = document.getElementById('profile-form');
@@ -315,7 +316,8 @@ document.addEventListener('DOMContentLoaded', function() {
             'pending': 'Очікує',
             'processing': 'В процесі',
             'completed': 'Виконано',
-            'rejected': 'Відхилено'
+            'rejected': 'Відхилено',
+            'consideration':'Очікує підтвердження'
         };
         return statusMapping[statusKey.toLowerCase()] || 'Невідомий статус';
     }
@@ -326,7 +328,14 @@ document.addEventListener('DOMContentLoaded', function() {
             'familyMembers': 'Кількість членів сім\'ї',
             'specialNeeds': 'Спеціальні потреби',
             'medicalCondition': 'Медичний стан',
-            // Додайте більше ключів за потреби
+            'legalIssue': 'Юридична проблема',
+            'currentEmployment': 'Поточний статус зайнятості',
+            'desiredJob': 'Бажана посада',
+            'currentEducation': 'Поточний рівень освіти',
+            'desiredProgram': 'Бажана освітня або професійна програма',
+            'foodItems': 'Перелік необхідних продуктів та предметів',
+            'financialAmount': 'Необхідна сума',
+            'financialPurpose': 'Мета фінансової допомоги'
         };
         return additionalDataMapping[key] || key;
     }
@@ -433,9 +442,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if (canAccept) {
           openChatBtn.style.display = 'none';
             acceptRequestBtn.style.display = 'block';
+            completeRequestBtn.style.display = 'none';
+
         } else {
             acceptRequestBtn.style.display = 'none';
             openChatBtn.style.display = 'block';
+            completeRequestBtn.style.display = 'block';
         }
 
         openModal(requestModal);

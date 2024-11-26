@@ -1,5 +1,6 @@
 package org.project.helpportalrefugees.service;
 
+import org.project.helpportalrefugees.DTO.RegistrationRequestDTO;
 import org.project.helpportalrefugees.model.Refugee;
 import org.project.helpportalrefugees.model.User;
 import org.project.helpportalrefugees.repository.UserRepo;
@@ -40,5 +41,9 @@ public class UserService {
 
     public String getUserRoleByUsername(String username) {
         return userRepo.getGetUserRoleByUsername(username);
+    }
+    public void register(RegistrationRequestDTO dto) throws Exception {
+        userRepo.registerUser(dto);
+
     }
 }

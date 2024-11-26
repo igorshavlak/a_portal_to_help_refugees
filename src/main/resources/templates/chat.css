@@ -3,18 +3,17 @@
 -------------------------------------------------- */
 
 .open-chat-btn {
-    padding: 10px 20px; /* Зменшено відступи */
-    font-size: 14px; /* Зменшено розмір шрифту */
-    color: #fff;
+    padding: 12px 25px;
     background-color: #28a745;
-    border: none;
-    border-radius: 20px; /* Зменшено радіус */
+    color: #fff;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.3s ease;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 6px; /* Зменшено відстань між іконкою та текстом */
+    align-self: center;
+    display: block;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .open-chat-btn:hover {

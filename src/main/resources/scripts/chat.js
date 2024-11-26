@@ -174,8 +174,12 @@ function fetchChatHistory() {
                 });
             } else {
                 chatId = data.id;
+                fetchChatReceiverDetails(chatId).then(userDetails => {
+                    if (userDetails) {
+                        updateChatProfile(userDetails);
+                    }
+                });
                 console.log('Чат існує, але повідомлення відсутні');
-                chatBody.innerHTML = '<p>Немає повідомлень</p>';
             }
             sendBtn.disabled = false;
         })

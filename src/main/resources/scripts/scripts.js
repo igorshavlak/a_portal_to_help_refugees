@@ -151,7 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // **Видалено: Закриття модальних вікон при кліку поза ними**
-    // Цей код був видалений відповідно до вашого запиту
     /*
     window.addEventListener('click', (e) => {
         if (e.target === loginModal) {
@@ -225,24 +224,37 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Обробка форми реєстрації
+    // Обробка форми реєстрації
     if (registerForm) {
         registerForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
             const name = document.getElementById('reg-name').value.trim();
+            const surname = document.getElementById('reg-surname').value.trim();
+            const phone = document.getElementById('reg-phone').value.trim();
+            const city = document.getElementById('reg-city').value;
+            const birthDate = document.getElementById('reg-birth-date').value;
             const email = document.getElementById('reg-email').value.trim();
             const password = document.getElementById('reg-password').value.trim();
             const confirmPassword = document.getElementById('reg-confirm-password').value.trim();
             const userType = document.getElementById('user-type').value;
 
             // Базова валідація
-            if (!name || !email || !password || !confirmPassword || !userType) {
+            if (!name || !surname || !phone || !city || !birthDate || !email || !password || !confirmPassword || !userType) {
                 showToast('Будь ласка, заповніть всі обов\'язкові поля.');
                 return;
             }
 
             if (password !== confirmPassword) {
                 showToast('Паролі не співпадають. Будь ласка, спробуйте ще раз.');
+                return;
+            }
+
+            // Додаткова валідація року народження
+            const  birthDateObj = new Date(birthDate);
+            const today = new Date();
+            if(birthDateObj > today){
+                showToast('Дата народження не може бути в майбутньому.');
                 return;
             }
 
@@ -258,27 +270,55 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // TODO: Реалізувати логіку реєстрації (наприклад, запит до API)
-
-            console.log('Дані для реєстрації:', {
+            // Підготовка даних для відправки
+            const registrationData = {
                 name,
+                surname,
+                phone,
+                city,
+                birthDate,
                 email,
                 password,
                 userType,
                 volunteerSkills
-            });
+            };
 
-            // Скидання форми
-            registerForm.reset();
-            hideVolunteerFields();
+            // Відправка даних на сервер
+            // Відправка даних на сервер
+            // Відправка даних на сервер
+            fetch('user/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(registrationData)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(errorMessage => {
+                            throw new Error(errorMessage || 'Помилка при виконанні запиту.');
+                        });
+                    }
+                    return response.text(); // Повернення тексту, якого чекає фронтенд
+                })
+                .then(data => {
+                    // Оскільки бекенд повертає лише текст, вважаємо успіхом лише статус OK
+                    showToast(data || 'Ви успішно зареєструвались. Тепер ви можете увійти до свого облікового запису.');
+                    // Закриття модального вікна
+                    closeModal(registerModal);
+                    // Скидання форми
+                    registerForm.reset();
+                    hideVolunteerFields();
+                })
+                .catch(error => {
+                    console.error('Помилка при реєстрації:', error);
+                    showToast(error.message || 'Виникла помилка при реєстрації. Будь ласка, спробуйте пізніше.');
+                });
 
-            // Відображення успішного повідомлення
-            showToast('Ви успішно зареєструвались. Тепер ви можете увійти до свого облікового запису.');
 
-            // Закриття модального вікна
-            closeModal(registerModal);
         });
     }
+
 
     // Обробка контактної форми
     if (contactForm) {

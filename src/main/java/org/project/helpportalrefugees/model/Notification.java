@@ -9,6 +9,7 @@ public class Notification {
     private int recipientId;
     private LocalDateTime timestamp;
     private String type;
+    private int applicationId;
 
     public Notification(String message, boolean read, int recipientId, LocalDateTime timestamp) {
         this.message = message;
@@ -29,6 +30,14 @@ public class Notification {
         this.read = read;
         this.recipientId = recipientId;
         this.timestamp = timestamp;
+    }
+    public Notification(int id,String message, boolean read, int recipientId, LocalDateTime timestamp,String type) {
+        this.id = id;
+        this.message = message;
+        this.read = read;
+        this.recipientId = recipientId;
+        this.timestamp = timestamp;
+        this.type = type;
     }
 
     public String getMessage() {
@@ -64,5 +73,21 @@ public class Notification {
 
     public String getType() {
         return type;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setApplicationId(int applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public int getApplicationId() {
+        return applicationId;
     }
 }

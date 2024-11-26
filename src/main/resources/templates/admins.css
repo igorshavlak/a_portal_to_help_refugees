@@ -585,8 +585,17 @@ footer {
 }
 
 .approve-btn {
-    background-color: #4CAF50; /* Зелений */
-    color: white;
+    padding: 12px 25px;
+    background-color: rgba(36, 255, 0, 0.5);
+    color: #fff;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    align-self: center;
+    display: block;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .approve-btn:hover {
@@ -595,8 +604,17 @@ footer {
 }
 
 .reject-btn {
-    background-color: #f44336; /* Червоний */
-    color: white;
+    padding: 12px 25px;
+    background-color: rgba(245, 0, 0, 0.5);
+    color: #fff;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    align-self: center;
+    display: block;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .reject-btn:hover {

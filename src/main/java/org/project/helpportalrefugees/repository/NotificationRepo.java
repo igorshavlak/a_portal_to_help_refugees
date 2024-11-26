@@ -13,9 +13,10 @@ import java.util.List;
 @Repository
 public class NotificationRepo {
 
-    private final String createNotificationSql = "INSERT INTO notification (receiver, message, created_at, read) VALUES (?, ?, ?, ?)";
+    private final String createNotificationSql = "INSERT INTO notification (receiver, message, created_at, read,type) VALUES (?, ?, ?, ?,?)";
     private final String getNotificationSql = "SELECT * FROM notification WHERE receiver = ? ORDER BY created_at DESC";
     private final String markAsReadSql = "UPDATE notification SET read = TRUE WHERE id = ?";
+    private final String deleteNotificationSql = "DELETE FROM notification WHERE id = ?";
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -30,20 +31,24 @@ public class NotificationRepo {
                     rs.getString("message"),
                     rs.getBoolean("read"),
                     rs.getInt("receiver"),
-                    rs.getTimestamp("created_at").toLocalDateTime());
+                    rs.getTimestamp("created_at").toLocalDateTime(),
+                    rs.getString("type")
+            );
 
         }
     };
 
     public void create(Notification notification) {
         jdbcTemplate.update(createNotificationSql, notification.getRecipient(), notification.getMessage(),
-                notification.getTimestamp(), notification.isRead());
+                notification.getTimestamp(), notification.isRead(),notification.getType());
     }
 
     public List<Notification> findByReceiver(Integer receiver) {
         return jdbcTemplate.query(getNotificationSql, new Object[]{receiver}, notificationRowMapper);
     }
-
+    public void deleteById(Integer id) {
+        jdbcTemplate.update(deleteNotificationSql, id);
+    }
 
     public int markAsRead(int id) {
         return jdbcTemplate.update(markAsReadSql, id);

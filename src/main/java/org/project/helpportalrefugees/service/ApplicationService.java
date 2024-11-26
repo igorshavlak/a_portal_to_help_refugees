@@ -77,9 +77,14 @@ public class ApplicationService {
     public Integer getRefugeeByApplicationId(int id){
        return applicationsRepo.getRefugeeByApplicationId(id);
     }
-
+    public Integer getVolunteerByApplicationId(int id){
+        return applicationsRepo.getVolunteerByApplicationId(id);
+    }
     public List<Application> getConsiderationApplications(){
         return applicationsRepo.getConsiderationApplications();
+    }
+    public void finishApplication(int id){
+        applicationsRepo.finishApplication(id);
     }
 
 }

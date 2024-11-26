@@ -172,7 +172,6 @@
     </div>
 </div>
 
-<!-- Модальне вікно реєстрації -->
 <div id="register-modal" class="modal">
     <div class="modal-content">
         <span class="close-btn register-close-btn">&times;</span>
@@ -180,6 +179,25 @@
         <form id="register-form">
             <label for="reg-name">Ім'я:</label>
             <input type="text" id="reg-name" name="name" required>
+
+            <label for="reg-surname">Фамілія:</label>
+            <input type="text" id="reg-surname" name="surname" required>
+
+            <label for="reg-phone">Телефон:</label>
+            <input type="tel" id="reg-phone" name="phone" required>
+
+            <label for="reg-city">Місто в Україні:</label>
+            <select id="reg-city" name="city" required>
+                <option value="" disabled selected>Виберіть місто</option>
+                <option value="Київ">Київ</option>
+                <option value="Львів">Львів</option>
+                <option value="Одеса">Одеса</option>
+                <option value="Харків">Харків</option>
+                <option value="Черкаси">Черкаси</option>
+            </select>
+
+            <label for="reg-birth-date">Дата народження:</label>
+            <input type="date" id="reg-birth-date" name="birth-date" required>
 
             <label for="reg-email">Електронна пошта:</label>
             <input type="email" id="reg-email" name="email" required>
@@ -208,8 +226,6 @@
         </form>
         <p>Вже маєте обліковий запис? <a href="#" class="login-link">Увійдіть</a></p>
     </div>
-</div>
-
 <!-- Підключення JavaScript -->
 <script src="/scripts/scripts.js"></script>
 <script src="/scripts/authentification.js"></script>

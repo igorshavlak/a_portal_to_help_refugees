@@ -37,5 +37,15 @@ public class NotificationController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Помилка.");
         }
     }
+    @DeleteMapping("/{id}/delete")
+    public ResponseEntity<String> deleteNotification(@PathVariable int id) {
+        try {
+            notificationService.deleteNotification(id);
+            return ResponseEntity.ok("Заявка видалена");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+    }
 
 }
